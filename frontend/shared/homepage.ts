@@ -1,6 +1,11 @@
 export type HomepageLocale = 'zh-CN' | 'zh-TW' | 'en-US'
 export type HomepageLocalizedText = Record<HomepageLocale, string>
 
+export interface HomepageActivityMessage {
+  kind: 'order' | 'presence' | 'notice'
+  text: HomepageLocalizedText
+}
+
 export interface HomepageReview {
   id: string
   name: string
@@ -12,6 +17,10 @@ export interface HomepageReview {
 export interface HomepageSettings {
   hero_phrases: HomepageLocalizedText[]
   hero_interval_ms: number
+  activity_enabled: boolean
+  activity_interval_ms: number
+  activity_names: string[]
+  activity_messages: HomepageActivityMessage[]
   reviews_enabled: boolean
   reviews_demo: boolean
   reviews_title: HomepageLocalizedText
@@ -39,12 +48,35 @@ export const createDefaultHeroPhrases = (): HomepageLocalizedText[] => [
   localized('无需海外信用卡', '無需海外信用卡', 'No overseas credit card needed'),
 ]
 
+export const createDefaultActivityNames = (): string[] => [
+  '晚风送信', '小林同学', 'wx_kai109', '青山不老', 'Mia_2026',
+  '小周周', '13752861042', '星河旅人', 'chenyu_88', '阿橙',
+]
+
+export const createDefaultActivityMessages = (): HomepageActivityMessage[] => [
+  { kind: 'order', text: localized('{name} 下单了 ChatGPT Plus 订阅', '{name} 下單了 ChatGPT Plus 訂閱', '{name} ordered a ChatGPT Plus subscription') },
+  { kind: 'presence', text: localized('目前有 {count} 位用户正在充值', '目前有 {count} 位使用者正在儲值', '{count} users are currently recharging') },
+  { kind: 'notice', text: localized('正规渠道充值，不成功100%退款', '正規管道儲值，不成功100%退款', 'Official-channel recharges. Full refund if unsuccessful.') },
+  { kind: 'notice', text: localized('支持 ChatGPT、Claude、Cursor、Gemini 等主流工具', '支援 ChatGPT、Claude、Cursor、Gemini 等主流工具', 'Supports ChatGPT, Claude, Cursor, Gemini and other popular tools') },
+  { kind: 'notice', text: localized('7×24 小时全天候自动充值服务！', '7×24 小時全天候自動儲值服務！', '24/7 automatic recharge service!') },
+]
+
 export const normalizeHomepageSettings = (value?: unknown): HomepageSettings => {
   const raw = record(value)
   const phrases = Array.isArray(raw.hero_phrases)
     ? raw.hero_phrases.map(item => localizedText(item, 100)).filter(item => Object.values(item).some(Boolean)).slice(0, 8)
     : []
   const ids = new Set<string>()
+  const names = Array.isArray(raw.activity_names)
+    ? raw.activity_names.map(item => text(item, 30)).filter(Boolean).slice(0, 40)
+    : []
+  const messages = Array.isArray(raw.activity_messages) ? raw.activity_messages.flatMap(item => {
+    const message = record(item)
+    const content = localizedText(message.text, 200)
+    if (!Object.values(content).some(Boolean)) return []
+    const kind: HomepageActivityMessage['kind'] = message.kind === 'order' || message.kind === 'presence' ? message.kind : 'notice'
+    return [{ kind, text: content }]
+  }).slice(0, 12) : []
   const reviews = Array.isArray(raw.reviews) ? raw.reviews.flatMap((item, index) => {
     const review = record(item)
     const content = localizedText(review.content, 1000)
@@ -60,6 +92,10 @@ export const normalizeHomepageSettings = (value?: unknown): HomepageSettings => 
   return {
     hero_phrases: phrases.length ? phrases : createDefaultHeroPhrases(),
     hero_interval_ms: integer(raw.hero_interval_ms, 1000, 10000, 2600),
+    activity_enabled: typeof raw.activity_enabled === 'boolean' ? raw.activity_enabled : true,
+    activity_interval_ms: integer(raw.activity_interval_ms, 2000, 15000, 4200),
+    activity_names: names.length ? names : createDefaultActivityNames(),
+    activity_messages: messages.length ? messages : createDefaultActivityMessages(),
     reviews_enabled: typeof raw.reviews_enabled === 'boolean' ? raw.reviews_enabled : true,
     reviews_demo: typeof raw.reviews_demo === 'boolean' ? raw.reviews_demo : true,
     reviews_title: localizedText(raw.reviews_title, 200),

@@ -91,4 +91,49 @@ describe('homepage content editor', () => {
     await click('button[aria-label="删除评价 1"]')
     expect(homepage.value.reviews).toHaveLength(0)
   })
+
+  it('edits announcement translations independently and preserves newlines in the random names editor', async () => {
+    const { homepage, language, container } = mountEditor({
+      activity_names: ['阿明', 'Leah'],
+      activity_messages: [{ kind: 'notice', text: { 'zh-CN': '服务文案', 'zh-TW': '服務文案', 'en-US': 'Service notice' } }],
+    })
+    language.value = 'en-US'
+    await nextTick()
+    await input('#homepage-activity-text-0', 'Order details are available any time.')
+    expect(homepage.value.activity_messages[0]!.text).toEqual({
+      'zh-CN': '服务文案', 'zh-TW': '服務文案', 'en-US': 'Order details are available any time.',
+    })
+    await input('#homepage-activity-names', '阿明\nLeah\n')
+    expect(homepage.value.activity_names).toEqual(['阿明', 'Leah', ''])
+    expect(container.querySelector<HTMLTextAreaElement>('#homepage-activity-names')!.value).toBe('阿明\nLeah\n')
+    await input('#homepage-activity-names', Array.from({ length: 45 }, (_, index) => `Name ${index}`).join('\n'))
+    expect(homepage.value.activity_names).toHaveLength(40)
+    expect(container.textContent).toContain('{name}')
+    expect(container.textContent).toContain('{count}')
+  })
+
+  it('limits announcement entries and restores default content without changing its visibility or speed', async () => {
+    const { homepage } = mountEditor({
+      activity_enabled: true,
+      activity_interval_ms: 4200,
+      activity_names: ['Custom name'],
+      activity_messages: [{ kind: 'notice', text: { 'zh-CN': 'Custom message' } }],
+    })
+    await input('#homepage-activity-interval', '9200')
+    expect(homepage.value.activity_interval_ms).toBe(9200)
+    await click('#homepage-activity-enabled')
+    expect(homepage.value.activity_enabled).toBe(false)
+    for (let i = 0; i < 15; i += 1) await click('[data-action="add-activity"]')
+    expect(homepage.value.activity_messages).toHaveLength(12)
+    expect(document.querySelector<HTMLButtonElement>('[data-action="add-activity"]')!.disabled).toBe(true)
+    await click('button[aria-label="删除播报 1"]')
+    expect(homepage.value.activity_messages).toHaveLength(11)
+    await click('[data-action="reset-activity"]')
+    expect(homepage.value.activity_names).toHaveLength(10)
+    expect(homepage.value.activity_names).not.toContain('Custom name')
+    expect(homepage.value.activity_messages).toHaveLength(5)
+    expect(homepage.value.activity_messages.every((message) => message.text['zh-CN'] && message.text['zh-TW'] && message.text['en-US'])).toBe(true)
+    expect(homepage.value.activity_enabled).toBe(false)
+    expect(homepage.value.activity_interval_ms).toBe(9200)
+  })
 })

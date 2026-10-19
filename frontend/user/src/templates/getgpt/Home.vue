@@ -11,6 +11,7 @@ import { getImageUrl } from '../../utils/image'
 import FaqSection from './components/FaqSection.vue'
 import RotatingHeadline from './components/RotatingHeadline.vue'
 import ReviewMarquee from './components/ReviewMarquee.vue'
+import ActivityTicker from './components/ActivityTicker.vue'
 import { normalizeHomepageSettings } from '../../../../shared/homepage'
 import { usePreferredReducedMotion } from '@vueuse/core'
 
@@ -47,7 +48,7 @@ onMounted(async () => {
       <RouterLink class="gpt-primary gpt-hero-cta" to="/plus-price">{{ c.buy }} <ChevronRight :size="22" /></RouterLink>
       <RouterLink class="gpt-pro-shortcut" to="/gptpro"><span>Pro</span>{{ c.alsoPro }} <ChevronRight :size="14" /></RouterLink>
       <p class="gpt-hero-note"><span class="gpt-mini-avatars"><i>✦</i><i>◈</i><i>✧</i></span>{{ c.heroNote }}</p>
-      <p class="gpt-hero-tools"><i></i>{{ c.heroTools }}</p>
+      <ActivityTicker :settings="homepage" />
       <div class="gpt-hero-trust"><div><span class="gpt-icon-box"><ShieldCheck :size="22" /></span><p><b>{{ c.trust1 }}</b><small>{{ c.trust1d }}</small></p></div><div><span class="gpt-icon-box"><Zap :size="22" /></span><p><b>{{ c.trust2 }}</b><small>{{ c.trust2d }}</small></p></div><div><span class="gpt-icon-box"><CreditCard :size="22" /></span><p><b>{{ c.trust3 }}</b><small>{{ c.trust3d }}</small></p></div></div>
       <a class="gpt-guide-pill" href="#video-tutorial" @click.prevent="scrollToGuide">{{ c.watch }} <ArrowRight :size="14" /></a>
       <div class="gpt-hero-stem"></div>

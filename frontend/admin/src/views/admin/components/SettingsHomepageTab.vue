@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import {
+  createDefaultActivityNames,
+  createDefaultActivityMessages,
   createDemoReviews,
   type HomepageLocalizedText,
   type HomepageSettings,
@@ -15,6 +19,23 @@ const { t } = useI18n()
 const props = defineProps<{ currentLang: 'zh-CN' | 'zh-TW' | 'en-US' }>()
 const homepage = defineModel<HomepageSettings>({ required: true })
 const blankText = (): HomepageLocalizedText => ({ 'zh-CN': '', 'zh-TW': '', 'en-US': '' })
+const activityNamesText = computed({
+  get: () => homepage.value.activity_names.join('\n'),
+  set: (value: string) => {
+    homepage.value.activity_names = value.split(/\r?\n/).slice(0, 40).map((name) => Array.from(name).slice(0, 30).join(''))
+  },
+})
+
+const addActivityMessage = () => {
+  if (homepage.value.activity_messages.length < 12) {
+    homepage.value.activity_messages.push({ kind: 'notice', text: blankText() })
+  }
+}
+
+const resetActivityContent = () => {
+  homepage.value.activity_names = createDefaultActivityNames()
+  homepage.value.activity_messages = createDefaultActivityMessages()
+}
 
 const addPhrase = () => {
   if (homepage.value.hero_phrases.length < 8) homepage.value.hero_phrases.push(blankText())
@@ -69,6 +90,69 @@ const loadDemoReviews = () => {
           </Button>
           <p class="text-xs text-muted-foreground">{{ t('admin.settings.homepage.phraseLimit') }}</p>
         </div>
+      </div>
+    </section>
+
+    <section class="rounded-xl border border-border bg-card">
+      <div class="border-b border-border bg-muted/40 px-6 py-4">
+        <h2 class="text-lg font-semibold">{{ t('admin.settings.homepage.activityTitle') }}</h2>
+        <p class="mt-1 text-xs text-muted-foreground">{{ t('admin.settings.homepage.activityHint') }}</p>
+      </div>
+      <div class="space-y-6 p-6">
+        <div class="flex items-start justify-between gap-4">
+          <div class="space-y-1">
+            <Label for="homepage-activity-enabled">{{ t('admin.settings.homepage.activityEnabled') }}</Label>
+            <p class="text-xs text-muted-foreground">{{ t('admin.settings.homepage.activityEnabledHint') }}</p>
+          </div>
+          <Switch id="homepage-activity-enabled" v-model="homepage.activity_enabled" />
+        </div>
+        <div class="rounded-lg border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+          {{ t('admin.settings.homepage.activityDemoHint') }}
+        </div>
+        <div class="grid gap-5 md:grid-cols-2">
+          <div class="space-y-2">
+            <Label for="homepage-activity-interval">{{ t('admin.settings.homepage.activityInterval') }}</Label>
+            <Input id="homepage-activity-interval" v-model.number="homepage.activity_interval_ms" type="number" min="2000" max="15000" step="100" />
+          </div>
+          <div class="space-y-2 md:col-span-2">
+            <Label for="homepage-activity-names">{{ t('admin.settings.homepage.activityNames') }}</Label>
+            <Textarea id="homepage-activity-names" v-model="activityNamesText" rows="5" :placeholder="t('admin.settings.homepage.activityNamesPlaceholder')" />
+            <p class="text-xs text-muted-foreground">{{ t('admin.settings.homepage.activityNamesHint') }}</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 border-t border-border pt-5">
+          <Button variant="outline" size="sm" data-action="add-activity" :disabled="homepage.activity_messages.length >= 12" @click="addActivityMessage">{{ t('admin.settings.homepage.addActivity') }}</Button>
+          <Button variant="outline" size="sm" data-action="reset-activity" @click="resetActivityContent">{{ t('admin.settings.homepage.resetActivity') }}</Button>
+          <span class="text-xs text-muted-foreground">{{ t('admin.settings.homepage.activityCount', { count: homepage.activity_messages.length }) }}</span>
+        </div>
+        <p class="text-xs text-muted-foreground">{{ t('admin.settings.homepage.activityTokens', { name: '{name}', count: '{count}' }) }}</p>
+        <p class="text-xs text-muted-foreground">{{ t('admin.settings.homepage.activityResetHint') }}</p>
+        <div v-if="!homepage.activity_messages.length" class="rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+          {{ t('admin.settings.homepage.activityEmpty') }}
+        </div>
+        <article v-for="(message, index) in homepage.activity_messages" :key="index" class="space-y-4 rounded-xl border border-border bg-background p-5">
+          <div class="flex items-center justify-between gap-4">
+            <h3 class="text-sm font-semibold">{{ t('admin.settings.homepage.activityMessage', { number: index + 1 }) }}</h3>
+            <Button variant="ghost" size="sm" :aria-label="t('admin.settings.homepage.removeActivity', { number: index + 1 })" @click="homepage.activity_messages.splice(index, 1)">{{ t('admin.settings.homepage.remove') }}</Button>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-3">
+            <div class="space-y-2">
+              <Label :for="`homepage-activity-kind-${index}`">{{ t('admin.settings.homepage.activityKind') }}</Label>
+              <Select v-model="message.kind">
+                <SelectTrigger :id="`homepage-activity-kind-${index}`"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="order">{{ t('admin.settings.homepage.activityKindOrder') }}</SelectItem>
+                  <SelectItem value="presence">{{ t('admin.settings.homepage.activityKindPresence') }}</SelectItem>
+                  <SelectItem value="notice">{{ t('admin.settings.homepage.activityKindNotice') }}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div class="space-y-2 sm:col-span-2">
+              <Label :for="`homepage-activity-text-${index}`">{{ t('admin.settings.homepage.activityText') }}</Label>
+              <Input :id="`homepage-activity-text-${index}`" v-model="message.text[props.currentLang]" maxlength="200" />
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 

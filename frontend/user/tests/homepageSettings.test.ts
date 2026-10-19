@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { createDemoReviews, normalizeHomepageSettings } from '../../shared/homepage.ts'
+import { createDefaultActivityMessages, createDefaultActivityNames, createDemoReviews, normalizeHomepageSettings } from '../../shared/homepage.ts'
 
 test('homepage animation values stay finite, integral and within supported durations', () => {
   const settings = normalizeHomepageSettings({ hero_interval_ms: 0, reviews_duration_seconds: Infinity })
@@ -48,4 +48,34 @@ test('demo reviews are fresh independent samples and are not silently stored as 
   assert.ok(second.every(review => review.id.startsWith('demo-')))
   assert.equal(normalizeHomepageSettings().reviews.length, 0)
   assert.equal(normalizeHomepageSettings().reviews_demo, true)
+})
+
+test('activity configuration is bounded and preserves only supported plain multilingual messages', () => {
+  const settings = normalizeHomepageSettings({
+    activity_enabled: false,
+    activity_interval_ms: 18000,
+    activity_names: ['', null, ...Array.from({ length: 45 }, () => '🙂'.repeat(35))],
+    activity_messages: [{ kind: 'order', text: {} }, ...Array.from({ length: 15 }, () => ({
+      kind: 'unknown', text: { 'zh-CN': '播'.repeat(210), ignored: 'remove' }, html: 'remove',
+    }))],
+  })
+  assert.equal(settings.activity_enabled, false)
+  assert.equal(settings.activity_interval_ms, 15000)
+  assert.equal(settings.activity_names.length, 40)
+  assert.equal(Array.from(settings.activity_names[0]!).length, 30)
+  assert.equal(settings.activity_messages.length, 12)
+  assert.equal(settings.activity_messages[0]!.kind, 'notice')
+  assert.equal(settings.activity_messages[0]!.text['zh-CN'].length, 200)
+  assert.deepEqual(Object.keys(settings.activity_messages[0]!).sort(), ['kind', 'text'])
+  assert.deepEqual(Object.keys(settings.activity_messages[0]!.text).sort(), ['en-US', 'zh-CN', 'zh-TW'])
+  assert.equal(normalizeHomepageSettings({ activity_interval_ms: 1999 }).activity_interval_ms, 4200)
+})
+
+test('empty activity content falls back to independent editable defaults', () => {
+  const settings = normalizeHomepageSettings({ activity_names: [' '], activity_messages: [{}] })
+  assert.deepEqual(settings.activity_names, createDefaultActivityNames())
+  assert.deepEqual(settings.activity_messages, createDefaultActivityMessages())
+  settings.activity_messages[0]!.text['zh-CN'] = 'custom'
+  assert.notEqual(createDefaultActivityMessages()[0]!.text['zh-CN'], 'custom')
+  assert.equal(settings.activity_enabled, true)
 })

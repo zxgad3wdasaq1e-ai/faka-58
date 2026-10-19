@@ -11,8 +11,10 @@ import (
 )
 
 const (
-	settingHomepageHeroPhrasesMaxCount = 8
-	settingHomepageReviewsMaxCount     = 24
+	settingHomepageHeroPhrasesMaxCount      = 8
+	settingHomepageReviewsMaxCount          = 24
+	settingHomepageActivityNamesMaxCount    = 40
+	settingHomepageActivityMessagesMaxCount = 12
 )
 
 var settingHomepageReviewIDPattern = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$`)
@@ -29,11 +31,83 @@ func NormalizeHomepage(raw interface{}) map[string]interface{} {
 		"reviews_subtitle":         normalizeHomepageLocalizedText(value["reviews_subtitle"], 500),
 		"reviews_duration_seconds": normalizeHomepageInteger(value["reviews_duration_seconds"], 20, 120, 55),
 		"reviews":                  normalizeHomepageReviews(value["reviews"]),
+		"activity_enabled":         true,
+		"activity_interval_ms":     normalizeHomepageInteger(value["activity_interval_ms"], 2000, 15000, 4200),
+		"activity_names":           normalizeHomepageActivityNames(value["activity_names"]),
+		"activity_messages":        normalizeHomepageActivityMessages(value["activity_messages"]),
 	}
-	for _, field := range []string{"reviews_enabled", "reviews_demo"} {
+	for _, field := range []string{"reviews_enabled", "reviews_demo", "activity_enabled"} {
 		if setting, ok := value[field]; ok && setting != nil {
 			result[field] = settingsvalue.ParseBool(setting)
 		}
+	}
+	return result
+}
+
+func normalizeHomepageActivityNames(raw interface{}) []string {
+	result := make([]string, 0, settingHomepageActivityNamesMaxCount)
+	for _, name := range settingsvalue.NormalizeStringList(raw) {
+		name = settingsvalue.NormalizeTextWithRuneLimit(name, 30)
+		if name == "" {
+			continue
+		}
+		result = append(result, name)
+		if len(result) == settingHomepageActivityNamesMaxCount {
+			break
+		}
+	}
+	if len(result) == 0 {
+		return []string{"晚风送信", "小林同学", "wx_kai109", "青山不老", "Mia_2026", "小周周", "13752861042", "星河旅人", "chenyu_88", "阿橙"}
+	}
+	return result
+}
+
+func normalizeHomepageActivityMessages(raw interface{}) []interface{} {
+	items, _ := raw.([]interface{})
+	result := make([]interface{}, 0, settingHomepageActivityMessagesMaxCount)
+	for _, item := range items {
+		message, ok := item.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		text := normalizeHomepageLocalizedText(message["text"], 200)
+		if homepageLocalizedTextIsEmpty(text) {
+			continue
+		}
+		kind := settingsvalue.NormalizeTextWithRuneLimit(message["kind"], 20)
+		if kind != "order" && kind != "presence" && kind != "notice" {
+			kind = "notice"
+		}
+		result = append(result, map[string]interface{}{"kind": kind, "text": text})
+		if len(result) == settingHomepageActivityMessagesMaxCount {
+			break
+		}
+	}
+	if len(result) == 0 {
+		return defaultHomepageActivityMessages()
+	}
+	return result
+}
+
+func defaultHomepageActivityMessages() []interface{} {
+	defaults := []struct {
+		kind string
+		zhCN string
+		zhTW string
+		enUS string
+	}{
+		{"order", "{name} 下单了 ChatGPT Plus 订阅", "{name} 下單了 ChatGPT Plus 訂閱", "{name} ordered a ChatGPT Plus subscription"},
+		{"presence", "目前有 {count} 位用户正在充值", "目前有 {count} 位使用者正在儲值", "{count} users are currently recharging"},
+		{"notice", "正规渠道充值，不成功100%退款", "正規管道儲值，不成功100%退款", "Official-channel recharges. Full refund if unsuccessful."},
+		{"notice", "支持 ChatGPT、Claude、Cursor、Gemini 等主流工具", "支援 ChatGPT、Claude、Cursor、Gemini 等主流工具", "Supports ChatGPT, Claude, Cursor, Gemini and other popular tools"},
+		{"notice", "7×24 小时全天候自动充值服务！", "7×24 小時全天候自動儲值服務！", "24/7 automatic recharge service!"},
+	}
+	result := make([]interface{}, 0, len(defaults))
+	for _, message := range defaults {
+		result = append(result, map[string]interface{}{
+			"kind": message.kind,
+			"text": map[string]interface{}{"zh-CN": message.zhCN, "zh-TW": message.zhTW, "en-US": message.enUS},
+		})
 	}
 	return result
 }

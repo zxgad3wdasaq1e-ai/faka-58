@@ -8,6 +8,7 @@ import (
 
 	"github.com/dujiao-next/internal/config"
 	"github.com/dujiao-next/internal/constants"
+	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
 	"github.com/dujiao-next/internal/shared/jsonmap"
 )
 
@@ -788,6 +789,10 @@ func TestHomepageReadDefaultsForExistingAndMissingSiteConfig(t *testing.T) {
 			"reviews_subtitle":         map[string]interface{}{"zh-CN": "", "zh-TW": "", "en-US": ""},
 			"reviews_duration_seconds": 55,
 			"reviews":                  []interface{}{},
+			"activity_enabled":         true,
+			"activity_interval_ms":     4200,
+			"activity_names":           []string{"晚风送信", "小林同学", "wx_kai109", "青山不老", "Mia_2026", "小周周", "13752861042", "星河旅人", "chenyu_88", "阿橙"},
+			"activity_messages":        settingsstorefront.NormalizeHomepage(nil)["activity_messages"],
 		}
 		if !reflect.DeepEqual(homepage, want) {
 			t.Fatalf("homepage defaults = %#v, want %#v", homepage, want)
@@ -813,6 +818,12 @@ func TestHomepagePublicConfigRoundTrip(t *testing.T) {
 			"reviews_demo":             false,
 			"reviews_title":            map[string]interface{}{"zh-CN": " 用户分享 ", "en-US": "Reviews"},
 			"reviews_duration_seconds": 75,
+			"activity_enabled":         false,
+			"activity_interval_ms":     12500,
+			"activity_names":           []interface{}{" Alice ", "Bob"},
+			"activity_messages": []interface{}{
+				map[string]interface{}{"kind": "notice", "text": map[string]interface{}{"en-US": " A custom notice ", "zh-CN": " 自定义提示 "}},
+			},
 			"reviews": []interface{}{
 				map[string]interface{}{
 					"id": "review-one", "name": " 阿明 ", "product": " Plus ", "rating": 4,
