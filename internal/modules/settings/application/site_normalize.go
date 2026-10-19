@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/dujiao-next/internal/constants"
+	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
 	"github.com/dujiao-next/internal/shared/contactlink"
 	"github.com/dujiao-next/internal/shared/jsonmap"
 )
@@ -42,6 +43,7 @@ func normalizeSiteSetting(value map[string]interface{}) jsonmap.JSON {
 	normalized["seo"] = normalizeSiteLocalizedBlock(value["seo"], []string{"title", "keywords", "description"})
 	normalized["legal"] = normalizeSiteLocalizedBlock(value["legal"], []string{"terms", "privacy"})
 	normalized["about"] = normalizeSiteAbout(value["about"])
+	normalized["homepage"] = settingsstorefront.NormalizeHomepage(value["homepage"])
 	normalized["scripts"] = normalizeSiteScripts(value["scripts"])
 	normalized["footer_links"] = normalizeSiteFooterLinks(value["footer_links"])
 	normalized[constants.SettingFieldSiteCurrency] = normalizeSiteCurrency(value[constants.SettingFieldSiteCurrency])

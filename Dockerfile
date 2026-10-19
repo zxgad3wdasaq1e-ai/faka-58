@@ -21,6 +21,7 @@ RUN cd user  && pnpm install --frozen-lockfile
 
 COPY frontend/admin ./admin
 COPY frontend/user  ./user
+COPY frontend/shared ./shared
 
 # admin 走 fullstack 模式：注入 __DJ_ADMIN_BASE__ 占位符，
 # 后端启动时按 web.admin_path 替换，使同一份产物能挂到任意自定义前缀。

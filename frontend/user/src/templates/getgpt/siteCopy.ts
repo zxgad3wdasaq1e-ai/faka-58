@@ -2,6 +2,10 @@ import { computed } from 'vue'
 import { useAppStore } from '../../stores/app'
 
 const zh = {
+  reviewsTag: '服务体验', reviewsTitle: '看看大家的使用体验', reviewsDesc: '选购、支付与交付，每一步都值得认真对待。',
+  reviewsDemo: '原创模拟评价', reviewsCTA: '选择适合我的方案', reviewsCTAHint: '先了解商品说明，再开始你的订阅。',
+  reviewRating: '评分', reviewSampleUser: '演示用户', reviewUser: '使用者', reviewsPause: '暂停滚动', reviewsResume: '继续滚动',
+  reviewsDemoNote: '以下为原创模拟评价，仅用于展示页面效果。',
   announcement: '让 AI 跟上你的工作节奏。Plus / Pro 订阅与数字商品，自助下单，安全交付。',
   seePlans: '查看 Pro 方案', subtitle: 'AI 订阅与数字服务', nav: '主导航', plans: 'ChatGPT 充值', pro: 'Pro 专区',
   guide: '充值教程', blog: '博客指南', claude: 'Claude 订阅', gemini: 'Gemini', grok: 'Grok', orders: '查询订单', cart: '购物车',
@@ -48,6 +52,10 @@ const zh = {
 
 type SiteCopy = typeof zh
 const en: SiteCopy = {
+  reviewsTag: 'SERVICE EXPERIENCES', reviewsTitle: 'A closer look at the experience', reviewsDesc: 'From choosing a plan to payment and delivery, every step matters.',
+  reviewsDemo: 'Original sample reviews', reviewsCTA: 'Find my plan', reviewsCTAHint: 'Read the product details before starting your subscription.',
+  reviewRating: 'Rating', reviewSampleUser: 'Sample user', reviewUser: 'User', reviewsPause: 'Pause reviews', reviewsResume: 'Resume reviews',
+  reviewsDemoNote: 'Original simulated reviews, shown to demonstrate the page design.',
   announcement: 'Keep AI in step with your work. Self-service subscriptions and digital products, delivered securely.',
   seePlans: 'Explore Pro', subtitle: 'AI subscriptions & digital services', nav: 'Main navigation', plans: 'ChatGPT plans', pro: 'Explore Pro',
   guide: 'How it works', blog: 'Guides', claude: 'Claude', gemini: 'Gemini', grok: 'Grok', orders: 'Find an order', cart: 'Cart',
@@ -92,6 +100,10 @@ const en: SiteCopy = {
 }
 
 const tw: SiteCopy = {
+  reviewsTag: '服務體驗', reviewsTitle: '看看大家的使用體驗', reviewsDesc: '選購、付款與交付，每一步都值得認真對待。',
+  reviewsDemo: '原創模擬評價', reviewsCTA: '選擇適合我的方案', reviewsCTAHint: '先了解商品說明，再開始你的訂閱。',
+  reviewRating: '評分', reviewSampleUser: '示範使用者', reviewUser: '使用者', reviewsPause: '暫停捲動', reviewsResume: '繼續捲動',
+  reviewsDemoNote: '以下為原創模擬評價，僅用於展示頁面效果。',
   announcement: '讓 AI 跟上你的工作節奏。Plus / Pro 訂閱與數位商品，自助下單，安全交付。',
   seePlans: '查看 Pro 方案', subtitle: 'AI 訂閱與數位服務', nav: '主導覽', plans: 'ChatGPT 儲值', pro: 'Pro 專區',
   guide: '儲值教學', blog: '部落格指南', claude: 'Claude 訂閱', gemini: 'Gemini', grok: 'Grok', orders: '查詢訂單', cart: '購物車',

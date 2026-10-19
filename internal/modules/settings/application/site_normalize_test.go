@@ -1,12 +1,14 @@
 package settingsapp
 
 import (
+	"encoding/json"
 	"errors"
 	"reflect"
 	"testing"
 
 	"github.com/dujiao-next/internal/config"
 	"github.com/dujiao-next/internal/constants"
+	"github.com/dujiao-next/internal/shared/jsonmap"
 )
 
 func TestStorefrontTemplateNormalization(t *testing.T) {
@@ -755,5 +757,124 @@ func TestUpdateSiteSettingValidatesContactLinks(t *testing.T) {
 	}
 	if _, err := svc.Update(constants.SettingKeySiteConfig, map[string]interface{}{"contact": map[string]interface{}{}}); err != nil {
 		t.Fatalf("empty contact links rejected: %v", err)
+	}
+}
+
+func TestHomepageReadDefaultsForExistingAndMissingSiteConfig(t *testing.T) {
+	for _, stored := range []jsonmap.JSON{
+		nil,
+		{},
+		{"homepage": nil},
+		{"homepage": "invalid"},
+	} {
+		repo := newMockSettingRepo()
+		if stored != nil {
+			repo.store[constants.SettingKeySiteConfig] = stored
+		}
+		data, err := NewService(repo).GetConfig(map[string]interface{}{"currency": "USD"})
+		if err != nil {
+			t.Fatal(err)
+		}
+		homepage, ok := data["homepage"].(map[string]interface{})
+		if !ok {
+			t.Fatalf("homepage is not an object for stored config %#v", stored)
+		}
+		want := map[string]interface{}{
+			"hero_phrases":             []interface{}{},
+			"hero_interval_ms":         2600,
+			"reviews_enabled":          true,
+			"reviews_demo":             true,
+			"reviews_title":            map[string]interface{}{"zh-CN": "", "zh-TW": "", "en-US": ""},
+			"reviews_subtitle":         map[string]interface{}{"zh-CN": "", "zh-TW": "", "en-US": ""},
+			"reviews_duration_seconds": 55,
+			"reviews":                  []interface{}{},
+		}
+		if !reflect.DeepEqual(homepage, want) {
+			t.Fatalf("homepage defaults = %#v, want %#v", homepage, want)
+		}
+		if data["currency"] != "USD" {
+			t.Fatalf("existing defaults changed: %#v", data)
+		}
+	}
+}
+
+func TestHomepagePublicConfigRoundTrip(t *testing.T) {
+	repo := newMockSettingRepo()
+	svc := NewService(repo)
+	updated, err := svc.UpdateWithEffects(constants.SettingKeySiteConfig, map[string]interface{}{
+		"brand":              map[string]interface{}{"site_name": "XIOEN AI"},
+		"existing_extension": "keep",
+		"homepage": map[string]interface{}{
+			"hero_phrases": []interface{}{
+				map[string]interface{}{"zh-CN": "  一起探索  ", "zh-TW": " 一起探索 ", "en-US": " Explore together "},
+			},
+			"hero_interval_ms":         3000,
+			"reviews_enabled":          false,
+			"reviews_demo":             false,
+			"reviews_title":            map[string]interface{}{"zh-CN": " 用户分享 ", "en-US": "Reviews"},
+			"reviews_duration_seconds": 75,
+			"reviews": []interface{}{
+				map[string]interface{}{
+					"id": "review-one", "name": " 阿明 ", "product": " Plus ", "rating": 4,
+					"content": map[string]interface{}{"zh-CN": " 查询起来很方便。 ", "en-US": "Easy to check the order."},
+				},
+			},
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !updated.HasEffect(EffectInvalidatePublicConfigCache) {
+		t.Fatal("homepage update must invalidate public config cache")
+	}
+	// 模拟数据库 JSON 编解码后再由公开 GetConfig 扁平化输出。
+	encoded, err := json.Marshal(updated.Value)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var stored jsonmap.JSON
+	if err := json.Unmarshal(encoded, &stored); err != nil {
+		t.Fatal(err)
+	}
+	repo.store[constants.SettingKeySiteConfig] = stored
+	public, err := svc.GetConfig(map[string]interface{}{"languages": []string{"zh-CN"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, nested := public[constants.SettingKeySiteConfig]; nested {
+		t.Fatal("public config must keep homepage at top level")
+	}
+	if !reflect.DeepEqual(public["homepage"], updated.Value["homepage"]) {
+		t.Fatalf("homepage did not survive JSON/public config round trip: %#v", public["homepage"])
+	}
+	if public["existing_extension"] != "keep" || public["brand"].(map[string]interface{})["site_name"] != "XIOEN AI" {
+		t.Fatalf("existing site config was changed: %#v", public)
+	}
+}
+
+func TestHomepageReadFiltersLegacyFieldsWithoutMutatingStoredData(t *testing.T) {
+	repo := newMockSettingRepo()
+	legacy := map[string]interface{}{
+		"hero_interval_ms": 2500, "html": "<div>old</div>",
+		"reviews": []interface{}{
+			map[string]interface{}{"id": "../invalid", "name": "Guest", "avatar": "private", "content": map[string]interface{}{"en-US": "A comment"}},
+			map[string]interface{}{"id": "review-1", "name": "Other", "content": map[string]interface{}{"en-US": "Another comment"}},
+		},
+	}
+	repo.store[constants.SettingKeySiteConfig] = jsonmap.JSON{"homepage": legacy}
+	data, err := NewService(repo).GetConfig(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	homepage := data["homepage"].(map[string]interface{})
+	if _, exists := homepage["html"]; exists {
+		t.Fatal("legacy unknown field leaked to public config")
+	}
+	reviews := homepage["reviews"].([]interface{})
+	if reviews[0].(map[string]interface{})["id"] == reviews[1].(map[string]interface{})["id"] {
+		t.Fatal("generated ID collided with a saved ID")
+	}
+	if legacy["html"] != "<div>old</div>" || legacy["reviews"].([]interface{})[0].(map[string]interface{})["id"] != "../invalid" {
+		t.Fatal("public config read mutated stored data")
 	}
 }

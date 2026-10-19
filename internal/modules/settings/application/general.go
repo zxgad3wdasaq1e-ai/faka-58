@@ -10,6 +10,7 @@ import (
 
 	"github.com/dujiao-next/internal/config"
 	"github.com/dujiao-next/internal/constants"
+	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
 	"github.com/dujiao-next/internal/shared/jsonmap"
 )
 
@@ -85,6 +86,7 @@ func (s *Service) GetConfig(defaults map[string]interface{}) (map[string]interfa
 	for k, v := range defaults {
 		data[k] = v
 	}
+	data["homepage"] = settingsstorefront.NormalizeHomepage(data["homepage"])
 	if s == nil {
 		return data, nil
 	}
@@ -100,6 +102,8 @@ func (s *Service) GetConfig(defaults map[string]interface{}) (map[string]interfa
 	for k, v := range value {
 		data[k] = v
 	}
+	// 旧站点配置可能没有 homepage；公开读取时也补齐默认值并过滤未知子字段。
+	data["homepage"] = settingsstorefront.NormalizeHomepage(data["homepage"])
 	return data, nil
 }
 

@@ -23,6 +23,8 @@ import SettingsOrderEmailTemplateTab from './components/SettingsOrderEmailTempla
 import SettingsNavigationTab from './components/SettingsNavigationTab.vue'
 import SettingsHomeAnnouncementTab from './components/SettingsHomeAnnouncementTab.vue'
 import SettingsUpstreamSyncTab from './components/SettingsUpstreamSyncTab.vue'
+import SettingsHomepageTab from './components/SettingsHomepageTab.vue'
+import { normalizeHomepageSettings } from '../../../../shared/homepage'
 
 const { t } = useI18n()
 const loading = ref(false)
@@ -75,6 +77,7 @@ const languages = computed(() => [
 const tabs = computed(() => [
   { label: t('admin.settings.tabs.basic'), value: 'basic' },
   { label: t('admin.settings.tabs.template'), value: 'template' },
+  { label: t('admin.settings.tabs.homepage'), value: 'homepage' },
   { label: t('admin.settings.tabs.navigation'), value: 'navigation' },
   { label: t('admin.settings.tabs.about'), value: 'about' },
   { label: t('admin.settings.tabs.legal'), value: 'legal' },
@@ -222,6 +225,7 @@ const form = reactive({
   footer_links: [] as FooterLinkItem[],
   storefront_template: 'getgpt' as 'classic' | 'vault' | 'getgpt',
   template_mode: 'card' as 'card' | 'list',
+  homepage: normalizeHomepageSettings(),
 })
 
 const smtpData = reactive({
@@ -460,6 +464,7 @@ const fetchSettings = async () => {
 
       const rawStorefrontTemplate = String(data.storefront_template || 'getgpt').trim()
       form.storefront_template = rawStorefrontTemplate === 'vault' ? 'vault' : rawStorefrontTemplate === 'classic' ? 'classic' : 'getgpt'
+      form.homepage = normalizeHomepageSettings(data.homepage)
     }
 
     if (orderRes.data && orderRes.data.data) {
@@ -609,6 +614,7 @@ const saveRegistrationSettings = async () => {
 }
 
 const saveSiteSettings = async () => {
+  form.homepage = normalizeHomepageSettings(form.homepage)
   const payload = {
     key: 'site_config',
     value: {
@@ -622,6 +628,7 @@ const saveSiteSettings = async () => {
       footer_links: form.footer_links,
       storefront_template: form.storefront_template,
       template_mode: form.template_mode,
+      homepage: form.homepage,
     },
   }
   await adminAPI.updateSettings(payload)
@@ -1276,6 +1283,10 @@ onMounted(() => {
           </RadioGroup>
         </div>
       </div>
+      </TabsContent>
+
+      <TabsContent value="homepage" :forceMount="true" v-show="currentTab === 'homepage'" class="mt-0">
+        <SettingsHomepageTab v-model="form.homepage" :current-lang="currentLang" />
       </TabsContent>
 
       <TabsContent value="about" :forceMount="true" v-show="currentTab === 'about'" class="space-y-6 mt-0">

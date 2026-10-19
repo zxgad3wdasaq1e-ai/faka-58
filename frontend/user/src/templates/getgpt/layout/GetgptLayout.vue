@@ -76,4 +76,6 @@ onBeforeUnmount(() => window.removeEventListener('keydown', escape))
 </template>
 <style scoped>
 .gpt-cart-link{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:none;min-width:32px;min-height:36px;color:#475569}.gpt-cart-count{position:absolute;top:-2px;right:-7px;min-width:17px;padding:1px 4px;border-radius:10px;background:#6250ef;color:white;font-size:10px;text-align:center}
+@media(max-width:640px){.gpt-brand{min-width:0;flex-shrink:1}.gpt-brand-icon{flex-shrink:0}.gpt-brand>span:last-child{min-width:0}.gpt-brand small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.gpt-order-link,.gpt-menu-button{flex-shrink:0}}
+@media(max-width:360px){.gpt-order-link{font-size:0;gap:0;min-width:24px}}
 </style>
