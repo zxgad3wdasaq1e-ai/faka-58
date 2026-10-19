@@ -1,0 +1,61 @@
+name: Docker deployment smoke test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      storage:
+        description: Include MinIO source build and S3 services
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Initialize private local configuration
+        env:
+          WITH_MINIO: ${{ inputs.storage }}
+        run: |
+          if [ "$WITH_MINIO" = "true" ]; then
+            python3 scripts/setup.py --local --storage minio
+          else
+            python3 scripts/setup.py --local
+          fi
+          docker compose config --quiet
+      - name: Build and start services
+        run: docker compose up -d --build --wait --wait-timeout 300
+      - name: Verify database, API, catalog and idempotent initialization
+        run: |
+          curl --fail --retry 20 --retry-delay 2 --retry-connrefused http://localhost:8080/health
+          python3 scripts/seed-catalog.py --base-url http://localhost:8080
+          python3 scripts/seed-catalog.py --base-url http://localhost:8080
+          python3 - <<'PY'
+          import json, urllib.request
+          base = 'http://localhost:8080'
+          with urllib.request.urlopen(base + '/api/v1/public/products') as response:
+              products = json.load(response)['data']
+          slugs = [product['slug'] for product in products]
+          for slug in ('chatgpt-plus', 'chatgpt-pro-100', 'chatgpt-pro-200'):
+              assert slugs.count(slug) == 1, slugs
+          with urllib.request.urlopen(base + '/') as response:
+              assert 'XIOEN AI' in response.read().decode()
+          PY
+      - name: Save diagnostic logs
+        if: failure()
+        run: docker compose logs --tail 100 app postgres redis caddy
+      - name: Stop services
+        if: always()
+        run: docker compose down

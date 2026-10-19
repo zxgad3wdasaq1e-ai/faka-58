@@ -1,0 +1,62 @@
+# setup.py --storage minio 会通过 .env 同时启用本文件与 storage profile。
+services:
+  app:
+    depends_on:
+      minio-init:
+        condition: service_completed_successfully
+
+  minio:
+    image: getgpt-minio:local
+    build:
+      context: .
+      dockerfile: deploy/minio.Dockerfile
+      target: server
+    profiles: [storage]
+    restart: unless-stopped
+    entrypoint: [/bin/sh, /opt/store/minio-start.sh]
+    command: [server, /data, --console-address, ':9001']
+    secrets: [minio_root_user, minio_root_password]
+    volumes:
+      - minio_data:/data
+      - ./deploy/minio-start.sh:/opt/store/minio-start.sh:ro
+    ports:
+      - '127.0.0.1:${MINIO_CONSOLE_PORT:-9001}:9001'
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, 'http://127.0.0.1:9000/minio/health/cluster']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    networks: [store]
+
+  minio-init:
+    image: getgpt-mc:local
+    build:
+      context: .
+      dockerfile: deploy/minio.Dockerfile
+      target: client
+    profiles: [storage]
+    restart: 'no'
+    entrypoint: [/bin/sh, /opt/store/minio-init.sh]
+    environment:
+      MINIO_BUCKET: storefront-media
+    secrets: [minio_root_user, minio_root_password, minio_app_user, minio_app_password]
+    volumes:
+      - ./deploy/minio-init.sh:/opt/store/minio-init.sh:ro
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks: [store]
+
+volumes:
+  minio_data:
+
+secrets:
+  minio_root_user:
+    file: ./deploy/secrets/minio_root_user
+  minio_root_password:
+    file: ./deploy/secrets/minio_root_password
+  minio_app_user:
+    file: ./deploy/secrets/minio_app_user
+  minio_app_password:
+    file: ./deploy/secrets/minio_app_password

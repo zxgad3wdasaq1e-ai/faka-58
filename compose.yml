@@ -1,0 +1,124 @@
+name: ${COMPOSE_PROJECT_NAME:-getgpt}
+
+services:
+  app:
+    image: ${APP_IMAGE:-getgpt-store:local}
+    build:
+      context: .
+      args:
+        APP_VERSION: ${APP_VERSION:-getgpt-local}
+    restart: unless-stopped
+    init: true
+    environment:
+      TZ: Asia/Shanghai
+    volumes:
+      - ./config.yml:/app/config.yml:ro
+      - uploads:/app/uploads
+      - app_state:/app/db
+      - app_logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, 'http://127.0.0.1:8080/health']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 90s
+    networks: [store]
+    security_opt: [no-new-privileges:true]
+
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: getgpt
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_admin_password
+      TZ: Asia/Shanghai
+    secrets: [postgres_password, postgres_admin_password]
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./deploy/postgres-init.sh:/docker-entrypoint-initdb.d/10-store-user.sh:ro
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -h 127.0.0.1 -U getgpt -d getgpt']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    networks: [store]
+
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    command:
+      - /bin/sh
+      - -ec
+      - 'exec /usr/local/bin/docker-entrypoint.sh redis-server --appendonly yes --requirepass "$$(cat /run/secrets/redis_password)"'
+    secrets: [redis_password]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [CMD-SHELL, 'REDISCLI_AUTH="$$(cat /run/secrets/redis_password)" redis-cli ping | grep -q PONG']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    networks: [store]
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-http://localhost}
+    ports:
+      - '${HTTP_PORT:-8080}:80'
+      - '${HTTPS_PORT:-8443}:443'
+      - '${HTTPS_PORT:-8443}:443/udp'
+    volumes:
+      - ./deploy/runtime/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      store:
+        ipv4_address: ${CADDY_IP:-172.29.240.10}
+    security_opt: [no-new-privileges:true]
+
+  adminer:
+    image: adminer:5-standalone
+    profiles: [tools]
+    restart: unless-stopped
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    ports:
+      - '127.0.0.1:${ADMINER_PORT:-8090}:8080'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [store]
+
+networks:
+  store:
+    ipam:
+      config:
+        - subnet: ${APP_SUBNET:-172.29.240.0/24}
+
+volumes:
+  postgres_data:
+  redis_data:
+  uploads:
+  app_state:
+  app_logs:
+  caddy_data:
+  caddy_config:
+
+secrets:
+  postgres_admin_password:
+    file: ./deploy/secrets/postgres_admin_password
+  postgres_password:
+    file: ./deploy/secrets/postgres_password
+  redis_password:
+    file: ./deploy/secrets/redis_password
