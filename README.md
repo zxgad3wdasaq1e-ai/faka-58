@@ -37,7 +37,14 @@ docker compose logs --tail 100 app
 
 需要由项目自动管理 HTTPS 时，可在首次安装命令末尾使用 `| bash -s -- --domain xioenai.vip` 替代 `| bash`；该模式继续使用标准 80/443，需将域名 DNS A/AAAA 指向服务器并放行这些端口。正式收款前仍需在后台配置易支付、导入卡密或设置人工交付，并完成真实订单测试。
 
-默认值只影响新安装。已有安装会沿用原端口和密钥；迁移为 HTTP 1888 时，先备份，将 `.env` 的 `SITE_ADDRESS` 改为 `:80`、`HTTP_PORT` 改为 `1888`、`HTTPS_PORT` 改为未占用的 `8443`（释放原来的 443，HTTP 模式不使用此 TLS 映射），将 `deploy/runtime/installation.json` 的 `origin` 改为 `http://localhost:1888`、`local` 改为 `true`，并把 `config.yml` 中 `cors.allowed_origins` 改为你的实际访问地址。随后执行 `sh deploy/start.sh` 重建入口，再在后台将站点 URL 更新为实际的域名或 IP 地址。不要重新运行首次初始化或删除数据卷。
+默认值只影响新安装。已有安装会沿用原端口和密钥；迁移为 HTTP 1888 时，先备份，将 `.env` 的 `SITE_ADDRESS` 改为 `:80`、`HTTP_PORT` 改为 `1888`、`HTTPS_PORT` 改为未占用的 `8443`（释放原来的 443，HTTP 模式不使用此 TLS 映射），将 `deploy/runtime/installation.json` 的 `origin` 改为 `http://localhost:1888`、`local` 改为 `true`，并把 `config.yml` 中 `cors.allowed_origins` 改为你的实际访问地址。随后执行以下命令，让应用重新读取配置，并兼容尚未更新的旧版启动脚本：
+
+```bash
+docker compose up -d --no-build --force-recreate --wait --wait-timeout 300 app caddy
+curl --fail --retry 10 --retry-delay 2 --retry-connrefused http://localhost:1888/health
+```
+
+完成后在后台将站点 URL 更新为实际的域名或 IP 地址。不要重新运行首次初始化或删除数据卷。
 
 拉取镜像报 `denied` 时，先检查镜像发布是否成功及 Package 是否已设为 Public；私有镜像需在服务器自行 `docker login ghcr.io`，不要将令牌发给他人。配置生成完成但服务启动或目录初始化失败后，在原目录沿用配置重试：
 
