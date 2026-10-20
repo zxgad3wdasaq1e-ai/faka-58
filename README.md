@@ -12,7 +12,7 @@
 
 ## Ubuntu 快速部署（推荐：预构建镜像）
 
-GitHub 负责保存代码、测试和构建镜像，网站运行在你的 Ubuntu 服务器上。服务器安装 Docker Engine、Docker Compose v2（支持 `up --wait`）、Python 3.8+ 和 curl 即可，不需要 Git、Node、Go 或在服务器编译前后台。将 `xioenai.vip` 的 DNS A/AAAA 指向服务器，开放 TCP 80、443；已有服务占用这些端口时需先协调反向代理。
+GitHub 负责保存代码、测试和构建镜像，网站运行在你的 Ubuntu 服务器上。服务器只需 Docker Engine、Docker Compose v2（支持 `up --wait`）、Shell 和 curl；无需安装 Python、Node.js、Go 或 jq，也不在服务器编译前后台。将 `xioenai.vip` 的 DNS A/AAAA 指向服务器，开放 TCP 80、443；已有服务占用这些端口时需先协调反向代理。
 
 首次发布需要仓库管理员完成一次：将部署改动上传到 `main`，等待 Actions 中 `ci` 和 `Publish Docker image` 成功；在 GitHub 个人主页的 Packages 中打开 `faka-58` → Package settings → Change visibility → Public。公开源码仓库不会自动将容器包设为公开。流水线使用仓库自带的 `GITHUB_TOKEN`，无需把个人令牌写进代码。
 
@@ -23,7 +23,7 @@ mkdir -p ~/faka-58 && cd ~/faka-58
 curl -fsSL https://raw.githubusercontent.com/zxgad3wdasaq1e-ai/faka-58/main/deploy/docker-deploy.sh | bash -s -- --domain xioenai.vip
 ```
 
-脚本拉取 `ghcr.io/zxgad3wdasaq1e-ai/faka-58:latest`，根据镜像的源码版本下载同版本部署文件，并将安装固定到镜像的 SHA256 摘要；不会下载整个源码仓库。随后自动生成私有密钥和管理员账号，启动 PostgreSQL、Redis、店面和 Caddy，申请 HTTPS 并导入初始商品目录。图片使用持久化 `uploads` 卷，无需单独部署图床。服务器同时支持 amd64 和 arm64；全新安装脚本拒绝覆盖非空目录和既有密钥。
+Shell 脚本拉取 `ghcr.io/zxgad3wdasaq1e-ai/faka-58:latest`，校验镜像来源及源码版本，下载同版本部署文件并固定到镜像 SHA256 摘要；不会下载整个源码仓库。镜像内的 Go 工具 `storectl` 使用系统安全随机源生成独立密钥和管理员账号，然后启动 PostgreSQL、Redis、店面和 Caddy，申请 HTTPS 并幂等导入初始商品目录。图片使用持久化 `uploads` 卷，自动提供图床，无需额外安装语言运行时。服务器同时支持 amd64 和 arm64；全新安装脚本拒绝覆盖非空目录和既有密钥。
 
 店面：`https://xioenai.vip`。在部署目录读取首次后台地址与账号：
 
@@ -35,17 +35,17 @@ docker compose logs --tail 100 app
 
 只通过 HTTP 体验时将 `--domain xioenai.vip` 换为 `--local`，在服务器本机访问 `http://localhost:8080`。远程体验可运行 `ssh -L 8080:127.0.0.1:8080 用户名@服务器IP` 后在自己电脑打开同一地址。正式收款前仍需在后台配置易支付、导入卡密或设置人工交付，并完成真实订单测试。
 
-拉取镜像报 `denied` 时，先检查镜像发布是否成功及 Package 是否已设为 Public；私有镜像需在服务器自行 `docker login ghcr.io`，不要将令牌发给他人。启动或初始化目录失败后，在原目录执行 `python3 scripts/setup.py --start --seed` 即可沿用配置重试，无需重新运行全新安装脚本。
-
-已有完整源码的全新部署也可跳过编译：
+拉取镜像报 `denied` 时，先检查镜像发布是否成功及 Package 是否已设为 Public；私有镜像需在服务器自行 `docker login ghcr.io`，不要将令牌发给他人。配置生成完成但服务启动或目录初始化失败后，在原目录沿用配置重试：
 
 ```bash
-python3 scripts/setup.py --domain xioenai.vip --image ghcr.io/zxgad3wdasaq1e-ai/faka-58:latest --start --seed
+sh deploy/start.sh --seed
 ```
 
 镜像方式使用 `docker compose pull` 和 `up --no-build`；既有源码部署不会被自动切换。快速安装固定版本以便复现，日常重启使用 `docker compose up -d --no-build --wait`；单独执行 `pull` 不会将已固定摘要升级到新版本。升级前先备份，明确选定新镜像版本后同步调整 `.env` 的 `APP_IMAGE` 与 `deploy/runtime/installation.json` 的 `image`；跨版本部署文件应取自对应源码版本，不要混用。备份及空环境恢复方法见下文。
 
-## Ubuntu 源码部署
+## Ubuntu 源码部署（兼容旧工具）
+
+以下 Python 工具保留给既有源码部署与可选 MinIO 源码构建；它们不参与上面的无 Python 一键安装，新用户直接使用快速部署即可。旧配置和密钥不会被新流程自动切换或覆盖。
 
 先安装 Git、Python 3.8+、Docker Engine 和 Docker Compose v2（支持 `up --wait`）。首次构建需要访问 npm、Go modules、镜像仓库，建议至少 2 核 / 4 GB 内存。将 `xioenai.vip` 的 DNS A/AAAA 指向服务器，开放入站 TCP 80、443；UDP 443 为可选 HTTP/3。
 
@@ -126,23 +126,25 @@ curl --fail https://xioenai.vip/health
 
 Caddy 是应用唯一受信任的代理地址。增加 CDN 或更改网络时，应同步设置真实可信代理链。更新前先备份。源码部署执行 `git pull --ff-only`、`docker compose up -d --build --wait`；镜像安装按上文选择对应版本，使用 `up --no-build` 启动。
 
-备份会短暂停止店面、队列及对象存储，结束后恢复原先运行的服务：
+无 Python 快速安装使用 Shell 备份工具。备份会短暂停止店面和队列，结束或失败后恢复原先运行的服务：
 
 ```bash
-python3 deploy/backup.py backup
+sh deploy/backup.sh backup
 ```
 
-输出到 `backups/UTC时间/`，包含 PostgreSQL 一致性 dump、uploads、Redis、MinIO（已启用时）、Caddy、应用状态和完整私有配置，以及 SHA-256 校验清单。备份包含支付配置及密钥，必须加密保存到异机。恢复必须保留同一 `app.secret_key`，否则不能解密敏感配置。
+默认输出到 `backups/UTC时间/`，包含 PostgreSQL 一致性 dump、uploads、Redis、Caddy、应用状态、应用日志和完整私有配置，以及 `SHA256SUMS` 校验清单。备份包含支付配置及密钥，必须加密保存到异机。恢复必须保留同一 `app.secret_key`，否则不能解密敏感配置。
 
-在新主机、全新 checkout 和空数据卷中恢复，先安全传入备份目录，不要先运行 setup：
+在新主机、具有同版本公开部署文件的空安装目录和空数据卷中恢复，先安全传入备份目录，不要先运行初始化。可在另一台电脑准备同版本源码或在服务器克隆公开文件；恢复本身无需 Python：
 
 ```bash
 git clone https://github.com/zxgad3wdasaq1e-ai/faka-58.git
 cd faka-58
-python3 deploy/backup.py restore --source /安全路径/备份目录 --confirm-replace-database
+sh deploy/backup.sh restore --source /安全路径/备份目录 --confirm-replace-database
 ```
 
-恢复工具先校验备份并预检全部目标文件卷，拒绝覆盖已有配置和非空文件卷，再恢复密钥、文件卷及数据库。数据库导入为单个事务；恢复进度写入私有目录，网络或磁盘故障修复后重新执行同一条恢复命令可继续，不能混用另一份备份。该确认参数明确允许替换目标 PostgreSQL 数据。恢复后核对商品、历史订单、图片和回调。不要使用 `docker compose down -v` 重启，它会删除持久化卷。
+恢复工具先校验备份格式、摘要及归档路径，再预检目标配置、容器和数据卷；已有私有配置、同项目容器或非空卷都会被拒绝。数据库导入为单个事务。Shell 恢复不覆盖已有安装，也不自动清理失败现场；中途失败应保留现场排查，不能直接重跑或删除密钥。恢复后核对商品、历史订单、图片和回调。不要使用 `docker compose down -v` 重启，它会删除持久化卷。
+
+Shell 工具仅处理新快速安装的持久化本地图床与预构建镜像，备份格式为 Shell v1。旧 Python 备份及 MinIO/源码安装继续使用原 `python3 deploy/backup.py backup` / `restore` 流程，两种备份格式不可混用。
 
 ## 本地开发和构建
 

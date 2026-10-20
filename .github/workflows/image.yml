@@ -87,25 +87,57 @@ jobs:
           cache-from: type=gha,scope=storefront
           cache-to: type=gha,mode=max,scope=storefront
 
-      - name: Set up Python 3.8 for the real installation test
-        if: steps.source.outputs.publish == 'true'
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.8'
-
-      - name: Test the published image with its dependencies
+      - name: Test a complete installation without Python
         id: smoke
         if: steps.source.outputs.publish == 'true'
         env:
           APP_RELEASE: ${{ steps.source.outputs.image }}:sha-${{ steps.source.outputs.sha }}
         run: |
-          python3 -c 'import sys; assert sys.version_info[:2] == (3, 8); print(sys.version)'
+          deny_bin="$(mktemp -d)"
+          cat > "$deny_bin/python3" <<'SH'
+          #!/bin/sh
+          echo 'The deployment attempted to use Python.' >&2
+          touch "$RUNNER_TEMP/deployment-used-python"
+          exit 73
+          SH
+          chmod +x "$deny_bin/python3"
+          cp "$deny_bin/python3" "$deny_bin/python"
+          export PATH="$deny_bin:$PATH"
           mkdir "$RUNNER_TEMP/store-smoke"
           cd "$RUNNER_TEMP/store-smoke"
-          python3 "$GITHUB_WORKSPACE/deploy/install.py" --local --image "$APP_RELEASE"
+          sh "$GITHUB_WORKSPACE/deploy/docker-deploy.sh" --local --image "$APP_RELEASE"
           curl --fail --retry 10 --retry-delay 2 --retry-connrefused http://localhost:8080/health
+          docker compose exec -T app sh -c '! command -v python3 && ! command -v python'
           test ! -e Dockerfile
           test ! -d frontend
+          test ! -d scripts
+          sh deploy/start.sh --seed
+          curl --fail http://localhost:8080/api/v1/public/products > "$RUNNER_TEMP/catalog.json"
+          for slug in chatgpt-plus chatgpt-pro-100 chatgpt-pro-200; do
+            test "$(grep -o "\"slug\":\"$slug\"" "$RUNNER_TEMP/catalog.json" | wc -l)" -eq 1
+          done
+          docker compose exec -T app sh -c 'printf "%s" "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aS1cAAAAASUVORK5CYII=" | base64 -d > /app/uploads/ci-persistence.png'
+          curl --fail http://localhost:8080/uploads/ci-persistence.png > "$RUNNER_TEMP/media-before.png"
+          docker compose up -d --no-build --force-recreate --wait app
+          curl --fail --retry 10 --retry-delay 2 http://localhost:8080/uploads/ci-persistence.png > "$RUNNER_TEMP/media-after.png"
+          cmp "$RUNNER_TEMP/media-before.png" "$RUNNER_TEMP/media-after.png"
+          sh deploy/backup.sh backup --output "$RUNNER_TEMP/store-backup"
+          (cd "$RUNNER_TEMP/store-backup" && sha256sum -c SHA256SUMS)
+          curl --fail --retry 10 --retry-delay 2 http://localhost:8080/health
+          # Only this disposable CI installation is removed to test a fresh restore.
+          docker compose down --volumes
+          mkdir -p "$RUNNER_TEMP/store-restore/deploy"
+          cp compose.yml "$RUNNER_TEMP/store-restore/"
+          cp deploy/*.sh deploy/Caddyfile "$RUNNER_TEMP/store-restore/deploy/"
+          cd "$RUNNER_TEMP/store-restore"
+          sh deploy/backup.sh restore --source "$RUNNER_TEMP/store-backup" --confirm-replace-database
+          curl --fail --retry 10 --retry-delay 2 http://localhost:8080/uploads/ci-persistence.png > "$RUNNER_TEMP/media-restored.png"
+          cmp "$RUNNER_TEMP/media-before.png" "$RUNNER_TEMP/media-restored.png"
+          curl --fail http://localhost:8080/api/v1/public/products > "$RUNNER_TEMP/catalog-restored.json"
+          for slug in chatgpt-plus chatgpt-pro-100 chatgpt-pro-200; do
+            test "$(grep -o "\"slug\":\"$slug\"" "$RUNNER_TEMP/catalog-restored.json" | wc -l)" -eq 1
+          done
+          test ! -e "$RUNNER_TEMP/deployment-used-python"
           docker compose ps
 
       - name: Promote the tested image to latest

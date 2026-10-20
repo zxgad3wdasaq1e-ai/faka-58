@@ -40,8 +40,10 @@ jobs:
 
       - name: Verify image deployment bootstrap and configuration
         run: |
-          bash -n deploy/docker-deploy.sh
-          shellcheck -S warning deploy/docker-deploy.sh
+          bash -n deploy/docker-deploy.sh deploy/start.sh deploy/backup.sh
+          shellcheck -x -S warning deploy/docker-deploy.sh deploy/start.sh deploy/backup.sh
+          bash scripts/tests/docker-deploy_test.sh
+          bash scripts/tests/backup_test.sh
           python3 -m unittest discover -s scripts/tests -p 'test_*.py' -v
 
       - name: Check release archive includes installer
@@ -56,7 +58,7 @@ jobs:
           PY
 
   python38:
-    name: Verify Python 3.8 deployment
+    name: Verify legacy Python deployment tools
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -69,23 +71,6 @@ jobs:
           python3 -c 'import sys; assert sys.version_info[:2] == (3, 8); print(sys.version)'
           python3 -m py_compile deploy/install.py deploy/backup.py scripts/setup.py scripts/seed-catalog.py
           python3 -m unittest discover -s scripts/tests -p 'test_*.py' -v
-      - name: Exercise the shell bootstrap with Python 3.8
-        run: |
-          stub_dir="$(mktemp -d)"
-          cat > "$stub_dir/curl" <<'SH'
-          #!/bin/sh
-          set -eu
-          while [ "$#" -gt 0 ]; do
-              if [ "$1" = '--output' ]; then
-                  cp "$GITHUB_WORKSPACE/deploy/install.py" "$2"
-                  exit 0
-              fi
-              shift
-          done
-          exit 1
-          SH
-          chmod +x "$stub_dir/curl"
-          PATH="$stub_dir:$PATH" sh deploy/docker-deploy.sh --help
 
   api:
     name: Verify API
