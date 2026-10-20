@@ -19,6 +19,26 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# Use an explicit tag/digest so an installer never silently selects ``latest``.
+# Repository components follow the OCI/Docker distribution reference grammar;
+# shell, Compose interpolation, URL schemes and whitespace are not accepted.
+IMAGE_REFERENCE = re.compile(
+    r"(?=.{1,255}$)"
+    r"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)*(?::[0-9]{1,5})?/)?"
+    r"[a-z0-9]+(?:(?:[._]|__|-+)[a-z0-9]+)*"
+    r"(?:/[a-z0-9]+(?:(?:[._]|__|-+)[a-z0-9]+)*)*"
+    r"(?::[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}|@sha256:[a-f0-9]{64})"
+)
+
+
+def validate_image(image: str) -> str:
+    if not isinstance(image, str) or not IMAGE_REFERENCE.fullmatch(image):
+        raise ValueError("--image 必须是带显式 tag 或 sha256 摘要的 OCI 镜像引用，例如 ghcr.io/owner/store:v1；不能含空白、协议或变量。")
+    registry = image.partition("/")[0]
+    if "/" in image and ":" in registry and not 1 <= int(registry.rpartition(":")[2]) <= 65535:
+        raise ValueError("--image 的镜像仓库端口需在 1–65535 之间。")
+    return image
+
 
 def private_write(path: Path, contents: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -32,12 +52,18 @@ def random_secret() -> str:
 
 
 def initialize(args: argparse.Namespace) -> dict:
+    requested_image = getattr(args, "image", None)
+    if requested_image is not None:
+        validate_image(requested_image)
     config_path = ROOT / "config.yml"
     state_path = ROOT / "deploy/runtime/installation.json"
     existing = [config_path, ROOT / ".env", state_path]
     if all(path.is_file() for path in existing):
+        state = json.loads(state_path.read_text(encoding="utf-8"))
+        if requested_image is not None and requested_image != state.get("image", ""):
+            raise ValueError("--image 与既有安装模式或镜像不一致；脚本不会切换源码/镜像模式或覆盖配置。请沿用现有配置。")
         print("沿用现有部署配置和密钥；没有覆盖或轮换。")
-        return json.loads(state_path.read_text(encoding="utf-8"))
+        return state
     if any(path.exists() for path in existing):
         raise ValueError("发现不完整的既有部署配置。请先恢复 config.yml、.env 和 deploy/runtime/installation.json；脚本不会覆盖密钥。")
 
@@ -51,6 +77,8 @@ def initialize(args: argparse.Namespace) -> dict:
         raise ValueError("--subnet 需要一个私有 IPv4 /24 网段。")
     proxy_ip = str(subnet.network_address + 10)
     storage = args.storage
+    if requested_image and storage == "minio":
+        raise ValueError("--image 快速部署不支持 --storage minio：MinIO 仍需源码构建。请使用默认持久化本地图床，或省略 --image 从源码构建。")
     address = "http://localhost" if args.local else f"https://{domain}"
     origin = "http://localhost:8080" if args.local else address
     admin_path = "/console-" + secrets.token_hex(6)
@@ -104,7 +132,7 @@ def initialize(args: argparse.Namespace) -> dict:
             # initializes as uid 999; the parent directory stays host-private 0700.
             (secret_dir / name).chmod(0o444)
 
-    env = ["COMPOSE_PROJECT_NAME=getgpt", f"SITE_ADDRESS={address}", f"HTTP_PORT={8080 if args.local else 80}", f"HTTPS_PORT={8443 if args.local else 443}", f"APP_SUBNET={subnet}", f"CADDY_IP={proxy_ip}", "APP_IMAGE=getgpt-store:local", "APP_VERSION=v1.0.0-xioen.1"]
+    env = ["COMPOSE_PROJECT_NAME=getgpt", f"SITE_ADDRESS={address}", f"HTTP_PORT={8080 if args.local else 80}", f"HTTPS_PORT={8443 if args.local else 443}", f"APP_SUBNET={subnet}", f"CADDY_IP={proxy_ip}", f"APP_IMAGE={requested_image or 'getgpt-store:local'}", "APP_VERSION=v1.0.0-xioen.1"]
     if storage == "minio":
         env += ["COMPOSE_PATH_SEPARATOR=|", "COMPOSE_FILE=compose.yml|compose.minio.yml", "COMPOSE_PROFILES=storage"]
     else:
@@ -116,7 +144,7 @@ def initialize(args: argparse.Namespace) -> dict:
     if storage == "minio":
         caddy = caddy.replace("    reverse_proxy app:8080", "    handle_path /media/* {\n        @read method GET HEAD\n        handle @read {\n            rewrite * /storefront-media{uri}\n            reverse_proxy minio:9000\n        }\n        respond 405\n    }\n    handle {\n        reverse_proxy app:8080\n    }")
     private_write(ROOT / "deploy/runtime/Caddyfile", caddy)
-    state = {"origin": origin, "admin_path": admin_path, "admin_user": args.admin_user, "storage": storage, "local": args.local}
+    state = {"origin": origin, "admin_path": admin_path, "admin_user": args.admin_user, "storage": storage, "local": args.local, "image": requested_image or ""}
     private_write(state_path, json.dumps(state, ensure_ascii=False, indent=2) + "\n")
     private_write(secret_dir / "initial-admin.txt", f"后台: {origin}{admin_path}\n用户名: {args.admin_user}\n首次密码: {admin_password}\n" + (f"MinIO 管理台: http://127.0.0.1:9001\nMinIO 用户名: {root_user}\nMinIO 密码: {root_password}\n" if storage == "minio" else "") + "首次登录后修改密码并启用 2FA。此文件含密钥，不得提交、分享或放入公开目录。\n")
     print("已生成私有配置。初始管理员凭据仅写入 deploy/secrets/initial-admin.txt。")
@@ -131,7 +159,9 @@ def start(state: dict, seed: bool) -> None:
     if not shutil.which("docker"):
         raise ValueError("未找到 Docker CLI；配置已生成。安装 Docker Engine / Desktop 和 Compose v2 后重新运行 --start。")
     run("docker", "compose", "version")
-    run("docker", "compose", "up", "-d", "--build", "--wait", "--wait-timeout", "300")
+    if state.get("image"):
+        run("docker", "compose", "pull")
+    run("docker", "compose", "up", "-d", "--no-build" if state.get("image") else "--build", "--wait", "--wait-timeout", "300")
     if seed:
         script = ROOT / "scripts/seed-catalog.py"
         if not script.is_file():
@@ -159,6 +189,7 @@ def main() -> int:
     parser.add_argument("--domain", default="xioenai.vip", help="正式域名（默认 xioenai.vip）")
     parser.add_argument("--local", action="store_true", help="本地 HTTP :8080，不申请证书")
     parser.add_argument("--storage", choices=["local", "minio"], default="local", help="图床（默认持久化 uploads）")
+    parser.add_argument("--image", help="拉取已构建的 OCI 镜像（显式 tag 或 sha256 摘要）；省略则保持源码构建")
     parser.add_argument("--admin-user", default="admin")
     parser.add_argument("--subnet", default="172.29.240.0/24", help="Docker 私有网段；与宿主机已有网络冲突时更换")
     parser.add_argument("--start", action="store_true", help="构建镜像、启动依赖并等待健康检查")

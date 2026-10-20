@@ -1,0 +1,126 @@
+name: Publish Docker image
+
+on:
+  workflow_run:
+    workflows: [ci]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  packages: write
+
+concurrency:
+  group: publish-image-main
+  cancel-in-progress: true
+
+jobs:
+  image:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Select the tested main revision
+        id: source
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sha = context.payload.workflow_run?.head_sha || context.sha;
+            const main = await github.rest.repos.getBranch({ ...context.repo, branch: 'main' });
+            if (main.data.commit.sha !== sha) {
+              core.notice('A newer main revision exists; skip publishing this older commit.');
+              core.setOutput('publish', 'false');
+              return;
+            }
+            const runs = await github.rest.actions.listWorkflowRuns({
+              ...context.repo, workflow_id: 'ci.yml', head_sha: sha, event: 'push', per_page: 10
+            });
+            if (!runs.data.workflow_runs.some(run => run.head_branch === 'main' && run.conclusion === 'success')) {
+              core.setFailed('This main revision must pass CI before publishing. Wait for ci, then rerun this workflow.');
+              return;
+            }
+            core.setOutput('publish', 'true');
+            core.setOutput('sha', sha);
+            core.setOutput('image', `ghcr.io/${process.env.GITHUB_REPOSITORY.toLowerCase()}`);
+            core.setOutput('version', `v1.0.0-${sha.slice(0, 12)}`);
+
+      - uses: actions/checkout@v4
+        if: steps.source.outputs.publish == 'true'
+        with:
+          ref: ${{ steps.source.outputs.sha }}
+          persist-credentials: false
+
+      - uses: docker/setup-qemu-action@v3
+        if: steps.source.outputs.publish == 'true'
+
+      - uses: docker/setup-buildx-action@v3
+        if: steps.source.outputs.publish == 'true'
+
+      - uses: docker/login-action@v3
+        if: steps.source.outputs.publish == 'true'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and publish amd64 and arm64
+        if: steps.source.outputs.publish == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ steps.source.outputs.image }}:sha-${{ steps.source.outputs.sha }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ steps.source.outputs.sha }}
+            org.opencontainers.image.licenses=GPL-3.0-only
+          build-args: |
+            APP_VERSION=${{ steps.source.outputs.version }}
+          cache-from: type=gha,scope=storefront
+          cache-to: type=gha,mode=max,scope=storefront
+
+      - name: Test the published image with its dependencies
+        id: smoke
+        if: steps.source.outputs.publish == 'true'
+        env:
+          APP_RELEASE: ${{ steps.source.outputs.image }}:sha-${{ steps.source.outputs.sha }}
+        run: |
+          mkdir "$RUNNER_TEMP/store-smoke"
+          cd "$RUNNER_TEMP/store-smoke"
+          python3 "$GITHUB_WORKSPACE/deploy/install.py" --local --image "$APP_RELEASE"
+          curl --fail --retry 10 --retry-delay 2 --retry-connrefused http://localhost:8080/health
+          test ! -e Dockerfile
+          test ! -d frontend
+          docker compose ps
+
+      - name: Promote the tested image to latest
+        if: steps.source.outputs.publish == 'true'
+        env:
+          APP_IMAGE: ${{ steps.source.outputs.image }}
+          APP_REVISION: ${{ steps.source.outputs.sha }}
+        run: |
+          docker buildx imagetools create --tag "$APP_IMAGE:latest" "$APP_IMAGE:sha-$APP_REVISION"
+          {
+            echo '### Deployment image ready'
+            echo "Image: $APP_IMAGE:latest"
+            echo "Revision: $APP_REVISION"
+            echo 'On the first publication, set the package visibility to Public in GitHub Packages to allow anonymous pulls.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Save diagnostic logs
+        if: failure() && steps.smoke.outcome == 'failure'
+        working-directory: ${{ runner.temp }}/store-smoke
+        run: docker compose logs --tail 80 app postgres redis caddy
+
+      - name: Stop smoke test services
+        if: always() && (steps.smoke.outcome == 'success' || steps.smoke.outcome == 'failure')
+        working-directory: ${{ runner.temp }}/store-smoke
+        run: docker compose down

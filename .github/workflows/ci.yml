@@ -38,6 +38,12 @@ jobs:
       - name: Run installer tests
         run: sudo bash scripts/tests/dujiao-next-manager_test.sh
 
+      - name: Verify image deployment bootstrap and configuration
+        run: |
+          bash -n deploy/docker-deploy.sh
+          shellcheck -S warning deploy/docker-deploy.sh
+          python3 -m unittest discover -s scripts/tests -p 'test_*.py' -v
+
       - name: Check release archive includes installer
         run: |
           python3 - <<'PY'

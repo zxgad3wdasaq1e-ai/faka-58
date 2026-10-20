@@ -164,7 +164,10 @@ def restore(source: Path, confirmed: bool) -> None:
             compose("exec", "-T", "postgres", "pg_restore", "-U", "postgres", "-d", "getgpt", "--clean", "--if-exists", "--exit-on-error", "--single-transaction", stdin=handle)
         progress["database_restored"] = True
         checkpoint()
-    compose("up", "-d", "--build", "--wait", "--wait-timeout", "300")
+    state = json.loads((ROOT / "deploy/runtime/installation.json").read_text(encoding="utf-8"))
+    if state.get("image"):
+        compose("pull")
+    compose("up", "-d", "--no-build" if state.get("image") else "--build", "--wait", "--wait-timeout", "300")
     marker_path.unlink()
     print("恢复完成。请检查商品、历史订单、图片和支付回调。")
 
