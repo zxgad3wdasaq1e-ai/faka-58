@@ -2,11 +2,11 @@
 set -eu
 
 if ! command -v python3 >/dev/null 2>&1; then
-    echo '需要 Python 3.9+，请先安装后再运行。' >&2
+    echo '需要 Python 3.8+，请先安装后再运行。' >&2
     exit 1
 fi
-if ! python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 9) else 1)'; then
-    echo '需要 Python 3.9+，请升级 Python 后再运行。' >&2
+if ! python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 8) else 1)'; then
+    echo '需要 Python 3.8+，请升级 Python 后再运行。' >&2
     exit 1
 fi
 if ! command -v curl >/dev/null 2>&1; then

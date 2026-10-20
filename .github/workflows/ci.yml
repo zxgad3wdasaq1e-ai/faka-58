@@ -55,6 +55,38 @@ jobs:
           assert './scripts/dujiao-next-manager.sh' in files, files
           PY
 
+  python38:
+    name: Verify Python 3.8 deployment
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+      - name: Test deployment scripts on Python 3.8
+        run: |
+          python3 -c 'import sys; assert sys.version_info[:2] == (3, 8); print(sys.version)'
+          python3 -m py_compile deploy/install.py deploy/backup.py scripts/setup.py scripts/seed-catalog.py
+          python3 -m unittest discover -s scripts/tests -p 'test_*.py' -v
+      - name: Exercise the shell bootstrap with Python 3.8
+        run: |
+          stub_dir="$(mktemp -d)"
+          cat > "$stub_dir/curl" <<'SH'
+          #!/bin/sh
+          set -eu
+          while [ "$#" -gt 0 ]; do
+              if [ "$1" = '--output' ]; then
+                  cp "$GITHUB_WORKSPACE/deploy/install.py" "$2"
+                  exit 0
+              fi
+              shift
+          done
+          exit 1
+          SH
+          chmod +x "$stub_dir/curl"
+          PATH="$stub_dir:$PATH" sh deploy/docker-deploy.sh --help
+
   api:
     name: Verify API
     runs-on: ubuntu-latest

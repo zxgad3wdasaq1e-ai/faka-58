@@ -12,7 +12,7 @@
 
 ## Ubuntu 快速部署（推荐：预构建镜像）
 
-GitHub 负责保存代码、测试和构建镜像，网站运行在你的 Ubuntu 服务器上。服务器安装 Docker Engine、Docker Compose v2（支持 `up --wait`）、Python 3.9+ 和 curl 即可，不需要 Git、Node、Go 或在服务器编译前后台。将 `xioenai.vip` 的 DNS A/AAAA 指向服务器，开放 TCP 80、443；已有服务占用这些端口时需先协调反向代理。
+GitHub 负责保存代码、测试和构建镜像，网站运行在你的 Ubuntu 服务器上。服务器安装 Docker Engine、Docker Compose v2（支持 `up --wait`）、Python 3.8+ 和 curl 即可，不需要 Git、Node、Go 或在服务器编译前后台。将 `xioenai.vip` 的 DNS A/AAAA 指向服务器，开放 TCP 80、443；已有服务占用这些端口时需先协调反向代理。
 
 首次发布需要仓库管理员完成一次：将部署改动上传到 `main`，等待 Actions 中 `ci` 和 `Publish Docker image` 成功；在 GitHub 个人主页的 Packages 中打开 `faka-58` → Package settings → Change visibility → Public。公开源码仓库不会自动将容器包设为公开。流水线使用仓库自带的 `GITHUB_TOKEN`，无需把个人令牌写进代码。
 
@@ -47,7 +47,7 @@ python3 scripts/setup.py --domain xioenai.vip --image ghcr.io/zxgad3wdasaq1e-ai/
 
 ## Ubuntu 源码部署
 
-先安装 Git、Python 3.9+、Docker Engine 和 Docker Compose v2（支持 `up --wait`）。首次构建需要访问 npm、Go modules、镜像仓库，建议至少 2 核 / 4 GB 内存。将 `xioenai.vip` 的 DNS A/AAAA 指向服务器，开放入站 TCP 80、443；UDP 443 为可选 HTTP/3。
+先安装 Git、Python 3.8+、Docker Engine 和 Docker Compose v2（支持 `up --wait`）。首次构建需要访问 npm、Go modules、镜像仓库，建议至少 2 核 / 4 GB 内存。将 `xioenai.vip` 的 DNS A/AAAA 指向服务器，开放入站 TCP 80、443；UDP 443 为可选 HTTP/3。
 
 ```bash
 git clone https://github.com/zxgad3wdasaq1e-ai/faka-58.git

@@ -283,6 +283,50 @@ class InstallTests(unittest.TestCase):
         self.assertEqual(error.exception.code, 2)
         self.process.assert_not_called()
 
+    def test_publish_rejects_resolved_paths_outside_target(self) -> None:
+        target = self.root / "store"
+        target.mkdir()
+        staging = self.root / "staging"
+        staging.mkdir()
+        outside = self.root / "outside.py"
+        outside.write_bytes(b"existing user file")
+        for relative in ("../outside.py", "../store-evil/escaped.py", "nested/../../outside.py", str(outside)):
+            with self.subTest(relative=relative), patch.object(installer, "RUNTIME_FILES", (relative,)):
+                with self.assertRaisesRegex(installer.InstallError, "超出安装目录"):
+                    installer.publish_runtime(staging, target)
+                self.assertEqual(list(target.iterdir()), [])
+                self.assertEqual(outside.read_bytes(), b"existing user file")
+                self.assertFalse((self.root / "store-evil").exists())
+
+    def test_publish_rejects_symlink_escape_after_target_recheck(self) -> None:
+        target, staging, outside = (self.root / name for name in ("store", "staging", "store-evil"))
+        for directory in (target, staging, outside):
+            directory.mkdir()
+        sentinel = outside / "setup.py"
+        sentinel.write_bytes(b"existing user file")
+        original_check = installer.ensure_empty_target
+        def insert_symlink(root):
+            original_check(root)
+            try:
+                (root / "scripts").symlink_to(outside, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest("Directory symlinks are unavailable for this account")
+        with patch.object(installer, "ensure_empty_target", side_effect=insert_symlink), patch.object(installer, "RUNTIME_FILES", ("scripts/setup.py",)):
+            with self.assertRaisesRegex(installer.InstallError, "超出安装目录"):
+                installer.publish_runtime(staging, target)
+        self.assertEqual(sentinel.read_bytes(), b"existing user file")
+
+    def test_python_38_passes_version_guard(self) -> None:
+        with patch.object(installer.sys, "version_info", (3, 8, 0)), patch.object(installer, "install", return_value=PINNED) as install:
+            self.assertEqual(installer.main(["--local"]), 0)
+        install.assert_called_once()
+
+    def test_python_before_38_stops_before_installing(self) -> None:
+        with patch.object(installer.sys, "version_info", (3, 7, 17)), patch.object(installer, "install") as install, patch.object(sys, "stderr", io.StringIO()) as stderr:
+            self.assertEqual(installer.main(["--local"]), 1)
+            self.assertIn("Python 3.8+", stderr.getvalue())
+        install.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -89,10 +89,15 @@ def backup(output: Path) -> None:
 def restore(source: Path, confirmed: bool) -> None:
     if not confirmed:
         raise ValueError("恢复会替换目标数据库。仅在新主机/空数据卷中使用，并显式添加 --confirm-replace-database。")
+    source = source.resolve()
     manifest = json.loads((source / "checksums.json").read_text(encoding="utf-8"))
     for relative, expected in manifest.items():
         path = (source / relative).resolve()
-        if not path.is_relative_to(source) or not path.is_file() or digest(path) != expected:
+        try:
+            path.relative_to(source)
+        except ValueError:
+            raise ValueError(f"备份校验失败: {relative}") from None
+        if not path.is_file() or digest(path) != expected:
             raise ValueError(f"备份校验失败: {relative}")
     mandatory = ("private/.env", "private/config.yml", "private/deploy/runtime/installation.json", "private/deploy/runtime/Caddyfile", "private/deploy/secrets/postgres_password", "private/deploy/secrets/postgres_admin_password", "private/deploy/secrets/redis_password", "database.dump")
     if any(relative not in manifest for relative in mandatory):
@@ -173,7 +178,7 @@ def restore(source: Path, confirmed: bool) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="备份/恢复本站 Docker Compose 数据。需要 Python 3.9+。")
+    parser = argparse.ArgumentParser(description="备份/恢复本站 Docker Compose 数据。需要 Python 3.8+。")
     subparsers = parser.add_subparsers(dest="operation", required=True)
     save = subparsers.add_parser("backup")
     save.add_argument("--output", type=Path, default=ROOT / "backups" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"))

@@ -23,7 +23,7 @@ jobs:
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' &&
        github.event.workflow_run.event == 'push' &&
        github.event.workflow_run.head_repository.full_name == github.repository)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
       - name: Select the tested main revision
@@ -87,12 +87,19 @@ jobs:
           cache-from: type=gha,scope=storefront
           cache-to: type=gha,mode=max,scope=storefront
 
+      - name: Set up Python 3.8 for the real installation test
+        if: steps.source.outputs.publish == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.8'
+
       - name: Test the published image with its dependencies
         id: smoke
         if: steps.source.outputs.publish == 'true'
         env:
           APP_RELEASE: ${{ steps.source.outputs.image }}:sha-${{ steps.source.outputs.sha }}
         run: |
+          python3 -c 'import sys; assert sys.version_info[:2] == (3, 8); print(sys.version)'
           mkdir "$RUNNER_TEMP/store-smoke"
           cd "$RUNNER_TEMP/store-smoke"
           python3 "$GITHUB_WORKSPACE/deploy/install.py" --local --image "$APP_RELEASE"

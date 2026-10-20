@@ -158,14 +158,17 @@ def download_runtime_file(revision: str, relative: str, staging: Path) -> None:
 
 def publish_runtime(staging: Path, root: Path) -> None:
     """Publish only fully downloaded files, with exclusive creation and rollback."""
+    root = root.resolve()
     ensure_empty_target(root)
     created_files = []
     created_directories = []
     try:
         for relative in RUNTIME_FILES:
             destination = root / relative
-            if not destination.resolve().is_relative_to(root):
-                raise InstallError("运行文件路径超出安装目录，已拒绝写入。")
+            try:
+                destination.resolve().relative_to(root)
+            except ValueError:
+                raise InstallError("运行文件路径超出安装目录，已拒绝写入。") from None
             if not destination.parent.exists():
                 destination.parent.mkdir(mode=0o755)
                 created_directories.append(destination.parent)
@@ -219,8 +222,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--local", action="store_true", help="使用 http://localhost:8080，不申请证书")
     parser.add_argument("--image", default=DEFAULT_IMAGE, help="预构建镜像 tag 或 digest")
     args = parser.parse_args(argv)
-    if sys.version_info < (3, 9):
-        print("需要 Python 3.9+。", file=sys.stderr)
+    if sys.version_info < (3, 8):
+        print("需要 Python 3.8+。", file=sys.stderr)
         return 1
     try:
         install(args)

@@ -193,6 +193,52 @@ class RestoreTests(unittest.TestCase):
             self.assertFalse(any("--build" in call.args or "--no-build" in call.args for call in compose.call_args_list))
             self.assertTrue((root / "deploy/runtime/restore-state.json").is_file())
 
+    def test_restore_rejects_resolved_manifest_paths_outside_backup(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            parent = Path(temporary)
+            root, source = self.prepare_backup(parent, IMAGE)
+            outside = parent / "outside.dat"
+            outside.write_bytes(b"existing user file")
+            sibling = parent / "backup-evil"
+            sibling.mkdir()
+            (sibling / "outside.dat").write_bytes(b"existing user file")
+            manifest_path = source / "checksums.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            for relative in ("../outside.dat", "../backup-evil/outside.dat", "private/../../outside.dat", str(outside)):
+                with self.subTest(relative=relative):
+                    manifest_path.write_text(json.dumps({**manifest, relative: backup.digest(outside)}), encoding="utf-8")
+                    with patch.object(backup, "ROOT", root), patch.object(backup, "compose") as compose, patch.object(backup, "docker") as docker:
+                        with self.assertRaisesRegex(ValueError, "备份校验失败"):
+                            backup.restore(source, True)
+                    compose.assert_not_called()
+                    docker.assert_not_called()
+                    self.assertEqual(list(root.iterdir()), [])
+                    self.assertEqual(outside.read_bytes(), b"existing user file")
+
+    def test_restore_rejects_symlink_outside_backup(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            parent = Path(temporary)
+            root, source = self.prepare_backup(parent, IMAGE)
+            outside = parent / "backup-evil"
+            outside.mkdir()
+            sentinel = outside / "outside.dat"
+            sentinel.write_bytes(b"existing user file")
+            try:
+                (source / "linked").symlink_to(outside, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest("Directory symlinks are unavailable for this account")
+            manifest_path = source / "checksums.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["linked/outside.dat"] = backup.digest(sentinel)
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+            with patch.object(backup, "ROOT", root), patch.object(backup, "compose") as compose, patch.object(backup, "docker") as docker:
+                with self.assertRaisesRegex(ValueError, "备份校验失败"):
+                    backup.restore(source, True)
+            compose.assert_not_called()
+            docker.assert_not_called()
+            self.assertEqual(list(root.iterdir()), [])
+            self.assertEqual(sentinel.read_bytes(), b"existing user file")
+
 
 if __name__ == "__main__":
     unittest.main()
