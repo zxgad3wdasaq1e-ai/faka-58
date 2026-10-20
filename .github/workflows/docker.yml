@@ -51,7 +51,7 @@ jobs:
           for slug in ('chatgpt-plus', 'chatgpt-pro-100', 'chatgpt-pro-200'):
               assert slugs.count(slug) == 1, slugs
           with urllib.request.urlopen(base + '/') as response:
-              assert 'XIOEN AI' in response.read().decode()
+              assert 'XOPEN AI' in response.read().decode()
           PY
       - name: Save diagnostic logs
         if: failure()

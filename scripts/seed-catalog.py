@@ -180,7 +180,7 @@ def localized(zh_cn: str, zh_tw: str, en_us: str) -> dict[str, str]:
 def site_settings(origin: str) -> dict:
     return {
         "brand": {
-            "site_name": "XIOEN AI", "site_url": origin,
+            "site_name": "XOPEN AI", "site_url": origin,
             "site_description": localized("AI 订阅与数字商品服务", "AI 訂閱與數位商品服務", "AI subscriptions and digital services"),
         },
         "currency": "CNY",
@@ -188,7 +188,7 @@ def site_settings(origin: str) -> dict:
         "template_mode": "card",
         "languages": ["zh-CN", "zh-TW", "en-US"],
         "seo": {
-            "title": localized("XIOEN AI · AI 订阅与数字商品", "XIOEN AI · AI 訂閱與數位商品", "XIOEN AI · AI subscriptions and digital services"),
+            "title": localized("XOPEN AI · AI 订阅与数字商品", "XOPEN AI · AI 訂閱與數位商品", "XOPEN AI · AI subscriptions and digital services"),
             "description": localized("选购 AI 服务与数字商品，查询订单和交付进度。", "選購 AI 服務與數位商品，查詢訂單和交付進度。", "Explore AI services and digital goods. Track your order and delivery."),
         },
     }
@@ -255,7 +255,7 @@ def seed(api: AdminAPI) -> None:
         print("Kept existing site settings.")
     else:
         api.request("PUT", "/admin/settings", {"key": "site_config", "value": site_settings(api.origin)})
-        print("Initialized XIOEN AI site settings.")
+        print("Initialized XOPEN AI site settings.")
 
     category_id = ensure_category(api)
     path = "/admin/products"
@@ -278,8 +278,8 @@ def seed(api: AdminAPI) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Idempotently create the XIOEN AI catalog via the real admin API. Existing settings/products are preserved; no card secrets or payments are created.")
-    parser.add_argument("--base-url", default="https://xioenai.vip", help="Application origin (default: https://xioenai.vip; local: http://localhost:8080)")
+    parser = argparse.ArgumentParser(description="Idempotently create the XOPEN AI catalog via the real admin API. Existing settings/products are preserved; no card secrets or payments are created.")
+    parser.add_argument("--base-url", default="https://xopenai.vip", help="Application origin (default: https://xopenai.vip; local: http://localhost:8080)")
     parser.add_argument("--config", type=Path, default=ROOT / "config.yml", help="Private JSON-format YAML written by setup.py (default: repository config.yml)")
     parser.add_argument("--credentials-stdin", action="store_true", help="Read a JSON object with username/password or token from stdin instead of config/environment")
     args = parser.parse_args()

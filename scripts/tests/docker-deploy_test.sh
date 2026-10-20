@@ -6,8 +6,8 @@ repository=$(CDPATH='' cd "$(dirname "$0")/../.." && pwd -P)
 bootstrap=$repository/deploy/docker-deploy.sh
 shell=$(command -v sh)
 temp_base=$(CDPATH='' cd "${TMPDIR:-/tmp}" && pwd -P)
-test_root=$(mktemp -d "$temp_base/xioen-shell-test.XXXXXXXX")
-cleanup() { case "$test_root" in "$temp_base"/xioen-shell-test.*) rm -rf -- "$test_root" ;; esac; }
+test_root=$(mktemp -d "$temp_base/xopen-shell-test.XXXXXXXX")
+cleanup() { case "$test_root" in "$temp_base"/xopen-shell-test.*) rm -rf -- "$test_root" ;; esac; }
 trap cleanup 0
 trap 'exit 129' HUP
 trap 'exit 130' INT
@@ -59,7 +59,7 @@ case "$1" in
                 if [ "$local_mode" = true ]; then
                     printf '%s\n' 'http://localhost:1888' >deploy/runtime/test-origin
                 else
-                    printf '%s\n' 'https://xioenai.vip' >deploy/runtime/test-origin
+                    printf '%s\n' 'https://xopenai.vip' >deploy/runtime/test-origin
                 fi
                 printf '%s\n' 'initial-password-MUST-NOT-PRINT' >deploy/secrets/initial-admin.txt
                 [ "${MOCK_INIT_FAILURE:-false}" = false ] ;;
@@ -171,9 +171,9 @@ grep -q 'init.*--admin-user.manager.*--subnet.172.28.240.0/24.*--local' "$STORE_
 printf 'ok - local mode and initialization flags\n'
 
 new_case
-run_install --domain xioenai.vip
-grep -q '店面: https://xioenai.vip' "$test_root/output" || fail 'explicit domain did not select HTTPS'
-grep -q 'init.*--domain.xioenai.vip' "$STORE_TEST_LOG" || fail 'domain was not forwarded'
+run_install --domain xopenai.vip
+grep -q '店面: https://xopenai.vip' "$test_root/output" || fail 'explicit domain did not select HTTPS'
+grep -q 'init.*--domain.xopenai.vip' "$STORE_TEST_LOG" || fail 'domain was not forwarded'
 if grep -q 'init.*--local' "$STORE_TEST_LOG"; then fail 'explicit HTTPS domain selected HTTP mode'; fi
 printf 'ok - explicit domain preserves automatic HTTPS deployment\n'
 
@@ -293,7 +293,7 @@ printf 'ok - HTTP health wait has a bounded deadline and relevant port hint\n'
 
 new_case
 MOCK_HEALTH_FAILURE=true; export MOCK_HEALTH_FAILURE
-expect_failure --domain xioenai.vip
+expect_failure --domain xopenai.vip
 grep -q 'HTTPS 站点未就绪.*DNS.*80/443' "$test_root/output" || fail 'HTTPS health timeout lacks certificate recovery hint'
 printf 'ok - HTTPS health timeout retains DNS and certificate recovery hint\n'
 

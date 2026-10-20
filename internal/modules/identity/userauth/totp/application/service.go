@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	userTotpIssuerDefault     = "Dujiao-Next-User"
+	userTotpIssuerDefault     = "XOPEN AI User"
 	userTotpPendingTTL        = 10 * time.Minute
 	userTotpEnableMaxFailures = 5
 	RecoveryCodeCount         = 10

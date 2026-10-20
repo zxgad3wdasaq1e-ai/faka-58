@@ -23,7 +23,7 @@ const reducedMotion = usePreferredReducedMotion()
 const scrollToGuide = () => document.getElementById('video-tutorial')?.scrollIntoView({ behavior: reducedMotion.value === 'reduce' ? 'auto' : 'smooth', block: 'start' })
 const posts = ref<any[]>([])
 const selectedStep = ref(0)
-const brand = computed(() => app.config?.brand?.site_name || 'XIOEN AI')
+const brand = computed(() => app.config?.brand?.site_name || 'XOPEN AI')
 const advantages = computed(() => [
   { title: c.value.advantage1, desc: c.value.advantage1d, icon: ShieldCheck },
   { title: c.value.advantage2, desc: c.value.advantage2d, icon: CreditCard },

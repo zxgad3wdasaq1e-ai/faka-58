@@ -1,6 +1,8 @@
-# XIOEN AI 发卡商城
+# XOPEN AI 发卡商城
 
-基于 [Dujiao-Next](https://github.com/dujiao-next/dujiao-next) 的发卡商城，参考 [GETGPT](https://getgpt.pro/) 公开页面重建店面。面向 `xioenai.vip` 部署，品牌、商品、价格及客服信息可在后台维护。
+基于 [Dujiao-Next](https://github.com/dujiao-next/dujiao-next) 的发卡商城，参考 [GETGPT](https://getgpt.pro/) 公开页面重建店面。面向 `xopenai.vip` 部署，品牌、商品、价格及客服信息可在后台维护。
+
+展示品牌为 XOPEN AI，镜像内主程序为 `xopen-ai`。已有站点的名称、站点 URL 和 SEO 配置保存在数据库中，升级后请在后台「系统设置」同步为 XOPEN AI 和实际访问域名，并在支付平台同步 `https://xopenai.vip/api/v1/payments/callback`。后台版本检查使用本仓库的 GitHub Releases；镜像部署通过 Docker Compose 更新。
 
 包含分类和 SKU、卡密批量导入与自动交付、人工交付、游客查单、会员、购物车、优惠券、库存预占、订单管理、支付配置、后台 RBAC 和 2FA。初始化目录不含真实卡密、虚构销量或用户评价，展示商品需要先导入库存或配置人工交付。
 
@@ -35,7 +37,7 @@ docker compose logs --tail 100 app
 
 `--local` 保留为 HTTP 1888 模式的显式选项。应用容器内部仍使用 8080；自己的反向代理应指向宿主机 `http://127.0.0.1:1888`。配置正式域名后，在后台「系统设置」同步站点 URL，并在支付平台使用正式 HTTPS 域名的回调地址。
 
-需要由项目自动管理 HTTPS 时，可在首次安装命令末尾使用 `| bash -s -- --domain xioenai.vip` 替代 `| bash`；该模式继续使用标准 80/443，需将域名 DNS A/AAAA 指向服务器并放行这些端口。正式收款前仍需在后台配置易支付、导入卡密或设置人工交付，并完成真实订单测试。
+需要由项目自动管理 HTTPS 时，可在首次安装命令末尾使用 `| bash -s -- --domain xopenai.vip` 替代 `| bash`；该模式继续使用标准 80/443，需将域名 DNS A/AAAA 指向服务器并放行这些端口。正式收款前仍需在后台配置易支付、导入卡密或设置人工交付，并完成真实订单测试。
 
 默认值只影响新安装。已有安装会沿用原端口和密钥；迁移为 HTTP 1888 时，先备份，将 `.env` 的 `SITE_ADDRESS` 改为 `:80`、`HTTP_PORT` 改为 `1888`、`HTTPS_PORT` 改为未占用的 `8443`（释放原来的 443，HTTP 模式不使用此 TLS 映射），将 `deploy/runtime/installation.json` 的 `origin` 改为 `http://localhost:1888`、`local` 改为 `true`，并把 `config.yml` 中 `cors.allowed_origins` 改为你的实际访问地址。随后执行以下命令，让应用重新读取配置，并兼容尚未更新的旧版启动脚本：
 
@@ -58,25 +60,25 @@ sh deploy/start.sh --seed
 
 以下 Python 工具保留给既有源码部署与可选 MinIO 源码构建；它们不参与上面的无 Python 一键安装，新用户直接使用快速部署即可。旧配置和密钥不会被新流程自动切换或覆盖。
 
-先安装 Git、Python 3.8+、Docker Engine 和 Docker Compose v2（支持 `up --wait`）。首次构建需要访问 npm、Go modules、镜像仓库，建议至少 2 核 / 4 GB 内存。将 `xioenai.vip` 的 DNS A/AAAA 指向服务器，开放入站 TCP 80、443；UDP 443 为可选 HTTP/3。
+先安装 Git、Python 3.8+、Docker Engine 和 Docker Compose v2（支持 `up --wait`）。首次构建需要访问 npm、Go modules、镜像仓库，建议至少 2 核 / 4 GB 内存。将 `xopenai.vip` 的 DNS A/AAAA 指向服务器，开放入站 TCP 80、443；UDP 443 为可选 HTTP/3。
 
 ```bash
 git clone https://github.com/zxgad3wdasaq1e-ai/faka-58.git
 cd faka-58
-python3 scripts/setup.py --domain xioenai.vip --start --seed
+python3 scripts/setup.py --domain xopenai.vip --start --seed
 ```
 
 脚本生成三组独立应用密钥、数据库/Redis 密码、随机后台路径和首个管理员密码；启用 release 模式、关闭示例 SMTP；构建并启动 PostgreSQL、Redis、应用和 Caddy，等待健康检查后导入初始目录与品牌。Caddy 自动申请和续期 HTTPS 证书。脚本不会覆盖已有配置或自动轮换密钥。
 
-店面地址：`https://xioenai.vip`。后台地址、用户名及首次密码仅写入服务器 `deploy/secrets/initial-admin.txt`，不在终端打印。首次登录后修改管理员密码并启用 2FA。`config.yml`、`.env`、`deploy/secrets/`、`deploy/runtime/` 和备份已同时排除在 Git 与镜像构建上下文之外；不要提交或公开这些文件。
+店面地址：`https://xopenai.vip`。后台地址、用户名及首次密码仅写入服务器 `deploy/secrets/initial-admin.txt`，不在终端打印。首次登录后修改管理员密码并启用 2FA。`config.yml`、`.env`、`deploy/secrets/`、`deploy/runtime/` 和备份已同时排除在 Git 与镜像构建上下文之外；不要提交或公开这些文件。
 
 只生成配置、不启动服务：
 
 ```bash
-python3 scripts/setup.py --domain xioenai.vip
+python3 scripts/setup.py --domain xopenai.vip
 docker compose config --quiet
 docker compose up -d --build --wait
-python3 scripts/seed-catalog.py --base-url https://xioenai.vip
+python3 scripts/seed-catalog.py --base-url https://xopenai.vip
 ```
 
 初始化脚本只依赖 Python 标准库，生成的 `config.yml` 为兼容 YAML 的 JSON 格式，可直接编辑。应用首次启动自动迁移数据库并创建管理员；商品导入为幂等操作，不导入支付密钥或真实卡密。配置真实 SMTP 后再启用邮件验证与通知。
@@ -93,11 +95,11 @@ python3 scripts/seed-catalog.py --base-url https://xioenai.vip
 | 商户号 | 平台分配的商户 ID |
 | v1 签名 | MD5 商户密钥 |
 | v2 签名 | 商户私钥、平台公钥 |
-| 异步通知 | `https://xioenai.vip/api/v1/payments/callback` |
-| 支付后回跳 | `https://xioenai.vip/pay` |
+| 异步通知 | `https://xopenai.vip/api/v1/payments/callback` |
+| 支付后回跳 | `https://xopenai.vip/pay` |
 | 支付交互 | 按网关选择跳转收银台或二维码 |
 
-在平台完成 `xioenai.vip` 域名登记/白名单配置并允许回调。回跳页面展示订单状态；发货依据服务端验签及订单号、渠道、金额、币种核对后的结果。先导入一张专用测试卡，用平台允许的小额真实订单验证微信、支付宝各一次，并检查重复回调不会重复发卡。未提供商户参数时，只能验证界面、订单和库存，不能验收真实收款。
+在平台完成 `xopenai.vip` 域名登记/白名单配置并允许回调。回跳页面展示订单状态；发货依据服务端验签及订单号、渠道、金额、币种核对后的结果。先导入一张专用测试卡，用平台允许的小额真实订单验证微信、支付宝各一次，并检查重复回调不会重复发卡。未提供商户参数时，只能验证界面、订单和库存，不能验收真实收款。
 
 保留上游官方微信 API v3、支付宝 RSA2 等适配器，后续可在后台填写证书、公钥和私钥切换直连。真实配置不写入源码。项目不生成模拟付款成功入口。
 
@@ -108,10 +110,10 @@ python3 scripts/seed-catalog.py --base-url https://xioenai.vip
 首次部署可选择 MinIO：
 
 ```bash
-python3 scripts/setup.py --domain xioenai.vip --storage minio --start --seed
+python3 scripts/setup.py --domain xopenai.vip --storage minio --start --seed
 ```
 
-脚本通过 `.env` 合并 `compose.minio.yml` 并启用 `storage` profile。MinIO 从固定的[官方安全版本源码](https://github.com/minio/minio/releases/tag/RELEASE.2025-10-15T17-29-55Z)构建，不依赖旧的预构建镜像，首次构建较慢。初始化容器建立 `storefront-media` bucket、仅可写入/清理图片的应用账号和匿名对象读取策略。应用通过内网 S3 SigV4 上传，公开图片地址为 `https://xioenai.vip/media/...`，Caddy 仅开放该路径的 GET/HEAD。管理账号与应用账号分离。
+脚本通过 `.env` 合并 `compose.minio.yml` 并启用 `storage` profile。MinIO 从固定的[官方安全版本源码](https://github.com/minio/minio/releases/tag/RELEASE.2025-10-15T17-29-55Z)构建，不依赖旧的预构建镜像，首次构建较慢。初始化容器建立 `storefront-media` bucket、仅可写入/清理图片的应用账号和匿名对象读取策略。应用通过内网 S3 SigV4 上传，公开图片地址为 `https://xopenai.vip/media/...`，Caddy 仅开放该路径的 GET/HEAD。管理账号与应用账号分离。
 
 MinIO 控制台仅绑定 `127.0.0.1:9001`，凭据位于 `deploy/secrets/initial-admin.txt`。使用 `ssh -L 9001:127.0.0.1:9001 user@服务器IP` 转发后访问。
 
@@ -132,7 +134,7 @@ docker compose --profile tools stop adminer
 docker compose ps
 docker compose logs --tail 100 app
 docker compose logs --tail 100 caddy
-curl --fail https://xioenai.vip/health
+curl --fail https://xopenai.vip/health
 ```
 
 Caddy 是应用唯一受信任的代理地址。增加 CDN 或更改网络时，应同步设置真实可信代理链。更新前先备份。源码部署执行 `git pull --ff-only`、`docker compose up -d --build --wait`；镜像安装按上文选择对应版本，使用 `up --no-build` 启动。

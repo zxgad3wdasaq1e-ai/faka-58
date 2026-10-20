@@ -89,7 +89,7 @@ def initialize(args: argparse.Namespace) -> dict:
     upload_user = "upload" + secrets.token_hex(6)
 
     config = {
-        "app": {"secret_key": random_secret(), "totp_issuer": "XIOEN AI"},
+        "app": {"secret_key": random_secret(), "totp_issuer": "XOPEN AI"},
         "server": {"host": "0.0.0.0", "port": 8080, "mode": "release", "trusted_proxies": [proxy_ip + "/32"]},
         "database": {
             "driver": "postgres",
@@ -109,7 +109,7 @@ def initialize(args: argparse.Namespace) -> dict:
             "max_width": 4096, "max_height": 4096,
         },
         "cors": {"allowed_origins": [origin], "allowed_methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], "allowed_headers": ["Content-Type", "Authorization", "X-Requested-With", "X-CSRF-Token"], "allow_credentials": True, "max_age": 600},
-        "email": {"enabled": False, "host": "", "port": 587, "username": "", "password": "", "from": "", "from_name": "XIOEN AI", "use_tls": True, "use_ssl": False},
+        "email": {"enabled": False, "host": "", "port": 587, "username": "", "password": "", "from": "", "from_name": "XOPEN AI", "use_tls": True, "use_ssl": False},
         "telegram_auth": {"enabled": False},
         "google_auth": {"enabled": False},
         "reseller": {"enabled": False, "main_hosts": ["localhost" if args.local else domain], "trusted_forwarded_host": False},
@@ -132,7 +132,7 @@ def initialize(args: argparse.Namespace) -> dict:
             # initializes as uid 999; the parent directory stays host-private 0700.
             (secret_dir / name).chmod(0o444)
 
-    env = ["COMPOSE_PROJECT_NAME=getgpt", f"SITE_ADDRESS={address}", f"HTTP_PORT={8080 if args.local else 80}", f"HTTPS_PORT={8443 if args.local else 443}", f"APP_SUBNET={subnet}", f"CADDY_IP={proxy_ip}", f"APP_IMAGE={requested_image or 'getgpt-store:local'}", "APP_VERSION=v1.0.0-xioen.1"]
+    env = ["COMPOSE_PROJECT_NAME=getgpt", f"SITE_ADDRESS={address}", f"HTTP_PORT={8080 if args.local else 80}", f"HTTPS_PORT={8443 if args.local else 443}", f"APP_SUBNET={subnet}", f"CADDY_IP={proxy_ip}", f"APP_IMAGE={requested_image or 'getgpt-store:local'}", "APP_VERSION=v1.0.0-xopen.1"]
     if storage == "minio":
         env += ["COMPOSE_PATH_SEPARATOR=|", "COMPOSE_FILE=compose.yml|compose.minio.yml", "COMPOSE_PROFILES=storage"]
     else:
@@ -186,7 +186,7 @@ def start(state: dict, seed: bool) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="生成安全配置；可选启动 Docker 全栈服务和导入商品目录。")
-    parser.add_argument("--domain", default="xioenai.vip", help="正式域名（默认 xioenai.vip）")
+    parser.add_argument("--domain", default="xopenai.vip", help="正式域名（默认 xopenai.vip）")
     parser.add_argument("--local", action="store_true", help="本地 HTTP :8080，不申请证书")
     parser.add_argument("--storage", choices=["local", "minio"], default="local", help="图床（默认持久化 uploads）")
     parser.add_argument("--image", help="拉取已构建的 OCI 镜像（显式 tag 或 sha256 摘要）；省略则保持源码构建")

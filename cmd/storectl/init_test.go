@@ -21,7 +21,7 @@ func initFixture(t *testing.T) initOptions {
 	if err := os.WriteFile(filepath.Join(root, "deploy", "Caddyfile"), []byte("{$SITE_ADDRESS} {\n    reverse_proxy app:8080\n}\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	return initOptions{Root: root, Domain: "xioenai.vip", Image: testImage, AdminUser: "admin", Subnet: "172.29.240.0/24"}
+	return initOptions{Root: root, Domain: "xopenai.vip", Image: testImage, AdminUser: "admin", Subnet: "172.29.240.0/24"}
 }
 
 func snapshot(t *testing.T, root string) map[string]string {
@@ -49,7 +49,7 @@ func TestInitCompatibleConfigurationAndPermissions(t *testing.T) {
 	if err != nil || reused {
 		t.Fatalf("initialize reused=%v err=%v", reused, err)
 	}
-	if state.Origin != "https://xioenai.vip" || state.Image != testImage || state.Storage != "local" {
+	if state.Origin != "https://xopenai.vip" || state.Image != testImage || state.Storage != "local" {
 		t.Fatal("unexpected installation state")
 	}
 	var config map[string]any

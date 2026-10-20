@@ -205,9 +205,9 @@ func localized(cn, tw, en string) map[string]string {
 
 func siteSettings(origin string) map[string]any {
 	return map[string]any{
-		"brand":    map[string]any{"site_name": "XIOEN AI", "site_url": origin, "site_description": localized("AI 订阅与数字商品服务", "AI 訂閱與數位商品服務", "AI subscriptions and digital services")},
+		"brand":    map[string]any{"site_name": "XOPEN AI", "site_url": origin, "site_description": localized("AI 订阅与数字商品服务", "AI 訂閱與數位商品服務", "AI subscriptions and digital services")},
 		"currency": "CNY", "storefront_template": "getgpt", "template_mode": "card", "languages": []string{"zh-CN", "zh-TW", "en-US"},
-		"seo": map[string]any{"title": localized("XIOEN AI · AI 订阅与数字商品", "XIOEN AI · AI 訂閱與數位商品", "XIOEN AI · AI subscriptions and digital services"), "description": localized("选购 AI 服务与数字商品，查询订单和交付进度。", "選購 AI 服務與數位商品，查詢訂單和交付進度。", "Explore AI services and digital goods. Track your order and delivery.")},
+		"seo": map[string]any{"title": localized("XOPEN AI · AI 订阅与数字商品", "XOPEN AI · AI 訂閱與數位商品", "XOPEN AI · AI subscriptions and digital services"), "description": localized("选购 AI 服务与数字商品，查询订单和交付进度。", "選購 AI 服務與數位商品，查詢訂單和交付進度。", "Explore AI services and digital goods. Track your order and delivery.")},
 	}
 }
 
@@ -255,7 +255,7 @@ func seedCatalog(api *adminAPI, publicOrigin string, output io.Writer) error {
 		if _, err := api.request(http.MethodPut, "/admin/settings", map[string]any{"key": "site_config", "value": siteSettings(publicOrigin)}); err != nil {
 			return err
 		}
-		fmt.Fprintln(output, "已初始化 XIOEN AI 站点配置。")
+		fmt.Fprintln(output, "已初始化 XOPEN AI 站点配置。")
 	} else {
 		fmt.Fprintln(output, "沿用现有站点设置。")
 	}

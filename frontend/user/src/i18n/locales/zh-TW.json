@@ -1,6 +1,6 @@
 {
   "common": {
-    "siteName": "Dujiao-Next",
+    "siteName": "XOPEN AI",
     "loading": "載入中...",
     "error": "錯誤",
     "success": "成功",
@@ -103,6 +103,7 @@
     "terms": "服務條款",
     "privacy": "隱私政策",
     "email": "信箱",
+    "sourceCode": "{site} 的 GitHub 原始碼",
     "supportUrl": "線上客服"
   },
   "notFoundPage": {
@@ -114,7 +115,7 @@
   },
   "home": {
     "hero": {
-      "title": "Dujiao-Next · D&N",
+      "title": "XOPEN AI",
       "subtitle": "專業的產品與服務提供商",
       "cta": "瀏覽商品",
       "badge": "新一代數位商店"
@@ -261,8 +262,8 @@
   },
   "about": {
     "title": "關於我們",
-    "subtitle": "了解Dujiao-Next",
-    "introduction": "Dujiao-Next（D&N）是一家專業的線上工作室，致力於為客戶提供優質的產品和服務。我們以創新、專業、高效為核心價值觀，不斷追求卓越，為客戶創造價值。",
+    "subtitle": "了解 XOPEN AI",
+    "introduction": "XOPEN AI 提供 AI 訂閱與數位商品服務，支援線上選購、付款與訂單查詢。商品內容、交付方式及售後規則以商品說明為準。",
     "ourServices": "我們的服務",
     "service1": "優質商品推薦與銷售",
     "service2": "專業的售前諮詢服務",

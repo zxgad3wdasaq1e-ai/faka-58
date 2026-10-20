@@ -21,7 +21,7 @@ func runCLI(args []string, stdout, stderr io.Writer) int {
 	var action func() error
 	switch args[0] {
 	case "init":
-		domain := flags.String("domain", "xioenai.vip", "正式域名，不含协议或端口")
+		domain := flags.String("domain", "xopenai.vip", "正式域名，不含协议或端口")
 		local := flags.Bool("local", false, "HTTP :1888，可通过服务器 IP 访问，不申请证书")
 		image := flags.String("image", "", "带显式 tag 或 sha256 摘要的镜像")
 		admin := flags.String("admin-user", "admin", "首次管理员用户名")

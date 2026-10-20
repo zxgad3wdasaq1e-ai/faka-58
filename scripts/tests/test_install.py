@@ -37,7 +37,7 @@ class Response(io.BytesIO):
 
 
 def options(**overrides) -> argparse.Namespace:
-    values = {"domain": "xioenai.vip", "local": False, "image": REPOSITORY + ":latest"}
+    values = {"domain": "xopenai.vip", "local": False, "image": REPOSITORY + ":latest"}
     values.update(overrides)
     return argparse.Namespace(**values)
 
@@ -94,7 +94,7 @@ class InstallTests(unittest.TestCase):
         self.assertEqual(self.commands[1], ["docker", "info", "--format", "{{.ServerVersion}}"])
         self.assertEqual(self.commands[2], ["docker", "pull", REPOSITORY + ":latest"])
         self.assertEqual(self.commands[3], ["docker", "image", "inspect", REPOSITORY + ":latest", "--format", "{{json .}}"])
-        self.assertEqual(self.commands[-1], [sys.executable, str(self.root / "scripts/setup.py"), "--domain", "xioenai.vip", "--image", PINNED, "--start", "--seed"])
+        self.assertEqual(self.commands[-1], [sys.executable, str(self.root / "scripts/setup.py"), "--domain", "xopenai.vip", "--image", PINNED, "--start", "--seed"])
         self.assertFalse((self.root / "config.yml").exists())
 
     def test_local_mode_passes_only_local_flag_and_immutable_image(self) -> None:

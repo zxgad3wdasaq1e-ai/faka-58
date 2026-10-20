@@ -24,26 +24,29 @@ func bannerLinks(banner string) []string {
 	return links
 }
 
-func TestWriteStartupBannerOmitsRetiredFrontendRepositories(t *testing.T) {
+func TestWriteStartupBannerUsesStoreBrandAndLinks(t *testing.T) {
 	var output strings.Builder
 	writeStartupBanner(&output)
 
 	banner := output.String()
 	for _, removed := range []string{
-		"https://github.com/dujiao-next/user",
-		"https://github.com/dujiao-next/admin",
+		"Dujiao-Next",
+		"XIOEN AI",
+		"https://github.com/dujiao-next",
+		"https://dujiao-next.com",
+		"https://t.me/dujiaonext_official",
 	} {
 		if strings.Contains(banner, removed) {
 			t.Errorf("startup banner still contains retired repository: %s", removed)
 		}
 	}
 
-	// 用整 token 相等比较：组织地址是主仓地址的前缀，子串匹配挡不住"只剩主仓"的退化。
+	// 按完整链接比较，避免仓库地址的前缀被误当成完整文档入口。
 	links := bannerLinks(banner)
 	for _, retained := range []string{
-		"https://github.com/dujiao-next",
-		"https://github.com/dujiao-next/dujiao-next",
-		"https://dujiao-next.com",
+		"https://xopenai.vip",
+		"https://github.com/zxgad3wdasaq1e-ai/faka-58",
+		"https://github.com/zxgad3wdasaq1e-ai/faka-58/blob/main/README.md",
 	} {
 		if !slices.Contains(links, retained) {
 			t.Errorf("startup banner is missing retained repository: %s (got %v)", retained, links)

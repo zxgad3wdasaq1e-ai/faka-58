@@ -15,7 +15,7 @@ const route = useRoute()
 const mobile = ref(false)
 const helpOpen = ref(false)
 const supportOpen = ref(false)
-const brand = computed(() => app.config?.brand?.site_name || 'XIOEN AI')
+const brand = computed(() => app.config?.brand?.site_name || 'XOPEN AI')
 const logo = computed(() => app.config?.brand?.site_logo ? getImageUrl(app.config.brand.site_logo) : '')
 const contact = computed(() => app.config?.contact || {})
 const supportLinks = computed(() => [
@@ -66,7 +66,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', escape))
         <div><RouterLink to="/" class="gpt-brand gpt-footer-brand"><span class="gpt-brand-icon">{{ brand.charAt(0) }}</span><b>{{ brand }}</b></RouterLink><p>{{ c.footerDesc }}</p><button class="gpt-footer-contact" @click="supportOpen = true"><MessageCircle :size="16" />{{ c.contact }}</button></div>
         <div v-for="group in footerGroups" :key="group.title"><h3>{{ group.title }}</h3><RouterLink v-for="item in group.links" :key="item.to" :to="item.to">{{ item.label }}</RouterLink></div>
       </div>
-      <div class="gpt-footer-bottom"><p>{{ c.independent }}</p><div><span>© {{ new Date().getFullYear() }} {{ brand }} · <a href="https://github.com/dujiao-next/dujiao-next" target="_blank" rel="noopener noreferrer">Dujiao-Next · GPLv3</a></span><nav><RouterLink to="/privacy">{{ c.privacy }}</RouterLink><RouterLink to="/terms">{{ c.terms }}</RouterLink><select :value="app.locale" :aria-label="c.nav" @change="app.setLocale(($event.target as HTMLSelectElement).value)"><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option><option value="en-US">English</option></select></nav></div></div>
+      <div class="gpt-footer-bottom"><p>{{ c.independent }}</p><div><span>© {{ new Date().getFullYear() }} {{ brand }} · <a href="https://github.com/zxgad3wdasaq1e-ai/faka-58/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">{{ brand }} · GPLv3</a></span><nav><RouterLink to="/privacy">{{ c.privacy }}</RouterLink><RouterLink to="/terms">{{ c.terms }}</RouterLink><select :value="app.locale" :aria-label="c.nav" @change="app.setLocale(($event.target as HTMLSelectElement).value)"><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option><option value="en-US">English</option></select></nav></div></div>
     </footer>
     <button class="gpt-support-fab" @click="supportOpen = true" :aria-label="c.support"><MessageCircle :size="22" /><span>{{ c.support }}</span></button>
     <div v-if="supportOpen" class="gpt-modal-overlay" @click.self="supportOpen = false">

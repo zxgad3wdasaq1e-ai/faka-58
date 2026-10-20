@@ -1,8 +1,8 @@
-# Dujiao-Next User Web
+# XOPEN AI User Web
 
 The customer-facing storefront for browsing products, placing orders, and completing payments.
 
-> This directory is part of the [dujiao-next](https://github.com/dujiao-next/dujiao-next)
+> This directory is part of the [XOPEN AI](https://github.com/zxgad3wdasaq1e-ai/faka-58)
 > single repository and is no longer released on its own. Production assets are embedded
 > into the server binary via `go:embed` and served by the same process, on the same port,
 > as `frontend/admin`.
@@ -38,4 +38,6 @@ GitHub Actions release workflow all build and embed the frontends for you.
 
 ## Documentation
 
-https://dujiao-next.com
+[Deployment and configuration](https://github.com/zxgad3wdasaq1e-ai/faka-58#readme)
+
+Based on [Dujiao-Next](https://github.com/dujiao-next/dujiao-next), distributed under GPLv3.

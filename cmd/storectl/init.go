@@ -232,7 +232,7 @@ func initialize(options initOptions) (installationState, bool, error) {
 	}
 	state := installationState{Origin: origin, AdminPath: "/console-" + values[7][:12], AdminUser: options.AdminUser, Storage: "local", Local: options.Local, Image: options.Image}
 	config := map[string]any{
-		"app":      map[string]any{"secret_key": appKey, "totp_issuer": "XIOEN AI"},
+		"app":      map[string]any{"secret_key": appKey, "totp_issuer": "XOPEN AI"},
 		"server":   map[string]any{"host": "0.0.0.0", "port": 8080, "mode": "release", "trusted_proxies": []string{proxyIP + "/32"}},
 		"database": map[string]any{"driver": "postgres", "dsn": fmt.Sprintf("host=postgres user=getgpt password=%s dbname=getgpt port=5432 sslmode=disable TimeZone=Asia/Shanghai", pgPassword), "pool": map[string]int{"max_open_conns": 20, "max_idle_conns": 5, "conn_max_lifetime_seconds": 1800, "conn_max_idle_time_seconds": 300}},
 		"jwt":      map[string]any{"secret": jwtKey, "expire_hours": 12}, "user_jwt": map[string]any{"secret": userKey, "expire_hours": 24, "remember_me_expire_hours": 168},
@@ -241,7 +241,7 @@ func initialize(options initOptions) (installationState, bool, error) {
 		"queue":         map[string]any{"enabled": true, "host": "redis", "port": 6379, "password": redisPassword, "db": 1, "concurrency": 10, "queues": map[string]int{"default": 10, "critical": 5}},
 		"upload":        map[string]any{"storage": "local", "max_size": 10485760, "allowed_types": []string{"image/jpeg", "image/png", "image/gif", "image/webp"}, "allowed_extensions": []string{".jpg", ".jpeg", ".png", ".gif", ".webp"}, "max_width": 4096, "max_height": 4096},
 		"cors":          map[string]any{"allowed_origins": []string{origin}, "allowed_methods": []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}, "allowed_headers": []string{"Content-Type", "Authorization", "X-Requested-With", "X-CSRF-Token"}, "allow_credentials": true, "max_age": 600},
-		"email":         map[string]any{"enabled": false, "host": "", "port": 587, "username": "", "password": "", "from": "", "from_name": "XIOEN AI", "use_tls": true, "use_ssl": false},
+		"email":         map[string]any{"enabled": false, "host": "", "port": 587, "username": "", "password": "", "from": "", "from_name": "XOPEN AI", "use_tls": true, "use_ssl": false},
 		"telegram_auth": map[string]bool{"enabled": false}, "google_auth": map[string]bool{"enabled": false},
 		"reseller": map[string]any{"enabled": false, "main_hosts": []string{mainHost}, "trusted_forwarded_host": false}, "web": map[string]string{"admin_path": state.AdminPath},
 	}
@@ -250,7 +250,7 @@ func initialize(options initOptions) (installationState, bool, error) {
 		return zero, false, errors.New("无法编码部署配置")
 	}
 	stateJSON, _ := json.MarshalIndent(state, "", "  ")
-	env := fmt.Sprintf("COMPOSE_PROJECT_NAME=getgpt\nSITE_ADDRESS=%s\nHTTP_PORT=%d\nHTTPS_PORT=%d\nAPP_SUBNET=%s\nCADDY_IP=%s\nAPP_IMAGE=%s\nAPP_VERSION=v1.0.0-xioen.1\nCOMPOSE_FILE=compose.yml\n", siteAddress, httpPort, httpsPort, network, proxyIP, options.Image)
+	env := fmt.Sprintf("COMPOSE_PROJECT_NAME=getgpt\nSITE_ADDRESS=%s\nHTTP_PORT=%d\nHTTPS_PORT=%d\nAPP_SUBNET=%s\nCADDY_IP=%s\nAPP_IMAGE=%s\nAPP_VERSION=v1.0.0-xopen.1\nCOMPOSE_FILE=compose.yml\n", siteAddress, httpPort, httpsPort, network, proxyIP, options.Image)
 	files := []struct {
 		name string
 		data []byte

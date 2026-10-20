@@ -3,7 +3,7 @@
 set -eu
 
 usage() {
-    printf '%s\n' '用法: sh docker-deploy.sh [--domain xioenai.vip | --local] [--image OCI引用]' \
+    printf '%s\n' '用法: sh docker-deploy.sh [--domain xopenai.vip | --local] [--image OCI引用]' \
         '       [--admin-user admin] [--subnet 172.29.240.0/24]' \
         '在当前空目录部署预构建镜像；需要 Docker Compose 和 curl。' \
         '默认通过 HTTP :1888 部署，可访问 http://服务器IP:1888；显式 --domain 启用自动 HTTPS。' \
@@ -16,7 +16,7 @@ for argument do
     case "$argument" in -h|--help) usage; exit 0 ;; esac
 done
 
-domain=xioenai.vip
+domain=xopenai.vip
 local_mode=true
 image=ghcr.io/zxgad3wdasaq1e-ai/faka-58:latest
 admin_user='admin'
@@ -107,10 +107,10 @@ EOF
 [ -n "$pinned_image" ] || die 'RepoDigests 中没有与所选镜像仓库及摘要一致的不可变引用。'
 
 temp_base=$(CDPATH='' cd "${TMPDIR:-/tmp}" && pwd -P) || die '临时目录不可用。'
-staging=$(mktemp -d "$temp_base/xioen-deploy.XXXXXXXX") || die '无法创建临时下载目录。'
+staging=$(mktemp -d "$temp_base/xopen-deploy.XXXXXXXX") || die '无法创建临时下载目录。'
 cleanup() {
     # This path is returned by mktemp under our checked, absolute temp base.
-    case "$staging" in "$temp_base"/xioen-deploy.*) rm -rf -- "$staging" ;; esac
+    case "$staging" in "$temp_base"/xopen-deploy.*) rm -rf -- "$staging" ;; esac
 }
 trap cleanup 0
 trap 'exit 129' HUP

@@ -175,11 +175,11 @@ func buildOrderStatusContentFromTemplate(input notificationcontract.OrderStatusE
 func (s *Service) SendCustomEmail(toEmail, subject, body string) error {
 	subject = strings.TrimSpace(subject)
 	if subject == "" {
-		subject = "SMTP 配置测试邮件"
+		subject = i18n.T(i18n.LocaleZH, "email.smtp_test.subject")
 	}
 	body = strings.TrimSpace(body)
 	if body == "" {
-		body = "这是一封来自 Dujiao-Next 的 SMTP 测试邮件，说明当前配置可正常发送。"
+		body = i18n.T(i18n.LocaleZH, "email.smtp_test.body")
 	}
 	return s.sendTextEmail(toEmail, subject, body)
 }

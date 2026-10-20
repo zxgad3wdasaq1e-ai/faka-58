@@ -1,11 +1,14 @@
-# Dujiao-Next Admin
+# XOPEN AI Admin
 
 The management console for operating products, orders, users, payment channels, and system settings.
 
-> This directory is part of the [dujiao-next](https://github.com/dujiao-next/dujiao-next)
+> This directory is part of the [XOPEN AI](https://github.com/zxgad3wdasaq1e-ai/faka-58)
 > single repository and is no longer released on its own. Production assets are embedded
 > into the server binary via `go:embed` and served by the same process, on the same port,
 > as `frontend/user`.
+
+This modified version is based on [Dujiao-Next](https://github.com/dujiao-next/dujiao-next)
+and retains its GPL v3 license and upstream copyright notices.
 
 ## Tech Stack
 
@@ -36,4 +39,4 @@ GitHub Actions release workflow all build and embed the frontends for you.
 
 ## Documentation
 
-https://dujiao-next.com
+[Deployment and configuration](https://github.com/zxgad3wdasaq1e-ai/faka-58#readme)
