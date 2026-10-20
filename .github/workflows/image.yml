@@ -105,25 +105,26 @@ jobs:
           export PATH="$deny_bin:$PATH"
           mkdir "$RUNNER_TEMP/store-smoke"
           cd "$RUNNER_TEMP/store-smoke"
-          sh "$GITHUB_WORKSPACE/deploy/docker-deploy.sh" --local --image "$APP_RELEASE"
-          curl --fail --retry 10 --retry-delay 2 --retry-connrefused http://localhost:8080/health
+          sh "$GITHUB_WORKSPACE/deploy/docker-deploy.sh" --image "$APP_RELEASE"
+          curl --fail --retry 10 --retry-delay 2 --retry-connrefused http://localhost:1888/health
+          curl --fail -H 'Host: 198.51.100.10:1888' http://127.0.0.1:1888/health
           docker compose exec -T app sh -c '! command -v python3 && ! command -v python'
           test ! -e Dockerfile
           test ! -d frontend
           test ! -d scripts
           sh deploy/start.sh --seed
-          curl --fail http://localhost:8080/api/v1/public/products > "$RUNNER_TEMP/catalog.json"
+          curl --fail http://localhost:1888/api/v1/public/products > "$RUNNER_TEMP/catalog.json"
           for slug in chatgpt-plus chatgpt-pro-100 chatgpt-pro-200; do
             test "$(grep -o "\"slug\":\"$slug\"" "$RUNNER_TEMP/catalog.json" | wc -l)" -eq 1
           done
           docker compose exec -T app sh -c 'printf "%s" "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aS1cAAAAASUVORK5CYII=" | base64 -d > /app/uploads/ci-persistence.png'
-          curl --fail http://localhost:8080/uploads/ci-persistence.png > "$RUNNER_TEMP/media-before.png"
+          curl --fail http://localhost:1888/uploads/ci-persistence.png > "$RUNNER_TEMP/media-before.png"
           docker compose up -d --no-build --force-recreate --wait app
-          curl --fail --retry 10 --retry-delay 2 http://localhost:8080/uploads/ci-persistence.png > "$RUNNER_TEMP/media-after.png"
+          curl --fail --retry 10 --retry-delay 2 http://localhost:1888/uploads/ci-persistence.png > "$RUNNER_TEMP/media-after.png"
           cmp "$RUNNER_TEMP/media-before.png" "$RUNNER_TEMP/media-after.png"
           sh deploy/backup.sh backup --output "$RUNNER_TEMP/store-backup"
           (cd "$RUNNER_TEMP/store-backup" && sha256sum -c SHA256SUMS)
-          curl --fail --retry 10 --retry-delay 2 http://localhost:8080/health
+          curl --fail --retry 10 --retry-delay 2 http://localhost:1888/health
           # Only this disposable CI installation is removed to test a fresh restore.
           docker compose down --volumes
           mkdir -p "$RUNNER_TEMP/store-restore/deploy"
@@ -131,9 +132,9 @@ jobs:
           cp deploy/*.sh deploy/Caddyfile "$RUNNER_TEMP/store-restore/deploy/"
           cd "$RUNNER_TEMP/store-restore"
           sh deploy/backup.sh restore --source "$RUNNER_TEMP/store-backup" --confirm-replace-database
-          curl --fail --retry 10 --retry-delay 2 http://localhost:8080/uploads/ci-persistence.png > "$RUNNER_TEMP/media-restored.png"
+          curl --fail --retry 10 --retry-delay 2 http://localhost:1888/uploads/ci-persistence.png > "$RUNNER_TEMP/media-restored.png"
           cmp "$RUNNER_TEMP/media-before.png" "$RUNNER_TEMP/media-restored.png"
-          curl --fail http://localhost:8080/api/v1/public/products > "$RUNNER_TEMP/catalog-restored.json"
+          curl --fail http://localhost:1888/api/v1/public/products > "$RUNNER_TEMP/catalog-restored.json"
           for slug in chatgpt-plus chatgpt-pro-100 chatgpt-pro-200; do
             test "$(grep -o "\"slug\":\"$slug\"" "$RUNNER_TEMP/catalog-restored.json" | wc -l)" -eq 1
           done

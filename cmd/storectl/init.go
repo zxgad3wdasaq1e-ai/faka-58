@@ -228,7 +228,7 @@ func initialize(options initOptions) (installationState, bool, error) {
 	adminPassword := "Aa9_" + adminRandom
 	origin, siteAddress, httpPort, httpsPort, mainHost := "https://"+domain, "https://"+domain, 80, 443, domain
 	if options.Local {
-		origin, siteAddress, httpPort, httpsPort, mainHost = "http://localhost:8080", "http://localhost", 8080, 8443, "localhost"
+		origin, siteAddress, httpPort, httpsPort, mainHost = "http://localhost:1888", ":80", 1888, 8443, "localhost"
 	}
 	state := installationState{Origin: origin, AdminPath: "/console-" + values[7][:12], AdminUser: options.AdminUser, Storage: "local", Local: options.Local, Image: options.Image}
 	config := map[string]any{

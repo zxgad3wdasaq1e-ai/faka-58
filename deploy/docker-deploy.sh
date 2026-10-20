@@ -6,6 +6,7 @@ usage() {
     printf '%s\n' '用法: sh docker-deploy.sh [--domain xioenai.vip | --local] [--image OCI引用]' \
         '       [--admin-user admin] [--subnet 172.29.240.0/24]' \
         '在当前空目录部署预构建镜像；需要 Docker Compose 和 curl。' \
+        '默认通过 HTTP :1888 部署，可访问 http://服务器IP:1888；显式 --domain 启用自动 HTTPS。' \
         '仅允许当前目录已有普通文件 docker-deploy.sh，不会覆盖任何既有部署。'
 }
 die() { printf '%s\n' "部署未完成: $*" >&2; exit 1; }
@@ -16,7 +17,7 @@ for argument do
 done
 
 domain=xioenai.vip
-local_mode=false
+local_mode=true
 image=ghcr.io/zxgad3wdasaq1e-ai/faka-58:latest
 admin_user='admin'
 subnet=172.29.240.0/24
@@ -26,7 +27,7 @@ while [ "$#" -gt 0 ]; do
         --domain|--image|--admin-user|--subnet)
             [ "$#" -ge 2 ] || die "$1 缺少参数。"
             case "$1" in
-                --domain) domain=$2 ;;
+                --domain) domain=$2; local_mode=false ;;
                 --image) image=$2 ;;
                 --admin-user) admin_user=$2 ;;
                 --subnet) subnet=$2 ;;

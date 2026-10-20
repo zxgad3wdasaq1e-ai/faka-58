@@ -57,7 +57,7 @@ case "$1" in
                 printf '%s\n' 'private-config-MUST-NOT-PRINT' >config.yml
                 printf '%s\n' '{}' >deploy/runtime/installation.json
                 if [ "$local_mode" = true ]; then
-                    printf '%s\n' 'http://localhost:8080' >deploy/runtime/test-origin
+                    printf '%s\n' 'http://localhost:1888' >deploy/runtime/test-origin
                 else
                     printf '%s\n' 'https://xioenai.vip' >deploy/runtime/test-origin
                 fi
@@ -158,14 +158,24 @@ if grep '^curl.*raw.githubusercontent.com' "$STORE_TEST_LOG" | grep -v '/abcd123
 grep -q 'compose.*up.*--no-build.*--wait' "$STORE_TEST_LOG" || fail 'start attempted a source build'
 grep -q 'compose.*exec.*storectl.*seed.*http://127.0.0.1:8080' "$STORE_TEST_LOG" || fail 'seed did not use in-container helper'
 grep -q 'run.*--network.none.*--user.*--volume.*--entrypoint./app/storectl.*init' "$STORE_TEST_LOG" || fail 'init isolation flags differ'
+grep -q 'init.*--local' "$STORE_TEST_LOG" || fail 'default installation did not select HTTP mode'
+grep -q '店面: http://localhost:1888' "$test_root/output" || fail 'default HTTP origin differs'
+grep -q '远程访问: http://服务器IP:1888' "$test_root/output" || fail 'remote IP access hint missing'
 assert_no_secret_output
-printf 'ok - complete Docker-only installation with matching digest and revision\n'
+printf 'ok - default HTTP :1888 installation with matching digest and revision\n'
 
 new_case
 run_install --local --admin-user manager --subnet 172.28.240.0/24
-grep -q '店面: http://localhost:8080' "$test_root/output" || fail 'local origin differs'
+grep -q '店面: http://localhost:1888' "$test_root/output" || fail 'local origin differs'
 grep -q 'init.*--admin-user.manager.*--subnet.172.28.240.0/24.*--local' "$STORE_TEST_LOG" || fail 'init flags not forwarded'
 printf 'ok - local mode and initialization flags\n'
+
+new_case
+run_install --domain xioenai.vip
+grep -q '店面: https://xioenai.vip' "$test_root/output" || fail 'explicit domain did not select HTTPS'
+grep -q 'init.*--domain.xioenai.vip' "$STORE_TEST_LOG" || fail 'domain was not forwarded'
+if grep -q 'init.*--local' "$STORE_TEST_LOG"; then fail 'explicit HTTPS domain selected HTTP mode'; fi
+printf 'ok - explicit domain preserves automatic HTTPS deployment\n'
 
 new_case
 cp "$bootstrap" "$case_dir/docker-deploy.sh"
@@ -255,6 +265,11 @@ printf '%s\n' 'SHOULD_NOT_RUN=$(touch should-not-exist)' >>"$case_dir/.env"
 assert_no_secret_output
 printf 'ok - repeat startup preserves credentials and does not source env\n'
 
+printf '%s\n' 'http://localhost:8080' >"$case_dir/deploy/runtime/test-origin"
+(cd "$case_dir" && "$shell" deploy/start.sh --seed) >"$test_root/output" 2>&1
+grep -q '店面: http://localhost:8080' "$test_root/output" || fail 'legacy HTTP origin cannot retry'
+printf 'ok - legacy HTTP :8080 configuration can still retry\n'
+
 printf '%s\n' 'APP_IMAGE=$(touch should-not-exist)' >"$case_dir/.env"
 if (cd "$case_dir" && "$shell" deploy/start.sh) >"$test_root/output" 2>&1; then fail 'malicious APP_IMAGE accepted'; fi
 [ ! -e "$case_dir/should-not-exist" ] || fail 'APP_IMAGE executed code'
@@ -272,8 +287,15 @@ printf 'ok - initialization failure retains configuration for retry\n'
 new_case
 MOCK_HEALTH_FAILURE=true; export MOCK_HEALTH_FAILURE
 expect_failure --local
-grep -q 'DNS.*80/443' "$test_root/output" || fail 'health timeout lacks recovery hint'
-printf 'ok - public health wait has a bounded deadline\n'
+grep -q 'HTTP 站点未就绪.*1888.*防火墙' "$test_root/output" || fail 'HTTP health timeout lacks port recovery hint'
+if grep -q 'DNS.*80/443' "$test_root/output"; then fail 'HTTP timeout displayed HTTPS recovery hint'; fi
+printf 'ok - HTTP health wait has a bounded deadline and relevant port hint\n'
+
+new_case
+MOCK_HEALTH_FAILURE=true; export MOCK_HEALTH_FAILURE
+expect_failure --domain xioenai.vip
+grep -q 'HTTPS 站点未就绪.*DNS.*80/443' "$test_root/output" || fail 'HTTPS health timeout lacks certificate recovery hint'
+printf 'ok - HTTPS health timeout retains DNS and certificate recovery hint\n'
 
 [ ! -s "$STORE_TEST_PYTHON_LOG" ] || fail 'installation invoked Python'
 printf 'PASS: %s Docker-only shell scenarios; python/python3 were present but forbidden.\n' "$count"

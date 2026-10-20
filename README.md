@@ -12,7 +12,7 @@
 
 ## Ubuntu 快速部署（推荐：预构建镜像）
 
-GitHub 负责保存代码、测试和构建镜像，网站运行在你的 Ubuntu 服务器上。服务器只需 Docker Engine、Docker Compose v2（支持 `up --wait`）、Shell 和 curl；无需安装 Python、Node.js、Go 或 jq，也不在服务器编译前后台。将 `xioenai.vip` 的 DNS A/AAAA 指向服务器，开放 TCP 80、443；已有服务占用这些端口时需先协调反向代理。
+GitHub 负责保存代码、测试和构建镜像，网站运行在你的 Ubuntu 服务器上。服务器只需 Docker Engine、Docker Compose v2（支持 `up --wait`）、Shell 和 curl；无需安装 Python、Node.js、Go 或 jq，也不在服务器编译前后台。默认以 HTTP 部署到 `1888` 端口，放行服务器及云安全组的 TCP 1888 后，可直接通过服务器 IP 访问，再按需配置自己的反向代理。
 
 首次发布需要仓库管理员完成一次：将部署改动上传到 `main`，等待 Actions 中 `ci` 和 `Publish Docker image` 成功；在 GitHub 个人主页的 Packages 中打开 `faka-58` → Package settings → Change visibility → Public。公开源码仓库不会自动将容器包设为公开。流水线使用仓库自带的 `GITHUB_TOKEN`，无需把个人令牌写进代码。
 
@@ -20,12 +20,12 @@ GitHub 负责保存代码、测试和构建镜像，网站运行在你的 Ubuntu
 
 ```bash
 mkdir -p ~/faka-58 && cd ~/faka-58
-curl -fsSL https://raw.githubusercontent.com/zxgad3wdasaq1e-ai/faka-58/main/deploy/docker-deploy.sh | bash -s -- --domain xioenai.vip
+curl -fsSL https://raw.githubusercontent.com/zxgad3wdasaq1e-ai/faka-58/main/deploy/docker-deploy.sh | bash
 ```
 
-Shell 脚本拉取 `ghcr.io/zxgad3wdasaq1e-ai/faka-58:latest`，校验镜像来源及源码版本，下载同版本部署文件并固定到镜像 SHA256 摘要；不会下载整个源码仓库。镜像内的 Go 工具 `storectl` 使用系统安全随机源生成独立密钥和管理员账号，然后启动 PostgreSQL、Redis、店面和 Caddy，申请 HTTPS 并幂等导入初始商品目录。图片使用持久化 `uploads` 卷，自动提供图床，无需额外安装语言运行时。服务器同时支持 amd64 和 arm64；全新安装脚本拒绝覆盖非空目录和既有密钥。
+Shell 脚本拉取 `ghcr.io/zxgad3wdasaq1e-ai/faka-58:latest`，校验镜像来源及源码版本，下载同版本部署文件并固定到镜像 SHA256 摘要；不会下载整个源码仓库。镜像内的 Go 工具 `storectl` 使用系统安全随机源生成独立密钥和管理员账号，然后启动 PostgreSQL、Redis、店面和 Caddy，提供 HTTP 1888 入口并幂等导入初始商品目录。图片使用持久化 `uploads` 卷，自动提供图床，无需额外安装语言运行时。服务器同时支持 amd64 和 arm64；全新安装脚本拒绝覆盖非空目录和既有密钥。
 
-店面：`https://xioenai.vip`。在部署目录读取首次后台地址与账号：
+店面：`http://服务器IP:1888`，在服务器本机可访问 `http://localhost:1888`。在部署目录读取首次后台路径与账号（凭据文件默认使用 localhost；远程访问时将其替换为服务器 IP）：
 
 ```bash
 cat deploy/secrets/initial-admin.txt
@@ -33,7 +33,11 @@ docker compose ps
 docker compose logs --tail 100 app
 ```
 
-只通过 HTTP 体验时将 `--domain xioenai.vip` 换为 `--local`，在服务器本机访问 `http://localhost:8080`。远程体验可运行 `ssh -L 8080:127.0.0.1:8080 用户名@服务器IP` 后在自己电脑打开同一地址。正式收款前仍需在后台配置易支付、导入卡密或设置人工交付，并完成真实订单测试。
+`--local` 保留为 HTTP 1888 模式的显式选项。应用容器内部仍使用 8080；自己的反向代理应指向宿主机 `http://127.0.0.1:1888`。配置正式域名后，在后台「系统设置」同步站点 URL，并在支付平台使用正式 HTTPS 域名的回调地址。
+
+需要由项目自动管理 HTTPS 时，可在首次安装命令末尾使用 `| bash -s -- --domain xioenai.vip` 替代 `| bash`；该模式继续使用标准 80/443，需将域名 DNS A/AAAA 指向服务器并放行这些端口。正式收款前仍需在后台配置易支付、导入卡密或设置人工交付，并完成真实订单测试。
+
+默认值只影响新安装。已有安装会沿用原端口和密钥；迁移为 HTTP 1888 时，先备份，将 `.env` 的 `SITE_ADDRESS` 改为 `:80`、`HTTP_PORT` 改为 `1888`，将 `deploy/runtime/installation.json` 的 `origin` 改为 `http://localhost:1888`、`local` 改为 `true`，并把 `config.yml` 中 `cors.allowed_origins` 改为你的实际访问地址。随后执行 `sh deploy/start.sh` 重建入口，再在后台将站点 URL 更新为实际的域名或 IP 地址。不要重新运行首次初始化或删除数据卷。
 
 拉取镜像报 `denied` 时，先检查镜像发布是否成功及 Package 是否已设为 Public；私有镜像需在服务器自行 `docker login ghcr.io`，不要将令牌发给他人。配置生成完成但服务启动或目录初始化失败后，在原目录沿用配置重试：
 

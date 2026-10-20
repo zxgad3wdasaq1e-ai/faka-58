@@ -122,11 +122,11 @@ func TestInitLocalOriginAndMissingRuntimePreflight(t *testing.T) {
 	options := initFixture(t)
 	options.Local = true
 	state, _, err := initialize(options)
-	if err != nil || state.Origin != "http://localhost:8080" || !state.Local {
+	if err != nil || state.Origin != "http://localhost:1888" || !state.Local {
 		t.Fatal("local initialization did not retain its HTTP origin")
 	}
 	env, _ := os.ReadFile(filepath.Join(options.Root, ".env"))
-	for _, entry := range []string{"SITE_ADDRESS=http://localhost\n", "HTTP_PORT=8080\n", "HTTPS_PORT=8443\n"} {
+	for _, entry := range []string{"SITE_ADDRESS=:80\n", "HTTP_PORT=1888\n", "HTTPS_PORT=8443\n"} {
 		if !strings.Contains(string(env), entry) {
 			t.Fatal("local port contract changed")
 		}

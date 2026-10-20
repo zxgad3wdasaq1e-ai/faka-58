@@ -34,24 +34,27 @@ docker compose pull || die '镜像拉取失败，请检查网络或 GHCR public/
 docker compose up -d --no-build --wait --wait-timeout 300 || die '服务未通过健康检查；使用 docker compose logs 排查后重试本脚本。'
 origin=$(docker run --rm --network none --user "$(id -u):$(id -g)" --volume "$root:/workspace:ro" --entrypoint /app/storectl "$image" info --root /workspace --field origin) || die '无法读取安装状态中的站点地址。'
 case "$origin" in
-    http://localhost:8080|http://127.0.0.1:8080) ;;
+    http://localhost:1888|http://127.0.0.1:1888|http://localhost:8080|http://127.0.0.1:8080)
+        public_port=${origin##*:}
+        health_hint="HTTP 站点未就绪；请检查 Docker/Caddy 日志、服务器 $public_port 端口及防火墙后重试。" ;;
     https://*)
         hostname=${origin#https://}
-        case "$hostname" in ''|*[!A-Za-z0-9.-]*) die '安装状态中的公开域名无效。' ;; esac ;;
-    *) die '安装状态中的地址必须是 HTTPS 域名或本机 HTTP :8080。' ;;
+        case "$hostname" in ''|*[!A-Za-z0-9.-]*) die '安装状态中的公开域名无效。' ;; esac
+        health_hint='HTTPS 站点未就绪；请检查 DNS、80/443 和 Caddy 证书日志后重试。' ;;
+    *) die '安装状态中的地址必须是 HTTPS 域名或本机 HTTP :1888（兼容旧版 :8080）。' ;;
 esac
 
 printf '%s\n' '等待公开站点健康检查就绪（最多 120 秒）…'
 deadline=$(($(date +%s) + 120))
 while :; do
     remaining=$((deadline - $(date +%s)))
-    [ "$remaining" -gt 0 ] || die '公开站点未就绪；请检查 DNS、80/443 和 Caddy 证书日志后重试。'
+    [ "$remaining" -gt 0 ] || die "$health_hint"
     request_timeout=5
     [ "$remaining" -ge 5 ] || request_timeout=$remaining
     status=$(curl --fail --silent --show-error --proto '=http,https' --max-time "$request_timeout" --output /dev/null --write-out '%{http_code}' "$origin/health") || status=
     [ "$status" = 200 ] && break
     remaining=$((deadline - $(date +%s)))
-    [ "$remaining" -gt 0 ] || die '公开站点未就绪；请检查 DNS、80/443 和 Caddy 证书日志后重试。'
+    [ "$remaining" -gt 0 ] || die "$health_hint"
     pause=2
     [ "$remaining" -ge 2 ] || pause=$remaining
     sleep "$pause"
@@ -60,3 +63,7 @@ if [ "$seed" = true ]; then
     docker compose exec -T app /app/storectl seed --root /app --base-url http://127.0.0.1:8080 || die '商品初始化未完成；修复后使用 --seed 重试。'
 fi
 printf '%s\n' "店面: $origin" "后台地址与初始凭据保存在: $root/deploy/secrets/initial-admin.txt"
+case "$origin" in
+    http://localhost:1888|http://127.0.0.1:1888)
+        printf '%s\n' '远程访问: http://服务器IP:1888（请放行服务器 1888/TCP 端口）。' ;;
+esac
