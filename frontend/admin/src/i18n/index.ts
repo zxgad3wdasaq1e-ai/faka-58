@@ -3577,6 +3577,8 @@ const messages = {
       affiliatesCommissions: {
         title: '佣金记录',
         empty: '暂无佣金记录',
+        legacyRefundReviewRequired: '历史退款记录需人工核对，此笔佣金已暂停提现；其他有效佣金不受影响。',
+        held: '待核对',
         filters: {
           keyword: '用户名 / 邮箱 / 联盟ID',
           orderNo: '订单号',
@@ -3598,8 +3600,6 @@ const messages = {
         status: {
           pendingConfirm: '待确认',
           available: '可提现',
-        legacyRefundReviewRequired: '历史退款记录需人工核对，此笔佣金已暂停提现；其他有效佣金不受影响。',
-        held: '待核对',
           rejected: '已失效',
           withdrawn: '已提现',
         },
@@ -8187,6 +8187,8 @@ const messages = {
       affiliatesCommissions: {
         title: '佣金記錄',
         empty: '暫無佣金記錄',
+        legacyRefundReviewRequired: '歷史退款記錄需人工核對，此筆佣金已暫停提現；其他有效佣金不受影響。',
+        held: '待核對',
         filters: {
           keyword: '用戶名 / 郵箱 / 聯盟ID',
           orderNo: '訂單號',
@@ -8229,8 +8231,6 @@ const messages = {
           status: '狀態',
           rejectReason: '拒絕原因',
           processedBy: '審核人',
-        legacyRefundReviewRequired: '歷史退款記錄需人工核對，此筆佣金已暫停提現；其他有效佣金不受影響。',
-        held: '待核對',
           createdAt: '申請時間',
           action: '操作',
         },
@@ -12797,6 +12797,8 @@ const messages = {
       affiliatesCommissions: {
         title: 'Commission Records',
         empty: 'No commission records',
+        legacyRefundReviewRequired: 'Historical refunds require manual review. Withdrawal of this commission is on hold; other valid commissions are unaffected.',
+        held: 'Review required',
         filters: {
           keyword: 'User / Email / Affiliate ID',
           orderNo: 'Order No',
@@ -12860,8 +12862,6 @@ const messages = {
         },
       },
       resellerLedgerEntries: {
-        legacyRefundReviewRequired: 'Historical refunds require manual review. Withdrawal of this commission is on hold; other valid commissions are unaffected.',
-        held: 'Review required',
         title: 'Reseller Ledger',
         empty: 'No reseller ledger entries',
         filters: {
