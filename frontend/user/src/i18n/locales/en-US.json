@@ -620,11 +620,13 @@
         "createdAt": "Created At"
       },
       "commissionStatus": {
+        "held": "Review required",
         "pendingConfirm": "Pending Confirm",
         "available": "Available",
         "rejected": "Rejected",
         "withdrawn": "Withdrawn"
       },
+      "legacyRefundReviewRequired": "This historical refund commission is on hold for manual review. Please contact support. Other valid commissions are unaffected.",
       "withdrawStatus": {
         "pendingReview": "Pending Review",
         "rejected": "Rejected",

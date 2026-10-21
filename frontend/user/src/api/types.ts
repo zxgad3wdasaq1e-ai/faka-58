@@ -177,6 +177,7 @@ export interface AffiliateCommissionData {
     commission_type: string
     commission_amount: string
     status: string
+    requires_review?: boolean
     confirm_at?: string
     available_at?: string
     created_at: string

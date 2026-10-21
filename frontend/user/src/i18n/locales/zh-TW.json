@@ -620,11 +620,13 @@
         "createdAt": "申請時間"
       },
       "commissionStatus": {
+        "held": "待核對",
         "pendingConfirm": "待確認",
         "available": "可提現",
         "rejected": "已失效",
         "withdrawn": "已提現"
       },
+      "legacyRefundReviewRequired": "此筆歷史退款佣金需人工核對，已暫停提現，請聯絡客服；其他有效佣金不受影響。",
       "withdrawStatus": {
         "pendingReview": "待審核",
         "rejected": "已拒絕",

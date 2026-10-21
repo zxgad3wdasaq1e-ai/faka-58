@@ -573,11 +573,13 @@
         "createdAt": "申请时间"
       },
       "commissionStatus": {
+        "held": "待核对",
         "pendingConfirm": "待确认",
         "available": "可提现",
         "rejected": "已失效",
         "withdrawn": "已提现"
       },
+      "legacyRefundReviewRequired": "此笔历史退款佣金需人工核对，已暂停提现，请联系客服；其他有效佣金不受影响。",
       "withdrawStatus": {
         "pendingReview": "待审核",
         "rejected": "已拒绝",

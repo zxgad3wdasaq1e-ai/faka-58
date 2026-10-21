@@ -38,9 +38,15 @@ func TestAffiliateOrderPaidWorkerCreatesCommission(t *testing.T) {
 	if err != nil {
 		t.Fatalf("open db failed: %v", err)
 	}
-	if err := db.AutoMigrate(&affiliatedomain.Profile{}, &affiliatedomain.Commission{}); err != nil {
+	if err := db.AutoMigrate(&orderdomain.Order{}, &affiliatedomain.Profile{}, &affiliatedomain.Commission{}); err != nil {
 		t.Fatalf("migrate failed: %v", err)
 	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	sqlDB.SetMaxOpenConns(1)
+	t.Cleanup(func() { _ = sqlDB.Close() })
 	profile := affiliatedomain.Profile{UserID: 1, AffiliateCode: "WORKER1", Status: constants.AffiliateProfileStatusActive}
 	if err := db.Create(&profile).Error; err != nil {
 		t.Fatalf("seed profile failed: %v", err)
@@ -50,8 +56,14 @@ func TestAffiliateOrderPaidWorkerCreatesCommission(t *testing.T) {
 		t.Fatalf("init affiliate setting failed: %v", err)
 	}
 	order := &orderdomain.Order{
-		ID: 42, UserID: 2, Status: constants.OrderStatusPaid, AffiliateProfileID: &profile.ID,
-		Items: []orderdomain.OrderItem{{ProductID: 1, TotalPrice: money.FromDecimal(decimal.NewFromInt(100))}},
+		ID: 42, OrderNo: "WORKER-42", UserID: 2, Status: constants.OrderStatusPaid, AffiliateProfileID: &profile.ID,
+		TotalAmount: money.FromDecimal(decimal.NewFromInt(100)),
+		Items:       []orderdomain.OrderItem{{ProductID: 1, TotalPrice: money.FromDecimal(decimal.NewFromInt(100))}},
+	}
+	// Commission retries now re-read the persisted refund state inside their
+	// transaction; use the real schema and order instead of only a stub snapshot.
+	if err := db.Omit("Items").Create(order).Error; err != nil {
+		t.Fatalf("seed order failed: %v", err)
 	}
 	store := affiliategormstore.New(db)
 	c := New(&container.Container{

@@ -16,6 +16,9 @@ const (
 
 var messages = map[string]map[string]string{
 	LocaleZH: {
+		"error.affiliate_withdraw_legacy_refund":         "部分历史退款佣金需人工核对，已暂停提现；其他有效佣金可正常申请提现",
+		"error.affiliate_withdraw_refunded":              "关联订单发生退款，提现申请已自动拒绝；有效佣金已解冻，请重新申请提现",
+		"error.affiliate_withdraw_invalid":               "提现佣金与申请金额不一致，申请已拒绝，请重新申请提现",
 		"error.jwt_secret_missing":                       "JWT secret 未配置",
 		"error.auth_header_missing":                      "缺少 Authorization header",
 		"error.auth_header_invalid":                      "Authorization header 格式错误",
@@ -401,6 +404,9 @@ var messages = map[string]map[string]string{
 		"error.invalid_product_status":              "无效的商品状态参数",
 	},
 	LocaleTW: {
+		"error.affiliate_withdraw_legacy_refund":         "部分歷史退款佣金需人工核對，已暫停提現；其他有效佣金可正常申請提現",
+		"error.affiliate_withdraw_refunded":              "關聯訂單發生退款，提現申請已自動拒絕；有效佣金已解凍，請重新申請提現",
+		"error.affiliate_withdraw_invalid":               "提現佣金與申請金額不一致，申請已拒絕，請重新申請提現",
 		"error.jwt_secret_missing":                       "JWT secret 未配置",
 		"error.auth_header_missing":                      "缺少 Authorization header",
 		"error.auth_header_invalid":                      "Authorization header 格式錯誤",
@@ -786,6 +792,9 @@ var messages = map[string]map[string]string{
 		"error.invalid_product_status":              "無效的商品狀態參數",
 	},
 	LocaleEN: {
+		"error.affiliate_withdraw_legacy_refund":         "Some historical refund commissions require manual review and are on hold. Other valid commissions can still be withdrawn.",
+		"error.affiliate_withdraw_refunded":              "A related order was refunded. This withdrawal was automatically rejected; remaining valid commissions are available for a new request.",
+		"error.affiliate_withdraw_invalid":               "The commissions do not match the requested amount. This withdrawal was rejected; please submit a new request.",
 		"error.jwt_secret_missing":                       "JWT secret is not configured",
 		"error.auth_header_missing":                      "Missing Authorization header",
 		"error.auth_header_invalid":                      "Invalid Authorization header format",

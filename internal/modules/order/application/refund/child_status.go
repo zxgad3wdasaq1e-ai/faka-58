@@ -14,6 +14,34 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+// lockRefundOrder 统一退款与手续费更新的锁顺序：先父订单，再目标子订单。
+// 读取关系也必须使用事务 store；父子关系不可变，锁定后再次核对以拒绝异常数据。
+func lockRefundOrder(orderStore ordercontract.Store, orderID uint) (*orderdomain.Order, error) {
+	observed, err := orderStore.GetByID(orderID)
+	if err != nil || observed == nil {
+		return nil, err
+	}
+	rootID := paymentFeeRefundRootOrderID(observed)
+	root, err := orderStore.GetByIDForUpdate(rootID)
+	if err != nil || root == nil {
+		return nil, err
+	}
+	if root.ParentID != nil && *root.ParentID > 0 {
+		return nil, ErrOrderStatusInvalid
+	}
+	if rootID == orderID {
+		return root, nil
+	}
+	order, err := orderStore.GetByIDForUpdate(orderID)
+	if err != nil || order == nil {
+		return nil, err
+	}
+	if order.ParentID == nil || *order.ParentID != rootID {
+		return nil, ErrOrderStatusInvalid
+	}
+	return order, nil
+}
+
 // applyParentRefundChildStatusUpdates 根据父订单退款结果统一更新子订单状态。
 // 规则:子订单退款状态始终跟随父订单,避免分支逻辑造成状态混乱。
 //

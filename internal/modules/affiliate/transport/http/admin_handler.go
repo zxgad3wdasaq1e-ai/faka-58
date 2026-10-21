@@ -7,6 +7,7 @@ import (
 	affiliatedomain "github.com/dujiao-next/internal/modules/affiliate/domain"
 
 	"github.com/dujiao-next/internal/constants"
+	"github.com/dujiao-next/internal/i18n"
 	affiliateapp "github.com/dujiao-next/internal/modules/affiliate/application"
 	"github.com/dujiao-next/internal/platform/http/ginutil"
 	"github.com/dujiao-next/internal/platform/http/response"
@@ -105,6 +106,9 @@ func (h *AdminHandler) ListAffiliateWithdraws(c *gin.Context) {
 		ginutil.RespondError(c, response.CodeInternal, "error.user_fetch_failed", err)
 		return
 	}
+	for i := range rows {
+		rows[i].RejectReason = localizedWithdrawRejectReason(c, rows[i].RejectReason)
+	}
 	response.SuccessWithPage(c, rows, response.BuildPagination(page, pageSize, total))
 }
 
@@ -185,11 +189,16 @@ func (h *AdminHandler) RejectAffiliateWithdraw(c *gin.Context) {
 			ginutil.RespondError(c, response.CodeNotFound, "error.bad_request", nil)
 		case errors.Is(err, affiliateapp.ErrWithdrawStatusInvalid):
 			ginutil.RespondError(c, response.CodeBadRequest, "error.bad_request", nil)
+		case errors.Is(err, affiliateapp.ErrWithdrawRefunded):
+			ginutil.RespondError(c, response.CodeBadRequest, affiliateapp.WithdrawRefundRejectReason, nil)
+		case errors.Is(err, affiliateapp.ErrWithdrawLegacyRefund):
+			ginutil.RespondError(c, response.CodeBadRequest, affiliateapp.WithdrawLegacyRefundRejectReason, nil)
 		default:
 			ginutil.RespondError(c, response.CodeInternal, "error.save_failed", err)
 		}
 		return
 	}
+	row.RejectReason = localizedWithdrawRejectReason(c, row.RejectReason)
 	response.Success(c, row)
 }
 
@@ -211,10 +220,21 @@ func (h *AdminHandler) PayAffiliateWithdraw(c *gin.Context) {
 			ginutil.RespondError(c, response.CodeNotFound, "error.bad_request", nil)
 		case errors.Is(err, affiliateapp.ErrWithdrawStatusInvalid):
 			ginutil.RespondError(c, response.CodeBadRequest, "error.bad_request", nil)
+		case errors.Is(err, affiliateapp.ErrWithdrawRefunded):
+			ginutil.RespondError(c, response.CodeBadRequest, affiliateapp.WithdrawRefundRejectReason, nil)
+		case errors.Is(err, affiliateapp.ErrWithdrawLegacyRefund):
+			ginutil.RespondError(c, response.CodeBadRequest, affiliateapp.WithdrawLegacyRefundRejectReason, nil)
 		default:
 			ginutil.RespondError(c, response.CodeInternal, "error.save_failed", err)
 		}
 		return
 	}
 	response.Success(c, row)
+}
+
+func localizedWithdrawRejectReason(c *gin.Context, reason string) string {
+	if reason == affiliateapp.WithdrawRefundRejectReason || reason == affiliateapp.WithdrawInvalidRejectReason || reason == affiliateapp.WithdrawLegacyRefundRejectReason {
+		return i18n.T(i18n.ResolveLocale(c), reason)
+	}
+	return reason
 }

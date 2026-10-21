@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/dujiao-next/internal/constants"
+	affiliatedomain "github.com/dujiao-next/internal/modules/affiliate/domain"
 	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
 	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
 	settingsstore "github.com/dujiao-next/internal/modules/settings/infrastructure/gormstore"
@@ -343,5 +344,91 @@ func TestEnsurePaymentChannelBepusdtConfigMigration_NormalizesLegacyChannels(t *
 	}
 	if !migrationDone(marker.ValueJSON) || marker.ValueJSON["migrated_count"] != float64(len(tests)+1) {
 		t.Fatalf("unexpected marker: %v", marker.ValueJSON)
+	}
+}
+
+func TestAffiliateRefundMigrationPreservesAmbiguousHistoryAndRejectsPending(t *testing.T) {
+	db, err := gorm.Open(sqlite.Open(fmt.Sprintf("file:affiliate_migration_%d?mode=memory&cache=shared", time.Now().UnixNano())), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	previous := gormdb.DB
+	gormdb.DB = db
+	sqlDB, err := db.DB()
+	if err != nil {
+		t.Fatal(err)
+	}
+	sqlDB.SetMaxOpenConns(1)
+	t.Cleanup(func() { gormdb.DB = previous; _ = sqlDB.Close() })
+	if err := db.AutoMigrate(&orderdomain.Order{}, &affiliatedomain.Profile{}, &affiliatedomain.Commission{}, &affiliatedomain.WithdrawRequest{}, &settingsstore.SettingRecord{}); err != nil {
+		t.Fatal(err)
+	}
+	m := func(value string) money.Amount { return money.FromDecimal(decimal.RequireFromString(value)) }
+	profile := affiliatedomain.Profile{UserID: 1, AffiliateCode: "MIGRATE1", Status: constants.AffiliateProfileStatusActive}
+	if err := db.Create(&profile).Error; err != nil {
+		t.Fatal(err)
+	}
+	orders := []orderdomain.Order{
+		{OrderNo: "legacy-split", UserID: 2, Currency: "CNY", Status: constants.OrderStatusPartiallyRefunded, TotalAmount: m("100"), RefundedAmount: m("40"), AffiliateProfileID: &profile.ID},
+		{OrderNo: "unrelated-valid", UserID: 2, Currency: "CNY", Status: constants.OrderStatusPaid, TotalAmount: m("10"), AffiliateProfileID: &profile.ID},
+		{OrderNo: "already-paid", UserID: 2, Currency: "CNY", Status: constants.OrderStatusRefunded, TotalAmount: m("100"), RefundedAmount: m("100"), AffiliateProfileID: &profile.ID},
+		{OrderNo: "unbound-adjusted", UserID: 2, Currency: "CNY", Status: constants.OrderStatusPartiallyRefunded, TotalAmount: m("100"), RefundedAmount: m("40"), AffiliateProfileID: &profile.ID},
+	}
+	if err := db.Create(&orders).Error; err != nil {
+		t.Fatal(err)
+	}
+	requests := []affiliatedomain.WithdrawRequest{
+		{AffiliateProfileID: profile.ID, Amount: m("10"), Channel: "test", Account: "test-only", Status: constants.AffiliateWithdrawStatusPendingReview},
+		{AffiliateProfileID: profile.ID, Amount: m("20"), Channel: "test", Account: "test-only", Status: constants.AffiliateWithdrawStatusPaid},
+	}
+	if err := db.Create(&requests).Error; err != nil {
+		t.Fatal(err)
+	}
+	rows := []affiliatedomain.Commission{
+		// The old split duplicated the base; migration must not invent its
+		// original allocation or charge the already adjusted unbound half twice.
+		{AffiliateProfileID: profile.ID, OrderID: orders[0].ID, CommissionType: "order", BaseAmount: m("100"), CommissionAmount: m("8"), RatePercent: m("20"), Status: constants.AffiliateCommissionStatusAvailable, WithdrawRequestID: &requests[0].ID},
+		{AffiliateProfileID: profile.ID, OrderID: orders[0].ID, CommissionType: "spold", BaseAmount: m("60"), CommissionAmount: m("7.20"), RatePercent: m("20"), Status: constants.AffiliateCommissionStatusAvailable},
+		{AffiliateProfileID: profile.ID, OrderID: orders[1].ID, CommissionType: "order", BaseAmount: m("10"), CommissionAmount: m("2"), RatePercent: m("20"), Status: constants.AffiliateCommissionStatusAvailable, WithdrawRequestID: &requests[0].ID},
+		{AffiliateProfileID: profile.ID, OrderID: orders[2].ID, CommissionType: "order", BaseAmount: m("100"), CommissionAmount: m("20"), RatePercent: m("20"), Status: constants.AffiliateCommissionStatusWithdrawn, WithdrawRequestID: &requests[1].ID},
+		{AffiliateProfileID: profile.ID, OrderID: orders[3].ID, CommissionType: "order", BaseAmount: m("60"), CommissionAmount: m("12"), RatePercent: m("20"), Status: constants.AffiliateCommissionStatusAvailable},
+	}
+	if err := db.Create(&rows).Error; err != nil {
+		t.Fatal(err)
+	}
+	for range 2 {
+		if err := ensureAffiliateRefundSnapshotMigration(); err != nil {
+			t.Fatal(err)
+		}
+	}
+	var migrated []affiliatedomain.Commission
+	if err := db.Order("id asc").Find(&migrated).Error; err != nil {
+		t.Fatal(err)
+	}
+	wants := []string{"4.80", "7.20", "2", "20", "12"}
+	for i, row := range migrated {
+		if !row.CommissionAmount.Decimal.Equal(decimal.RequireFromString(wants[i])) {
+			t.Fatalf("row %d amount changed incorrectly: %+v", i, row)
+		}
+	}
+	for _, i := range []int{1, 4} {
+		if migrated[i].InvalidReason != affiliatedomain.CommissionInvalidReasonLegacyRefundReview || !migrated[i].OrderRefundedAmount.Decimal.Equal(decimal.NewFromInt(40)) || !migrated[i].BaseAmount.Decimal.Equal(decimal.NewFromInt(60)) {
+			t.Fatalf("ambiguous old unbound row was guessed, charged again or not held: %+v", migrated[i])
+		}
+	}
+	if migrated[0].WithdrawRequestID != nil || migrated[2].WithdrawRequestID != nil || migrated[2].InvalidReason != "" {
+		t.Fatal("rejection did not release other valid commissions")
+	}
+	if migrated[3].Status != constants.AffiliateCommissionStatusWithdrawn || migrated[3].WithdrawRequestID == nil || !migrated[3].OrderRefundedAmount.Decimal.IsZero() {
+		t.Fatalf("settled audit history changed: %+v", migrated[3])
+	}
+	var request affiliatedomain.WithdrawRequest
+	if err := db.First(&request, requests[0].ID).Error; err != nil {
+		t.Fatal(err)
+	}
+	if request.Status != constants.AffiliateWithdrawStatusRejected || !request.Amount.Decimal.Equal(decimal.NewFromInt(10)) || request.RejectReason == "" {
+		t.Fatalf("legacy pending withdrawal not rejected at original amount: %+v", request)
 	}
 }

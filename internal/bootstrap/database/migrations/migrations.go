@@ -7,6 +7,9 @@ import (
 	"time"
 
 	"github.com/dujiao-next/internal/constants"
+	affiliateapp "github.com/dujiao-next/internal/modules/affiliate/application"
+	affiliatedomain "github.com/dujiao-next/internal/modules/affiliate/domain"
+	affiliatestore "github.com/dujiao-next/internal/modules/affiliate/infrastructure/gormstore"
 	cardsecretdomain "github.com/dujiao-next/internal/modules/cardsecret/domain"
 	cartdomain "github.com/dujiao-next/internal/modules/cart/domain"
 	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
@@ -908,4 +911,84 @@ func ensureCategoryParentMigration() error {
 		},
 	}
 	return gormdb.DB.Save(&doneMarker).Error
+}
+
+const affiliateRefundSnapshotMigrationKey = "migration/affiliate_refund_snapshot_v1"
+
+// Old refunds reduced unbound commissions but skipped bound withdrawals. After
+// a manual rejection the binding was erased, so an unbound refunded row no
+// longer proves whether its money was corrected. Preserve that amount and
+// freeze only the ambiguous rows; do not infer or duplicate old deductions.
+func ensureAffiliateRefundSnapshotMigration() error {
+	if gormdb.DB == nil {
+		return errors.New("database is not initialized")
+	}
+	return gormdb.DB.Transaction(func(tx *gorm.DB) error {
+		var marker settingsstore.SettingRecord
+		if err := tx.First(&marker, "key = ?", affiliateRefundSnapshotMigrationKey).Error; err != nil {
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return err
+			}
+		} else if migrationDone(marker.ValueJSON) {
+			return nil
+		}
+		var rows []struct {
+			affiliatedomain.Commission
+			RefundedAmount decimal.Decimal
+			TotalAmount    decimal.Decimal
+		}
+		if err := tx.Model(&affiliatedomain.Commission{}).
+			Select("affiliate_commissions.*, orders.refunded_amount, orders.total_amount").
+			Joins("JOIN orders ON orders.id = affiliate_commissions.order_id AND orders.deleted_at IS NULL").
+			Where("affiliate_commissions.deleted_at IS NULL AND affiliate_commissions.status IN ? AND affiliate_commissions.withdraw_request_id IS NULL AND affiliate_commissions.order_refunded_amount = 0 AND orders.refunded_amount > 0",
+				[]string{constants.AffiliateCommissionStatusAvailable, constants.AffiliateCommissionStatusPendingConfirm}).
+			Order("affiliate_commissions.id asc").Find(&rows).Error; err != nil {
+			return err
+		}
+		for _, row := range rows {
+			if err := tx.Model(&affiliatedomain.Commission{}).Where("id = ?", row.ID).
+				Updates(map[string]interface{}{
+					"order_refunded_amount": money.FromDecimal(decimal.Min(row.RefundedAmount, row.TotalAmount)),
+					"invalid_reason":        affiliatedomain.CommissionInvalidReasonLegacyRefundReview,
+				}).Error; err != nil {
+				return err
+			}
+		}
+
+		// A commission still attached to a pending request is known to have
+		// skipped the old clawback. Run the same atomic rejection/reconciliation
+		// used by new refunds, keeping each request's original amount intact.
+		var orderIDs []uint
+		if err := tx.Model(&affiliatedomain.Commission{}).
+			Select("DISTINCT affiliate_commissions.order_id").
+			Joins("JOIN orders ON orders.id = affiliate_commissions.order_id AND orders.deleted_at IS NULL").
+			Joins("JOIN affiliate_withdraw_requests aw ON aw.id = affiliate_commissions.withdraw_request_id AND aw.deleted_at IS NULL").
+			Where("affiliate_commissions.deleted_at IS NULL AND affiliate_commissions.status IN ? AND aw.status = ? AND orders.refunded_amount > affiliate_commissions.order_refunded_amount",
+				[]string{constants.AffiliateCommissionStatusAvailable, constants.AffiliateCommissionStatusPendingConfirm}, constants.AffiliateWithdrawStatusPendingReview).
+			Order("affiliate_commissions.order_id asc").Pluck("affiliate_commissions.order_id", &orderIDs).Error; err != nil {
+			return err
+		}
+		store := affiliatestore.New(tx)
+		svc := affiliateapp.NewService(store, nil, nil, nil, nil)
+		for _, orderID := range orderIDs {
+			state, err := store.GetOrderRefundState(orderID)
+			if err != nil {
+				return err
+			}
+			if state == nil {
+				continue
+			}
+			order := &orderdomain.Order{
+				ID: state.ID, AffiliateProfileID: state.AffiliateProfileID, AffiliateCode: state.AffiliateCode,
+				TotalAmount: money.FromDecimal(state.TotalAmount),
+			}
+			if err := svc.HandleOrderRefunded(store, order, state.RefundedAmount, decimal.Zero, "order_refunded_before_upgrade"); err != nil {
+				return err
+			}
+		}
+		return tx.Save(&settingsstore.SettingRecord{
+			Key:       affiliateRefundSnapshotMigrationKey,
+			ValueJSON: jsonmap.JSON{"done": true, "migrated_at": time.Now().UTC().Format(time.RFC3339)},
+		}).Error
+	})
 }

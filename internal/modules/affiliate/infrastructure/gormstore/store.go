@@ -29,6 +29,28 @@ func (r *Store) WithinTransaction(fn func(affiliatecontract.Store) error) error 
 	})
 }
 
+func (r *Store) LockProfiles(ids []uint) error {
+	if len(ids) == 0 {
+		return nil
+	}
+	var rows []affiliatedomain.Profile
+	return r.db.Select("id").Clauses(clause.Locking{Strength: "UPDATE"}).
+		Where("id IN ?", ids).Order("id asc").Find(&rows).Error
+}
+
+func (r *Store) GetOrderRefundState(orderID uint) (*affiliatecontract.OrderRefundState, error) {
+	var row affiliatecontract.OrderRefundState
+	err := r.db.Table("orders").Select("id, parent_id, affiliate_profile_id, affiliate_code, status, total_amount, refunded_amount").
+		Where("id = ? AND deleted_at IS NULL", orderID).Take(&row).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &row, nil
+}
+
 // GetProfileByID 按ID获取推广档案
 func (r *Store) GetProfileByID(id uint) (*affiliatedomain.Profile, error) {
 	if id == 0 {
@@ -379,7 +401,7 @@ func (r *Store) SumCommissionByProfile(profileID uint, statuses []string, unboun
 	query := r.db.Model(&affiliatedomain.Commission{}).
 		Where("affiliate_profile_id = ? AND status IN ? AND deleted_at IS NULL", profileID, statuses)
 	if unboundOnly {
-		query = query.Where("withdraw_request_id IS NULL")
+		query = query.Where("withdraw_request_id IS NULL AND COALESCE(invalid_reason, '') <> ?", affiliatedomain.CommissionInvalidReasonLegacyRefundReview)
 	}
 
 	var row struct {
@@ -578,9 +600,10 @@ func (r *Store) GetProfileStatsBatch(profileIDs []uint) (map[uint]affiliatecontr
 	}
 	if err := r.db.Model(&affiliatedomain.Commission{}).
 		Select("affiliate_profile_id, COALESCE(SUM(commission_amount), 0) AS total").
-		Where("affiliate_profile_id IN ? AND status = ? AND withdraw_request_id IS NULL AND deleted_at IS NULL",
+		Where("affiliate_profile_id IN ? AND status = ? AND withdraw_request_id IS NULL AND COALESCE(invalid_reason, '') <> ? AND deleted_at IS NULL",
 			profileIDs,
 			constants.AffiliateCommissionStatusAvailable,
+			affiliatedomain.CommissionInvalidReasonLegacyRefundReview,
 		).
 		Group("affiliate_profile_id").
 		Scan(&availableRows).Error; err != nil {

@@ -270,7 +270,7 @@ func (h *ChannelHandler) ListAffiliateWithdraws(c *gin.Context) {
 			"channel":              row.Channel,
 			"account":              row.Account,
 			"status":               row.Status,
-			"reject_reason":        row.RejectReason,
+			"reject_reason":        localizedWithdrawRejectReason(c, row.RejectReason),
 			"processed_by":         channelAffiliateUintValue(row.ProcessedBy),
 			"processed_at":         channelAffiliateTimeValue(row.ProcessedAt),
 			"created_at":           row.CreatedAt,
@@ -331,6 +331,8 @@ func (h *ChannelHandler) ApplyAffiliateWithdraw(c *gin.Context) {
 			channelresponse.Error(c, http.StatusBadRequest, response.CodeBadRequest, "affiliate_withdraw_channel_invalid", "error.bad_request", nil)
 		case errors.Is(err, affiliateapp.ErrWithdrawInsufficient):
 			channelresponse.Error(c, http.StatusBadRequest, response.CodeBadRequest, "affiliate_withdraw_insufficient", "error.bad_request", nil)
+		case errors.Is(err, affiliateapp.ErrWithdrawLegacyRefund):
+			channelresponse.Error(c, http.StatusBadRequest, response.CodeBadRequest, "affiliate_legacy_refund_review_required", affiliateapp.WithdrawLegacyRefundRejectReason, nil)
 		default:
 			ginutil.RequestLog(c).Errorw("channel_affiliate_apply_withdraw_failed", "user_id", userID, "channel_user_id", channelUserID, "error", err)
 			channelresponse.Error(c, http.StatusInternalServerError, response.CodeInternal, "affiliate_withdraw_apply_failed", "error.save_failed", err)

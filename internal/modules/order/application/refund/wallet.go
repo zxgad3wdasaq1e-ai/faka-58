@@ -66,7 +66,7 @@ func (s *Service) AdminRefundToWallet(
 
 	err := s.orderStore.WithinTransaction(func(tx ordercontract.Transaction) error {
 		orderRepository := tx.Orders()
-		locked, err := orderRepository.GetByIDForUpdate(input.OrderID)
+		locked, err := lockRefundOrder(orderRepository, input.OrderID)
 		if err != nil {
 			return err
 		}

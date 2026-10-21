@@ -1,6 +1,7 @@
 package application
 
 import (
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -101,7 +102,30 @@ func (s *Service) HandleOrderPaid(orderID uint) error {
 		ConfirmAt:          confirmAt,
 		AvailableAt:        availableAt,
 	}
-	return s.repo.CreateCommission(commission)
+	return s.repo.WithinTransaction(func(repoTx affiliatecontract.Store) error {
+		if err := repoTx.LockProfiles([]uint{profile.ID}); err != nil {
+			return err
+		}
+		// A retry may have read the order before a concurrent refund committed.
+		// Read its current state using this transaction after acquiring the same
+		// profile lock used by the refund path.
+		state, err := repoTx.GetOrderRefundState(order.ID)
+		if err != nil {
+			return err
+		}
+		if state == nil || state.Status == constants.OrderStatusRefunded || state.Status == constants.OrderStatusCanceled {
+			return nil
+		}
+		existing, err := repoTx.GetCommissionByOrderAndProfile(order.ID, profile.ID, commissionType)
+		if err != nil || existing != nil {
+			return err
+		}
+		applyCommissionRefund(commission, state.TotalAmount, state.RefundedAmount, "order_refunded", time.Now(), &commissionRefundRounding{})
+		if commission.CommissionAmount.Decimal.LessThanOrEqual(decimal.Zero) {
+			return nil
+		}
+		return repoTx.CreateCommission(commission)
+	})
 }
 
 // ConfirmDueCommissions 将到期佣金转可提现
@@ -118,36 +142,13 @@ func (s *Service) HandleOrderCanceled(orderID uint, reason string) error {
 	if orderID == 0 || s.repo == nil {
 		return nil
 	}
-	rows, err := s.repo.ListCommissionsByOrder(orderID, []string{
-		constants.AffiliateCommissionStatusPendingConfirm,
-		constants.AffiliateCommissionStatusAvailable,
-	})
-	if err != nil {
-		return err
-	}
-	if len(rows) == 0 {
-		return nil
-	}
-
-	now := time.Now()
-	reasonText := strings.TrimSpace(reason)
-	if reasonText == "" {
-		reasonText = "order_canceled"
-	}
-	for i := range rows {
-		item := rows[i]
-		if item.WithdrawRequestID != nil {
-			// 已进入提现流程，按业务规则不影响用户提现。
-			continue
-		}
-		item.Status = constants.AffiliateCommissionStatusRejected
-		item.InvalidReason = reasonText
-		item.UpdatedAt = now
-		if err := s.repo.UpdateCommission(&item); err != nil {
+	return s.repo.WithinTransaction(func(repoTx affiliatecontract.Store) error {
+		state, err := repoTx.GetOrderRefundState(orderID)
+		if err != nil || state == nil {
 			return err
 		}
-	}
-	return nil
+		return s.reconcileOrderRefund(repoTx, state, state.TotalAmount, reason)
+	})
 }
 
 // HandleOrderRefunded 使用调用方提供的事务 Store 处理退款后的佣金回滚。
@@ -165,91 +166,143 @@ func (s *Service) HandleOrderRefunded(
 	if delta.LessThanOrEqual(decimal.Zero) {
 		return nil
 	}
-	totalAmount := order.TotalAmount.Decimal.Round(2)
-	if totalAmount.LessThanOrEqual(decimal.Zero) {
-		return nil
+	state := &affiliatecontract.OrderRefundState{
+		ID: order.ID, AffiliateProfileID: order.AffiliateProfileID, AffiliateCode: order.AffiliateCode,
+		TotalAmount: order.TotalAmount.Decimal, RefundedAmount: refundedBefore.Add(delta),
 	}
-	before := refundedBefore.Round(2)
-	if before.LessThan(decimal.Zero) {
-		before = decimal.Zero
+	if order.ParentID != nil && *order.ParentID > 0 {
+		// Payment creates the commission on the parent; reserveParentRefund has
+		// already updated that parent's cumulative refund in this transaction.
+		var err error
+		state, err = repoTx.GetOrderRefundState(*order.ParentID)
+		if err != nil || state == nil {
+			return err
+		}
 	}
-	if before.GreaterThan(totalAmount) {
-		before = totalAmount
-	}
-	remaining := totalAmount.Sub(before).Round(2)
-	if remaining.LessThanOrEqual(decimal.Zero) {
-		return nil
-	}
-	if delta.GreaterThan(remaining) {
-		delta = remaining
-	}
+	return s.reconcileOrderRefund(repoTx, state, state.RefundedAmount, reason)
+}
 
-	rows, err := repoTx.ListCommissionsByOrderForUpdate(order.ID, []string{
-		constants.AffiliateCommissionStatusPendingConfirm,
-		constants.AffiliateCommissionStatusAvailable,
+func (s *Service) reconcileOrderRefund(repoTx affiliatecontract.Store, state *affiliatecontract.OrderRefundState, refunded decimal.Decimal, reason string) error {
+	rows, err := repoTx.ListCommissionsByOrder(state.ID, nil)
+	if err != nil {
+		return err
+	}
+	profileIDs := make([]uint, 0, len(rows)+1)
+	if state.AffiliateProfileID != nil {
+		profileIDs = append(profileIDs, *state.AffiliateProfileID)
+	} else if state.AffiliateCode != "" {
+		profile, err := repoTx.GetProfileByCode(state.AffiliateCode)
+		if err != nil {
+			return err
+		}
+		if profile != nil {
+			profileIDs = append(profileIDs, profile.ID)
+		}
+	}
+	for _, row := range rows {
+		profileIDs = append(profileIDs, row.AffiliateProfileID)
+	}
+	if err := repoTx.LockProfiles(profileIDs); err != nil {
+		return err
+	}
+	// All monetary writers lock the profile first. Re-read after waiting, so a
+	// simultaneous ApplyWithdraw cannot hide a newly split or bound commission.
+	rows, err = repoTx.ListCommissionsByOrder(state.ID, nil)
+	if err != nil {
+		return err
+	}
+	now := time.Now()
+	reason = strings.TrimSpace(reason)
+	if reason == "" {
+		reason = "order_refunded"
+	}
+	withdrawIDs := make([]uint, 0)
+	seen := make(map[uint]bool)
+	for _, row := range rows {
+		if row.Status == constants.AffiliateCommissionStatusWithdrawn || row.WithdrawRequestID == nil || !refunded.GreaterThan(row.OrderRefundedAmount.Decimal) {
+			continue
+		}
+		if id := *row.WithdrawRequestID; !seen[id] {
+			seen[id] = true
+			withdrawIDs = append(withdrawIDs, id)
+		}
+	}
+	sort.Slice(withdrawIDs, func(i, j int) bool { return withdrawIDs[i] < withdrawIDs[j] })
+	for _, id := range withdrawIDs {
+		req, err := repoTx.GetWithdrawByIDForUpdate(id)
+		if err != nil {
+			return err
+		}
+		if req != nil && req.Status == constants.AffiliateWithdrawStatusPendingReview {
+			if err := rejectRefundedWithdraw(repoTx, req, now); err != nil {
+				return err
+			}
+		}
+	}
+	rows, err = repoTx.ListCommissionsByOrderForUpdate(state.ID, []string{
+		constants.AffiliateCommissionStatusPendingConfirm, constants.AffiliateCommissionStatusAvailable,
 	})
 	if err != nil {
 		return err
 	}
-	if len(rows) == 0 {
-		return nil
-	}
-
-	now := time.Now()
-	reasonText := strings.TrimSpace(reason)
-	if reasonText == "" {
-		reasonText = "order_refunded"
-	}
+	roundingBySnapshot := make(map[string]*commissionRefundRounding)
 	for i := range rows {
-		item := rows[i]
+		item := &rows[i]
+		// Paid withdrawals are immutable history. Never debit shopping wallets.
 		if item.WithdrawRequestID != nil {
-			// 已进入提现流程，按业务规则不影响用户提现。
 			continue
 		}
-
-		currentCommission := item.CommissionAmount.Decimal.Round(2)
-		if currentCommission.LessThanOrEqual(decimal.Zero) {
-			item.Status = constants.AffiliateCommissionStatusRejected
-			item.InvalidReason = reasonText
-			item.ConfirmAt = nil
-			item.AvailableAt = nil
-			item.UpdatedAt = now
-			if err := repoTx.UpdateCommission(&item); err != nil {
+		key := item.OrderRefundedAmount.Decimal.StringFixed(2)
+		rounding := roundingBySnapshot[key]
+		if rounding == nil {
+			rounding = &commissionRefundRounding{}
+			roundingBySnapshot[key] = rounding
+		}
+		if applyCommissionRefund(item, state.TotalAmount, refunded, reason, now, rounding) {
+			if err := repoTx.UpdateCommission(item); err != nil {
 				return err
 			}
-			continue
-		}
-
-		// 按“本次退款金额 / 当前剩余未退款金额”比例扣减当前佣金，避免多次退款时重复放大扣减。
-		deduct := currentCommission.Mul(delta).Div(remaining).Round(2)
-		nextCommission := currentCommission.Sub(deduct).Round(2)
-		if nextCommission.LessThan(decimal.Zero) {
-			nextCommission = decimal.Zero
-		}
-		currentBase := item.BaseAmount.Decimal.Round(2)
-		nextBase := currentBase
-		if currentBase.GreaterThan(decimal.Zero) {
-			baseDeduct := currentBase.Mul(delta).Div(remaining).Round(2)
-			nextBase = currentBase.Sub(baseDeduct).Round(2)
-			if nextBase.LessThan(decimal.Zero) {
-				nextBase = decimal.Zero
-			}
-		}
-
-		item.CommissionAmount = money.FromDecimal(nextCommission)
-		item.BaseAmount = money.FromDecimal(nextBase)
-		item.UpdatedAt = now
-		if nextCommission.LessThanOrEqual(decimal.Zero) {
-			item.Status = constants.AffiliateCommissionStatusRejected
-			item.InvalidReason = reasonText
-			item.ConfirmAt = nil
-			item.AvailableAt = nil
-		}
-		if err := repoTx.UpdateCommission(&item); err != nil {
-			return err
 		}
 	}
 	return nil
+}
+
+type commissionRefundRounding struct {
+	commission, base, remainingCommission, remainingBase decimal.Decimal
+}
+
+func applyCommissionRefund(item *affiliatedomain.Commission, total, refunded decimal.Decimal, reason string, now time.Time, rounding *commissionRefundRounding) bool {
+	total = total.Round(2)
+	refunded = decimal.Min(decimal.Max(refunded.Round(2), decimal.Zero), total)
+	before := decimal.Max(item.OrderRefundedAmount.Decimal.Round(2), decimal.Zero)
+	if total.LessThanOrEqual(decimal.Zero) || !refunded.GreaterThan(before) {
+		return false
+	}
+	remaining := total.Sub(before)
+	if remaining.LessThanOrEqual(decimal.Zero) {
+		return false
+	}
+	fraction := total.Sub(refunded).Div(remaining)
+	// Round cumulative totals, then distribute the difference. Rounding each
+	// split independently lets many one-cent splits evade a partial clawback.
+	rounding.commission = rounding.commission.Add(item.CommissionAmount.Decimal)
+	rounding.base = rounding.base.Add(item.BaseAmount.Decimal)
+	nextCommission := rounding.commission.Mul(fraction).Round(2)
+	nextBase := rounding.base.Mul(fraction).Round(2)
+	item.CommissionAmount = money.FromDecimal(decimal.Max(nextCommission.Sub(rounding.remainingCommission), decimal.Zero))
+	item.BaseAmount = money.FromDecimal(decimal.Max(nextBase.Sub(rounding.remainingBase), decimal.Zero))
+	rounding.remainingCommission, rounding.remainingBase = nextCommission, nextBase
+	item.OrderRefundedAmount = money.FromDecimal(refunded)
+	item.UpdatedAt = now
+	if item.CommissionAmount.Decimal.LessThanOrEqual(decimal.Zero) {
+		item.Status = constants.AffiliateCommissionStatusRejected
+		if item.InvalidReason != affiliatedomain.CommissionInvalidReasonLegacyRefundReview {
+			item.InvalidReason = reason
+		}
+		item.ConfirmAt = nil
+		item.AvailableAt = nil
+	}
+	return true
 }
 
 func (s *Service) resolveAffiliateProfileForOrder(order *orderdomain.Order) (*affiliatedomain.Profile, error) {

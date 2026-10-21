@@ -199,9 +199,12 @@ onMounted(() => {
             <TableCell class="px-6 py-4 font-mono text-xs text-foreground">{{ item.rate_percent || '0.00' }}%</TableCell>
             <TableCell class="px-6 py-4 font-mono text-xs text-foreground">{{ item.commission_amount || '0.00' }}</TableCell>
             <TableCell class="min-w-[90px] px-6 py-4 text-xs">
-              <span class="inline-flex rounded-full border px-2.5 py-1 text-xs" :class="statusClass(item.status)">
-                {{ statusLabel(item.status) }}
+              <span class="inline-flex rounded-full border px-2.5 py-1 text-xs" :class="item.invalid_reason === 'affiliate_refund_legacy_review_required' ? 'border-amber-200 bg-amber-50 text-amber-700' : statusClass(item.status)">
+                {{ item.invalid_reason === 'affiliate_refund_legacy_review_required' ? t('admin.affiliatesCommissions.held') : statusLabel(item.status) }}
               </span>
+              <p v-if="item.invalid_reason === 'affiliate_refund_legacy_review_required'" class="mt-2 max-w-56 text-amber-700">
+                {{ t('admin.affiliatesCommissions.legacyRefundReviewRequired') }}
+              </p>
             </TableCell>
             <TableCell class="min-w-[140px] px-6 py-4 text-xs text-muted-foreground">{{ formatDate(item.confirm_at) || '-' }}</TableCell>
             <TableCell class="min-w-[140px] px-6 py-4 text-xs text-muted-foreground">{{ formatDate(item.available_at) || '-' }}</TableCell>

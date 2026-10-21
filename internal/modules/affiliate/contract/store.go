@@ -66,8 +66,24 @@ type ProfileStatsAggregate struct {
 	WithdrawnCommission decimal.Decimal
 }
 
+// OrderRefundState is read through the current affiliate transaction so SQLite
+// never needs a second connection while reconciling or reviewing commissions.
+type OrderRefundState struct {
+	ID                 uint
+	ParentID           *uint
+	AffiliateProfileID *uint
+	AffiliateCode      string
+	Status             string
+	TotalAmount        decimal.Decimal
+	RefundedAmount     decimal.Decimal
+}
+
 type Store interface {
 	WithinTransaction(fn func(Store) error) error
+	// LockProfiles serializes commission creation, refunds and withdrawals. All
+	// callers acquire these locks before withdrawal or commission row locks.
+	LockProfiles(ids []uint) error
+	GetOrderRefundState(orderID uint) (*OrderRefundState, error)
 
 	GetProfileByID(id uint) (*domain.Profile, error)
 	UpdateProfileStatus(id uint, status string, updatedAt time.Time) error

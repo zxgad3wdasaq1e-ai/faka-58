@@ -133,9 +133,10 @@
               <TableCell class="px-4 font-mono text-xs text-foreground">-</TableCell>
               <TableCell class="px-4 font-mono text-xs text-foreground">{{ item.commission_amount }}</TableCell>
               <TableCell class="px-4">
-                <Badge :variant="commissionStatusVariant(item.status)" size="sm">
-                  {{ commissionStatusLabel(item.status) }}
+                <Badge :variant="item.requires_review ? 'warning' : commissionStatusVariant(item.status)" size="sm">
+                  {{ item.requires_review ? t('personalCenter.affiliate.commissionStatus.held') : commissionStatusLabel(item.status) }}
                 </Badge>
+                <p v-if="item.requires_review" class="mt-2 max-w-xs text-xs text-muted-foreground">{{ t('personalCenter.affiliate.legacyRefundReviewRequired') }}</p>
               </TableCell>
               <TableCell class="px-4 text-xs text-muted-foreground">{{ formatDate(item.created_at) }}</TableCell>
             </TableRow>
@@ -184,6 +185,7 @@
                 <Badge :variant="withdrawStatusVariant(item.status)" size="sm">
                   {{ withdrawStatusLabel(item.status) }}
                 </Badge>
+                <p v-if="item.reject_reason" class="mt-2 max-w-xs text-xs text-muted-foreground">{{ item.reject_reason }}</p>
               </TableCell>
               <TableCell class="px-4 text-xs text-muted-foreground">{{ formatDate(item.created_at) }}</TableCell>
             </TableRow>

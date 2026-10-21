@@ -140,6 +140,9 @@ func (h *Handler) ListAffiliateWithdraws(c *gin.Context) {
 		ginutil.RespondError(c, response.CodeInternal, "error.user_fetch_failed", err)
 		return
 	}
+	for i := range rows {
+		rows[i].RejectReason = localizedWithdrawRejectReason(c, rows[i].RejectReason)
+	}
 	response.SuccessWithPage(c, affiliatepresenter.NewWithdrawList(rows), response.BuildPagination(page, pageSize, total))
 }
 
@@ -178,6 +181,8 @@ func (h *Handler) ApplyAffiliateWithdraw(c *gin.Context) {
 			ginutil.RespondError(c, response.CodeBadRequest, "error.bad_request", nil)
 		case errors.Is(err, affiliateapp.ErrWithdrawInsufficient):
 			ginutil.RespondError(c, response.CodeBadRequest, "error.bad_request", nil)
+		case errors.Is(err, affiliateapp.ErrWithdrawLegacyRefund):
+			ginutil.RespondError(c, response.CodeBadRequest, affiliateapp.WithdrawLegacyRefundRejectReason, nil)
 		default:
 			ginutil.RespondError(c, response.CodeInternal, "error.save_failed", err)
 		}

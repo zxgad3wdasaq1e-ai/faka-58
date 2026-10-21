@@ -791,6 +791,7 @@ export interface AdminAffiliateCommission {
   base_amount?: number
   rate_percent?: number
   commission_amount?: number
+  invalid_reason?: string
   status: string
   confirmed_at?: string
   confirm_at?: string

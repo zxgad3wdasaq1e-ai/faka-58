@@ -66,6 +66,44 @@ func TestCommissionOmitsSensitiveFields(t *testing.T) {
 	}
 }
 
+func TestCommissionReviewFlagDoesNotExposeInternalReason(t *testing.T) {
+	for _, tc := range []struct {
+		name, reason string
+		wantReview   bool
+	}{
+		{"available", "", false},
+		{"refund_requires_review", affiliatedomain.CommissionInvalidReasonLegacyRefundReview, true},
+		{"other_internal_reason", "internal-order-diagnostic", false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			rows := NewCommissionList([]affiliatedomain.Commission{{
+				ID: 1, Status: "available", InvalidReason: tc.reason,
+				CommissionAmount: newMoney("12.00"),
+			}})
+			data, err := json.Marshal(rows)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var payload []map[string]any
+			if err := json.Unmarshal(data, &payload); err != nil {
+				t.Fatal(err)
+			}
+			if got, exists := payload[0]["requires_review"]; !exists || got != tc.wantReview {
+				t.Fatalf("requires_review = %v, exists=%v, want %v", got, exists, tc.wantReview)
+			}
+			if _, exists := payload[0]["invalid_reason"]; exists {
+				t.Fatal("internal invalid_reason leaked")
+			}
+			if tc.reason != "" && strings.Contains(string(data), tc.reason) {
+				t.Fatal("internal reason value leaked")
+			}
+			if rows[0].Status != "available" || !rows[0].CommissionAmount.Decimal.Equal(decimal.NewFromInt(12)) {
+				t.Fatal("presenter changed commission history")
+			}
+		})
+	}
+}
+
 func TestWithdrawOmitsSensitiveFields(t *testing.T) {
 	withdraw := &affiliatedomain.WithdrawRequest{
 		ID:                 1,

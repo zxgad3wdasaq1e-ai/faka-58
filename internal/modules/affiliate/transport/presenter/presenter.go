@@ -33,6 +33,7 @@ type Commission struct {
 	CommissionType   string       `json:"commission_type"`
 	CommissionAmount money.Amount `json:"commission_amount"`
 	Status           string       `json:"status"`
+	RequiresReview   bool         `json:"requires_review"`
 	ConfirmAt        *time.Time   `json:"confirm_at,omitempty"`
 	AvailableAt      *time.Time   `json:"available_at,omitempty"`
 	CreatedAt        time.Time    `json:"created_at"`
@@ -45,6 +46,7 @@ func NewCommission(c *affiliatedomain.Commission) Commission {
 		CommissionType:   c.CommissionType,
 		CommissionAmount: c.CommissionAmount,
 		Status:           c.Status,
+		RequiresReview:   c.InvalidReason == affiliatedomain.CommissionInvalidReasonLegacyRefundReview,
 		ConfirmAt:        c.ConfirmAt,
 		AvailableAt:      c.AvailableAt,
 		CreatedAt:        c.CreatedAt,

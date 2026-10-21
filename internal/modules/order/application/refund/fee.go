@@ -68,7 +68,7 @@ func (s *Service) UpdatePaymentFeeRefunded(input UpdatePaymentFeeRefundedInput) 
 	var updated *orderdomain.OrderRefundRecord
 	err = s.orderStore.WithinTransaction(func(tx ordercontract.Transaction) error {
 		orders := tx.Orders()
-		order, err := orders.GetByIDForUpdate(initial.OrderID)
+		order, err := lockRefundOrder(orders, initial.OrderID)
 		if err != nil {
 			return ErrOrderFetchFailed
 		}

@@ -12,6 +12,8 @@ var (
 	ErrWithdrawChannelInvalid = errors.New("affiliate withdraw channel invalid")
 	ErrWithdrawInsufficient   = errors.New("affiliate withdraw insufficient")
 	ErrWithdrawStatusInvalid  = errors.New("affiliate withdraw status invalid")
+	ErrWithdrawRefunded       = errors.New("affiliate withdraw contains refunded order")
+	ErrWithdrawLegacyRefund   = errors.New("affiliate historical refund requires review")
 	// ErrUserDisabled 开通推广时目标用户已禁用（与用户域共用同一文案哨兵）。
 	ErrUserDisabled = errors.New("user disabled")
 )

@@ -289,7 +289,7 @@ func (s *Service) AdminManualRefund(input AdminManualRefundInput) (*orderdomain.
 
 	if err := s.orderStore.WithinTransaction(func(tx ordercontract.Transaction) error {
 		orders := tx.Orders()
-		locked, err := orders.GetByIDForUpdate(input.OrderID)
+		locked, err := lockRefundOrder(orders, input.OrderID)
 		if err != nil {
 			return err
 		}
@@ -368,7 +368,7 @@ func (s *Service) AdminManualRefund(input AdminManualRefundInput) (*orderdomain.
 			return err
 		}
 		createdRecord = record
-		if s.affiliateRefund != nil && order.UserID > 0 {
+		if s.affiliateRefund != nil {
 			if err := s.affiliateRefund.HandleOrderRefunded(
 				tx.Affiliates(),
 				&order,
