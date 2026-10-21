@@ -30,6 +30,10 @@ case "$1" in
         exit 0;;
     compose)
         shift
+        if [[ "${MOCK_ASSERT_PROXY_MODE_UNSET:-no}" == yes && "${1:-}" == --project-name && "${CADDY_PROXY_MODE+x}" == x ]]; then
+            printf 'CADDY_PROXY_MODE leaked into Compose\n' >&2
+            exit 89
+        fi
         while [[ $# -gt 0 ]]; do
             case "$1" in --project-name|--env-file|-f) shift 2;; *) break;; esac
         done
@@ -120,6 +124,7 @@ HTTP_PORT=8080
 HTTPS_PORT=8443
 APP_SUBNET=172.29.240.0/24
 CADDY_IP=172.29.240.10
+CADDY_PROXY_MODE=direct
 APP_IMAGE=ghcr.io/example/store@sha256:$(printf 'a%.0s' {1..64})
 APP_VERSION=v1.0.0-test
 COMPOSE_FILE=compose.yml
@@ -144,13 +149,27 @@ success 'help requires neither configuration nor Docker calls' sh "$REPOSITORY/d
 source_root="$TEST_TMP/source"
 make_installation "$source_root"
 backup="$TEST_TMP/saved"
-success 'backup creates complete checksum-protected archives' sh "$source_root/deploy/backup.sh" backup --output "$backup"
+success 'backup accepts direct mode without inherited proxy overrides' env CADDY_PROXY_MODE=cloudflare MOCK_ASSERT_PROXY_MODE_UNSET=yes sh "$source_root/deploy/backup.sh" backup --output "$backup"
 [[ -f "$backup/SHA256SUMS" ]] || fail 'missing SHA256SUMS'
 (cd "$backup" && sha256sum -c SHA256SUMS > /dev/null)
 contains "$MOCK_LOG" 'up -d --no-deps --no-build --wait --wait-timeout 120 app' 'app was not resumed'
 contains "$MOCK_LOG" 'up -d --no-deps --no-build --wait --wait-timeout 120 caddy' 'caddy was not resumed'
 not_contains "$MOCK_LOG" 'up -d --no-deps --no-build --wait --wait-timeout 120 adminer' 'inactive adminer was started'
 failure 'existing backup directories are never overwritten' sh "$source_root/deploy/backup.sh" backup --output "$backup"
+
+cp "$source_root/.env" "$TEST_TMP/original.env"
+sed 's/^CADDY_PROXY_MODE=direct$/CADDY_PROXY_MODE=cloudflare/' "$TEST_TMP/original.env" > "$source_root/.env"
+success 'backup accepts cloudflare mode without inherited proxy overrides' env CADDY_PROXY_MODE=direct MOCK_ASSERT_PROXY_MODE_UNSET=yes sh "$source_root/deploy/backup.sh" backup --output "$TEST_TMP/cloudflare"
+tar -xOzf "$TEST_TMP/cloudflare/private.tar.gz" .env > "$TEST_TMP/archived.env"
+contains "$TEST_TMP/archived.env" 'CADDY_PROXY_MODE=cloudflare' 'backup lost the configured proxy mode'
+for mode in '' invalid; do
+    sed "s/^CADDY_PROXY_MODE=.*/CADDY_PROXY_MODE=$mode/" "$TEST_TMP/original.env" > "$source_root/.env"
+    : > "$MOCK_LOG"
+    failure "unsupported proxy mode '$mode' is refused before stopping services" sh "$source_root/deploy/backup.sh" backup --output "$TEST_TMP/invalid-mode"
+    contains "$TEST_TMP/output" 'CADDY_PROXY_MODE' 'invalid proxy mode failed for an unrelated reason'
+    not_contains "$MOCK_LOG" 'compose --project-name' 'invalid proxy mode reached Compose operations'
+done
+cp "$TEST_TMP/original.env" "$source_root/.env"
 
 export MOCK_ACTIVE='postgres app'
 : > "$MOCK_LOG"
@@ -169,7 +188,6 @@ unset MOCK_FAIL_UP
 contains "$MOCK_LOG" 'up -d --no-deps --no-build --wait --wait-timeout 120 caddy' 'resume failure prevented remaining service recovery'
 pass 'resume failure still attempts every originally active service'
 
-cp "$source_root/.env" "$TEST_TMP/original.env"
 printf 'COMPOSE_PROFILES=storage\n' >> "$source_root/.env"
 failure 'MinIO/custom profiles are explicitly refused' sh "$source_root/deploy/backup.sh" backup --output "$TEST_TMP/minio"
 cp "$TEST_TMP/original.env" "$source_root/.env"
@@ -238,7 +256,7 @@ export MOCK_EXISTING_CONTAINERS=existing-container
 failure 'an existing Compose project is refused even with empty volumes' sh "$restore_root/deploy/backup.sh" restore --source "$backup" --confirm-replace-database
 unset MOCK_EXISTING_CONTAINERS
 : > "$MOCK_LOG"
-success 'fresh restore extracts volumes and imports PostgreSQL in one transaction' sh "$restore_root/deploy/backup.sh" restore --source "$backup" --confirm-replace-database
+success 'fresh restore imports PostgreSQL transactionally without inherited proxy overrides' env CADDY_PROXY_MODE=cloudflare MOCK_ASSERT_PROXY_MODE_UNSET=yes sh "$restore_root/deploy/backup.sh" restore --source "$backup" --confirm-replace-database
 cmp "$source_root/.env" "$restore_root/.env"
 cmp "$source_root/config.yml" "$restore_root/config.yml"
 contains "$MOCK_LOG" '--exit-on-error --single-transaction' 'restore is not transactional'

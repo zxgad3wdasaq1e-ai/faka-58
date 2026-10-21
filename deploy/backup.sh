@@ -51,6 +51,7 @@ parse_env() {
             COMPOSE_PROJECT_NAME) PROJECT=$value;;
             APP_IMAGE) IMAGE=$value;;
             COMPOSE_FILE) [ "$value" = compose.yml ] || die '自定义 Compose / MinIO 请使用原备份工具。';;
+            CADDY_PROXY_MODE) case "$value" in direct|cloudflare) ;; *) die 'CADDY_PROXY_MODE 仅支持 direct 或 cloudflare。';; esac;;
             SITE_ADDRESS|HTTP_PORT|HTTPS_PORT|APP_SUBNET|CADDY_IP|APP_VERSION) ;;
             *) die '.env 含非快速安装配置项；请使用原备份工具。';;
         esac
@@ -63,9 +64,9 @@ parse_env() {
 
 compose() (
     # Do not allow an inherited shell variable to change the backed-up project,
-    # image, mount configuration, or public ports.
+    # image, mount configuration, public ports, or proxy trust mode.
     unset COMPOSE_FILE COMPOSE_PROJECT_NAME COMPOSE_PROFILES COMPOSE_PATH_SEPARATOR
-    unset APP_IMAGE APP_VERSION SITE_ADDRESS HTTP_PORT HTTPS_PORT APP_SUBNET CADDY_IP
+    unset APP_IMAGE APP_VERSION SITE_ADDRESS HTTP_PORT HTTPS_PORT APP_SUBNET CADDY_IP CADDY_PROXY_MODE
     cd "$ROOT"
     docker compose --project-name "$PROJECT" --env-file "$ROOT/.env" -f "$ROOT/compose.yml" "$@"
 )
