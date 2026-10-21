@@ -468,6 +468,7 @@ func Load() *Config {
 	viper.SetDefault("email.verify_code.max_attempts", 5)
 	viper.SetDefault("email.verify_code.length", 6)
 	viper.SetDefault("order.payment_expire_minutes", 15)
+	viper.SetDefault("order.uniform_pricing", true)
 	viper.SetDefault("order.max_refund_days", 30)
 	viper.SetDefault("captcha.provider", "none")
 	viper.SetDefault("captcha.scenes.login", false)
@@ -509,7 +510,6 @@ func Load() *Config {
 	}
 
 	var cfg Config
-	viper.SetDefault("order.uniform_pricing", true)
 	if err := viper.Unmarshal(&cfg); err != nil {
 		logger.Errorw("config_unmarshal_failed", "error", err)
 		panic(fmt.Errorf("配置解析失败: %w", err))
