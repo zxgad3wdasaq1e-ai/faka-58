@@ -167,11 +167,11 @@ const form = reactive({
   cost_price_amount: 0,
   images: [] as string[],
   tags: [] as string[],
-  purchase_type: 'member',
+  purchase_type: 'guest',
   min_purchase_quantity: '' as number | '',
   max_purchase_quantity: '' as number | '',
   stock_display_mode: 'exact',
-  fulfillment_type: 'manual',
+  fulfillment_type: 'auto',
   manual_stock_total: 0,
   skus: [] as SKUFormItem[],
   category_id: null as number | null,
@@ -511,11 +511,11 @@ const resetForm = () => {
     cost_price_amount: 0,
     images: [],
     tags: [],
-    purchase_type: 'member',
+    purchase_type: 'guest',
     min_purchase_quantity: '',
     max_purchase_quantity: '',
     stock_display_mode: 'exact',
-    fulfillment_type: 'manual',
+    fulfillment_type: 'auto',
     manual_stock_total: 0,
     skus: [],
     category_id: null,
@@ -767,17 +767,21 @@ watch(
             <p class="mt-1 text-xs text-muted-foreground">{{ t('admin.products.form.slugTip') }}</p>
           </div>
 
-          <div class="col-span-1">
-            <label class="block text-xs font-medium text-muted-foreground mb-1.5">{{ t('admin.products.form.seoMetaKeywords', { lang: getCurrentLangName() }) }}</label>
-            <Input v-model="form.seo_meta.keywords[currentLang]" :placeholder="t('admin.products.form.seoMetaKeywordsPlaceholder')" />
-            <p class="mt-1 text-xs text-muted-foreground">{{ t('admin.products.form.seoMetaKeywordsTip') }}</p>
-          </div>
-
-          <div class="col-span-1 md:col-span-2">
-            <label class="block text-xs font-medium text-muted-foreground mb-1.5">{{ t('admin.products.form.seoMetaDescription', { lang: getCurrentLangName() }) }}</label>
-            <Textarea v-model="form.seo_meta.description[currentLang]" :placeholder="t('admin.products.form.seoMetaDescriptionPlaceholder')" class="min-h-[80px]" />
-            <p class="mt-1 text-xs text-muted-foreground">{{ t('admin.products.form.seoMetaDescriptionTip') }}</p>
-          </div>
+          <details class="col-span-1 md:col-span-2 rounded-lg border border-border p-4">
+            <summary class="cursor-pointer text-sm font-medium">{{ t('admin.products.form.seoSettings') }}</summary>
+            <div class="mt-4 space-y-4">
+              <div>
+                <label class="block text-xs font-medium text-muted-foreground mb-1.5">{{ t('admin.products.form.seoMetaKeywords', { lang: getCurrentLangName() }) }}</label>
+                <Input v-model="form.seo_meta.keywords[currentLang]" :placeholder="t('admin.products.form.seoMetaKeywordsPlaceholder')" />
+                <p class="mt-1 text-xs text-muted-foreground">{{ t('admin.products.form.seoMetaKeywordsTip') }}</p>
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-muted-foreground mb-1.5">{{ t('admin.products.form.seoMetaDescription', { lang: getCurrentLangName() }) }}</label>
+                <Textarea v-model="form.seo_meta.description[currentLang]" :placeholder="t('admin.products.form.seoMetaDescriptionPlaceholder')" class="min-h-[80px]" />
+                <p class="mt-1 text-xs text-muted-foreground">{{ t('admin.products.form.seoMetaDescriptionTip') }}</p>
+              </div>
+            </div>
+          </details>
 
           <div class="col-span-1">
             <label class="block text-xs font-medium text-muted-foreground mb-1.5">{{ t('admin.products.form.category') }}</label>
@@ -808,7 +812,7 @@ watch(
             <label class="block text-xs font-medium text-muted-foreground mb-1.5">{{ t('admin.products.form.purchaseType') }}</label>
             <Select v-model="form.purchase_type">
               <SelectTrigger class="h-9 w-full">
-                <SelectValue :placeholder="t('admin.products.purchaseType.member')" />
+                <SelectValue :placeholder="t('admin.products.purchaseType.guest')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="member">{{ t('admin.products.purchaseType.member') }}</SelectItem>
@@ -858,7 +862,7 @@ watch(
             <label class="block text-xs font-medium text-muted-foreground mb-1.5">{{ t('admin.products.form.fulfillmentType') }}</label>
             <Select v-model="form.fulfillment_type" :disabled="editingIsMapped">
               <SelectTrigger class="h-9 w-full">
-                <SelectValue :placeholder="t('admin.products.fulfillmentType.manual')" />
+                <SelectValue :placeholder="t('admin.products.fulfillmentType.auto')" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="manual">{{ t('admin.products.fulfillmentType.manual') }}</SelectItem>
@@ -868,7 +872,7 @@ watch(
             <p v-if="editingIsMapped" class="mt-1 text-xs text-indigo-600">{{ t('admin.products.mappedFulfillmentLocked') }}</p>
           </div>
 
-          <div class="col-span-1">
+          <div v-if="form.fulfillment_type === 'manual' && !editingIsMapped" class="col-span-1">
             <label class="block text-xs font-medium text-muted-foreground mb-1.5">{{ t('admin.products.form.manualStockTotal') }}</label>
             <Input
               v-model.number="form.manual_stock_total"

@@ -91,6 +91,15 @@ const tabs = computed(() => [
   { label: t('admin.settings.tabs.upstreamSync'), value: 'upstream_sync' },
 ])
 
+const settingsGroups = [
+  { key: 'store', tabs: ['basic', 'template', 'homepage', 'navigation', 'home_announcement', 'about', 'legal'] },
+  { key: 'notifications', tabs: ['smtp', 'order_email_template'] },
+  { key: 'security', tabs: ['captcha', 'telegram', 'google'] },
+  { key: 'advanced', tabs: ['dashboard', 'upstream_sync'] },
+]
+const currentGroup = computed(() => settingsGroups.find(group => group.tabs.includes(currentTab.value)) || settingsGroups[0]!)
+const visibleTabs = computed(() => tabs.value.filter(tab => currentGroup.value.tabs.includes(tab.value)))
+
 const fallbackCurrencyOptions = [
   'CNY', 'USD', 'EUR', 'GBP', 'JPY', 'KRW', 'HKD', 'TWD', 'SGD', 'AUD',
   'CAD', 'CHF', 'NZD', 'SEK', 'NOK', 'DKK', 'AED', 'SAR', 'MYR', 'THB',
@@ -847,9 +856,18 @@ onMounted(() => {
       </div>
     </div>
 
+    <div class="flex flex-wrap gap-2" :aria-label="t('admin.settings.groups.label')">
+      <Button
+        v-for="group in settingsGroups" :key="group.key" size="sm"
+        :variant="currentGroup.key === group.key ? 'secondary' : 'ghost'"
+        :aria-pressed="currentGroup.key === group.key"
+        @click="currentTab = group.tabs[0]!"
+      >{{ t(`admin.settings.groups.${group.key}`) }}</Button>
+    </div>
+
     <Tabs v-model="currentTab" class="flex flex-col gap-6">
       <TabsList class="h-auto flex-wrap gap-1">
-        <TabsTrigger v-for="tab in tabs" :key="tab.value" :value="tab.value">{{ tab.label }}</TabsTrigger>
+        <TabsTrigger v-for="tab in visibleTabs" :key="tab.value" :value="tab.value">{{ tab.label }}</TabsTrigger>
       </TabsList>
 
       <TabsContent value="basic" :forceMount="true" v-show="currentTab === 'basic'" class="space-y-6 mt-0">

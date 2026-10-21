@@ -20,14 +20,12 @@ import type { ListFetchOptions } from '@/composables/useListRefresh'
 import { confirmAction } from '@/utils/confirm'
 import ProductEditModal from './components/ProductEditModal.vue'
 import { buildAdminCategoryPath, createAdminCategoryMap, createAdminCategoryChildCountMap, flattenAdminCategories, isAdminProductCategorySelectable } from '@/utils/category'
-import { formatWholesaleTierScopeLabel, wholesaleTierScopeValue } from '@/utils/wholesalePricing'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const loading = ref(false)
 const searchQuery = ref('')
 const stockStatus = ref('all')
 const statusFilter = ref('all')
-const wholesaleStatus = ref('all')
 const categoryFilter = ref('all')
 const route = useRoute()
 const router = useRouter()
@@ -112,29 +110,6 @@ const siteCurrency = ref('CNY')
 
 const formatPrice = (amount: number | string, currency: string) => {
   return formatMoney(amount, currency)
-}
-
-const formatWholesaleSummary = (product: AdminProduct) => {
-  const tiers = Array.isArray(product.wholesale_prices) ? product.wholesale_prices : []
-  if (!tiers.length) return ''
-  return tiers
-    .slice()
-    .sort((a, b) => {
-      const scopeA = wholesaleTierScopeValue(a)
-      const scopeB = wholesaleTierScopeValue(b)
-      if (scopeA !== scopeB) return scopeA.localeCompare(scopeB)
-      return Number(a.min_quantity || 0) - Number(b.min_quantity || 0)
-    })
-    .map((tier) => {
-      const scope = formatWholesaleTierScopeLabel(
-        product,
-        tier,
-        String(locale.value || 'zh-CN'),
-        t('admin.wholesalePrices.modal.skuAll'),
-      )
-      return `${scope} ≥${Number(tier.min_quantity || 0)} ${formatPrice(tier.unit_price, siteCurrency.value)}`
-    })
-    .join(' / ')
 }
 
 const toSafeInt = (value: unknown) => {
@@ -236,7 +211,6 @@ const fetchProducts = async (options: ListFetchOptions = {}) => {
       search: searchQuery.value,
       stock_status: stockStatus.value,
       is_active: statusQueryValue(),
-      wholesale: wholesaleStatus.value,
       category_id: categoryFilter.value === 'all' ? undefined : categoryFilter.value,
     })
     products.value = res.data.data || []
@@ -299,47 +273,13 @@ const statusQueryValue = () => {
   return undefined
 }
 
-const syncWholesaleStatusFromRoute = (value: unknown) => {
-  const raw = Array.isArray(value) ? value[0] : value
-  const normalized = String(raw ?? '').trim().toLowerCase()
-  if (['1', 'true', 'yes', 'enabled'].includes(normalized)) {
-    wholesaleStatus.value = 'enabled'
-  } else if (['0', 'false', 'no', 'disabled'].includes(normalized)) {
-    wholesaleStatus.value = 'disabled'
-  } else {
-    wholesaleStatus.value = 'all'
-  }
-}
-
-const wholesaleQueryValue = () => {
-  if (wholesaleStatus.value === 'enabled') return '1'
-  if (wholesaleStatus.value === 'disabled') return '0'
-  return undefined
-}
-
-const handleWholesaleStatusChange = () => {
-  pagination.page = 1
-  const current = Array.isArray(route.query.wholesale) ? route.query.wholesale[0] : route.query.wholesale
-  const nextWholesale = wholesaleQueryValue()
-  if ((current || undefined) !== nextWholesale) {
-    router.replace({ query: { ...route.query, wholesale: nextWholesale } })
-    return
-  }
-  fetchProducts()
-}
-
 const resetFilters = () => {
   searchQuery.value = ''
   stockStatus.value = 'all'
   statusFilter.value = 'all'
-  wholesaleStatus.value = 'all'
   categoryFilter.value = 'all'
   pagination.page = 1
-  if (route.query.wholesale !== undefined) {
-    router.replace({ query: { ...route.query, wholesale: undefined } })
-  } else {
-    fetchProducts({ preserveRows: true })
-  }
+  fetchProducts({ preserveRows: true })
   nextTick(() => {
     const input = document.getElementById('admin-products-search') as HTMLInputElement | null
     input?.focus()
@@ -454,7 +394,6 @@ const saveCategory = async (product: AdminProduct, newCategoryId: unknown) => {
 }
 
 onMounted(() => {
-  syncWholesaleStatusFromRoute(route.query.wholesale)
   fetchProducts()
   fetchCategories()
   fetchSiteCurrency()
@@ -476,14 +415,6 @@ watch(
   }
 )
 
-watch(
-  () => route.query.wholesale,
-  (value) => {
-    syncWholesaleStatusFromRoute(value)
-    pagination.page = 1
-    fetchProducts()
-  }
-)
 </script>
 
 <template>
@@ -551,18 +482,6 @@ watch(
               <SelectItem value="all">{{ t('admin.products.filters.statusAll') }}</SelectItem>
               <SelectItem value="active">{{ t('admin.products.filters.statusActive') }}</SelectItem>
               <SelectItem value="inactive">{{ t('admin.products.filters.statusInactive') }}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div class="w-full md:w-48">
-          <Select v-model="wholesaleStatus" @update:modelValue="handleWholesaleStatusChange">
-            <SelectTrigger class="h-9 w-full">
-              <SelectValue :placeholder="t('admin.products.filters.wholesalePlaceholder')" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{{ t('admin.products.filters.wholesaleAll') }}</SelectItem>
-              <SelectItem value="enabled">{{ t('admin.products.filters.wholesaleEnabled') }}</SelectItem>
-              <SelectItem value="disabled">{{ t('admin.products.filters.wholesaleDisabled') }}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -696,9 +615,6 @@ watch(
             </TableCell>
             <TableCell class="px-6 py-4">
               <div class="font-mono text-foreground">{{ formatPrice(product.price_amount, siteCurrency) }}</div>
-              <div v-if="formatWholesaleSummary(product)" class="mt-1 text-xs text-emerald-600 dark:text-emerald-400">
-                {{ formatWholesaleSummary(product) }}
-              </div>
             </TableCell>
             <TableCell class="px-6 py-4 min-w-[220px]">
               <div v-if="editingCategoryId === product.id" class="min-w-[140px]">

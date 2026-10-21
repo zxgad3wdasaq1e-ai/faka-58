@@ -3,7 +3,7 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { adminAPI, type AdminWalletAccount, type AdminWalletTransaction } from '@/api/admin'
-import type { AdminUser, AdminOrder, AdminPayment, AdminMemberLevel, AdminUserOAuthIdentity } from '@/api/types'
+import type { AdminUser, AdminOrder, AdminPayment, AdminUserOAuthIdentity } from '@/api/types'
 import IdCell from '@/components/IdCell.vue'
 import { BadgeCheck, Copy, BadgeAlert } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
@@ -12,7 +12,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import ListPagination from '@/components/ListPagination.vue'
-import type { AcceptableValue } from 'reka-ui'
 import { copyText } from '@/utils/clipboard'
 import { confirmAction } from '@/utils/confirm'
 import {
@@ -29,31 +28,19 @@ import {
   userStatusClass,
   userStatusLabel,
 } from '@/utils/status'
-import { formatDate, formatMoney, getLocalizedText } from '@/utils/format'
+import { formatDate, formatMoney } from '@/utils/format'
 
 const { t } = useI18n()
 const route = useRoute()
 const userId = computed(() => Number(route.params.id))
 
-interface UserDetailCouponUsage {
-  id: number
-  coupon_code?: string
-  coupon_id?: number
-  coupon_type?: string
-  scope_products?: Array<{ title: Record<string, string> }>
-  order_id?: number
-  discount_amount?: number
-  created_at: string
-}
-
 const user = ref<(AdminUser & Record<string, unknown>) | null>(null)
 const userError = ref('')
 
-const activeTab = ref<'orders' | 'payments' | 'coupons' | 'wallet'>('orders')
-const tabs = computed<Array<{ key: 'orders' | 'payments' | 'coupons' | 'wallet'; label: string }>>(() => [
+const activeTab = ref<'orders' | 'payments' | 'wallet'>('orders')
+const tabs = computed<Array<{ key: 'orders' | 'payments' | 'wallet'; label: string }>>(() => [
   { key: 'orders', label: t('admin.userDetail.tabs.orders') },
   { key: 'payments', label: t('admin.userDetail.tabs.payments') },
-  { key: 'coupons', label: t('admin.userDetail.tabs.coupons') },
   { key: 'wallet', label: t('admin.userDetail.tabs.wallet') },
 ])
 
@@ -64,10 +51,6 @@ const ordersPagination = ref({ page: 1, page_size: 20, total: 0, total_page: 1 }
 const payments = ref<AdminPayment[]>([])
 const paymentsLoading = ref(false)
 const paymentsPagination = ref({ page: 1, page_size: 20, total: 0, total_page: 1 })
-
-const couponUsages = ref<UserDetailCouponUsage[]>([])
-const couponsLoading = ref(false)
-const couponsPagination = ref({ page: 1, page_size: 20, total: 0, total_page: 1 })
 
 const walletAccount = ref<AdminWalletAccount | null>(null)
 const walletTransactions = ref<AdminWalletTransaction[]>([])
@@ -107,40 +90,6 @@ const fetchSiteCurrency = async () => {
   }
 }
 
-const memberLevels = ref<AdminMemberLevel[]>([])
-const memberLevelUpdating = ref(false)
-
-const fetchMemberLevels = async () => {
-  try {
-    const response = await adminAPI.getMemberLevels({ page: 1, page_size: 100 })
-    memberLevels.value = response.data.data || []
-  } catch {
-    memberLevels.value = []
-  }
-}
-
-const currentMemberLevelName = computed(() => {
-  const levelId = Number(user.value?.member_level_id || 0)
-  if (!levelId) return '-'
-  const level = memberLevels.value.find((l) => l.id === levelId)
-  if (!level) return `#${levelId}`
-  return getLocalizedText(level.name)
-})
-
-const handleMemberLevelChange = async (value: AcceptableValue) => {
-  const levelId = Number(value)
-  if (!Number.isFinite(levelId) || !user.value) return
-  memberLevelUpdating.value = true
-  try {
-    await adminAPI.setUserMemberLevel(userId.value, levelId)
-    user.value.member_level_id = levelId
-  } catch {
-    // revert
-  } finally {
-    memberLevelUpdating.value = false
-  }
-}
-
 const fetchOrders = async (page = 1) => {
   if (!Number.isFinite(userId.value) || userId.value <= 0) return
   ordersLoading.value = true
@@ -170,21 +119,6 @@ const fetchPayments = async (page = 1) => {
     paymentsPagination.value = response.data.pagination || paymentsPagination.value
   } finally {
     paymentsLoading.value = false
-  }
-}
-
-const fetchCoupons = async (page = 1) => {
-  if (!Number.isFinite(userId.value) || userId.value <= 0) return
-  couponsLoading.value = true
-  try {
-    const response = await adminAPI.getUserCouponUsages(userId.value, {
-      page,
-      page_size: couponsPagination.value.page_size,
-    })
-    couponUsages.value = (response.data.data as UserDetailCouponUsage[]) || []
-    couponsPagination.value = response.data.pagination || couponsPagination.value
-  } finally {
-    couponsLoading.value = false
   }
 }
 
@@ -252,17 +186,6 @@ const changePaymentsPageSize = (size: number) => {
   fetchPayments(1)
 }
 
-const changeCouponsPage = (page: number) => {
-  if (page < 1 || page > couponsPagination.value.total_page) return
-  fetchCoupons(page)
-}
-
-const changeCouponsPageSize = (size: number) => {
-  if (size === couponsPagination.value.page_size) return
-  couponsPagination.value.page_size = size
-  fetchCoupons(1)
-}
-
 const changeWalletPage = (page: number) => {
   if (page < 1 || page > walletPagination.value.total_page) return
   fetchWalletTransactions(page)
@@ -274,14 +197,12 @@ const changeWalletPageSize = (size: number) => {
   fetchWalletTransactions(1)
 }
 
-const changeTab = (tab: 'orders' | 'payments' | 'coupons' | 'wallet') => {
+const changeTab = (tab: 'orders' | 'payments' | 'wallet') => {
   activeTab.value = tab
   if (tab === 'orders') {
     fetchOrders(ordersPagination.value.page)
   } else if (tab === 'payments') {
     fetchPayments(paymentsPagination.value.page)
-  } else if (tab === 'coupons') {
-    fetchCoupons(couponsPagination.value.page)
   } else {
     walletError.value = ''
     walletSuccess.value = ''
@@ -374,23 +295,6 @@ const formatLocale = (raw?: string) => {
   return map[raw] || raw
 }
 
-const formatCouponType = (raw?: string) => {
-  if (!raw) return '-'
-  const map: Record<string, string> = {
-    percent: t('admin.common.discountTypes.percent'),
-    fixed: t('admin.common.discountTypes.fixed'),
-  }
-  return map[raw] || raw
-}
-
-const formatScopeProducts = (products?: Array<{ title: Record<string, string> }>) => {
-  if (!Array.isArray(products) || products.length === 0) return '-'
-  const names = products.map((item) => getLocalizedText(item.title)).filter((item) => item)
-  if (names.length === 0) return '-'
-  if (names.length <= 3) return names.join(', ')
-  return `${names.slice(0, 3).join(', ')}...`
-}
-
 const oauthIdentities = computed(() => {
   const list = user.value?.oauth_identities
   return Array.isArray(list) ? list : []
@@ -464,7 +368,6 @@ onMounted(() => {
   fetchSiteCurrency()
   fetchUser()
   fetchOrders()
-  fetchMemberLevels()
 })
 
 watch(
@@ -473,7 +376,6 @@ watch(
     fetchUser()
     fetchOrders(1)
     fetchPayments(1)
-    fetchCoupons(1)
     void loadWalletData(1)
   }
 )
@@ -564,33 +466,6 @@ watch(
         <CardContent class="p-3">
           <div class="text-xs text-muted-foreground">{{ t('admin.userDetail.fields.walletBalance') }}</div>
           <div class="text-sm font-mono text-foreground">{{ formatMoney(user?.wallet_balance, siteCurrency) }}</div>
-        </CardContent>
-      </Card>
-      <Card class="rounded-lg border-border bg-background shadow-none">
-        <CardContent class="p-3">
-          <div class="text-xs text-muted-foreground">{{ t('admin.userDetail.fields.memberLevel') }}</div>
-          <div class="mt-1">
-            <Select
-              :model-value="String(user?.member_level_id || 0)"
-              :disabled="memberLevelUpdating"
-              @update:model-value="handleMemberLevelChange"
-            >
-              <SelectTrigger class="h-8 w-full">
-                <SelectValue>{{ currentMemberLevelName }}</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="0">-</SelectItem>
-                <SelectItem
-                  v-for="level in memberLevels"
-                  :key="level.id"
-                  :value="String(level.id)"
-                >
-                  {{ level.icon }} {{ getLocalizedText(level.name) }}
-                  <span v-if="level.is_default" class="text-muted-foreground">({{ t('admin.memberLevels.default') }})</span>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
         </CardContent>
       </Card>
       <Card class="rounded-lg border-border bg-background shadow-none md:col-span-3">
@@ -856,62 +731,6 @@ watch(
         :page-size-options="pageSizeOptions"
         @change-page="changePaymentsPage"
         @change-page-size="changePaymentsPageSize"
-      />
-    </div>
-
-    <div v-if="activeTab === 'coupons'" class="rounded-xl border border-border bg-card overflow-x-auto">
-      <Table class="min-w-[900px]">
-        <TableHeader class="border-b border-border bg-muted/40 text-xs uppercase text-muted-foreground">
-          <TableRow>
-            <TableHead class="px-6 py-3">{{ t('admin.userDetail.coupons.id') }}</TableHead>
-            <TableHead class="px-6 py-3 min-w-[180px]">{{ t('admin.userDetail.coupons.coupon') }}</TableHead>
-            <TableHead class="px-6 py-3">{{ t('admin.userDetail.coupons.type') }}</TableHead>
-            <TableHead class="px-6 py-3 min-w-[220px]">{{ t('admin.userDetail.coupons.products') }}</TableHead>
-            <TableHead class="px-6 py-3">{{ t('admin.userDetail.coupons.orderId') }}</TableHead>
-            <TableHead class="px-6 py-3">{{ t('admin.userDetail.coupons.discount') }}</TableHead>
-            <TableHead class="px-6 py-3">{{ t('admin.userDetail.coupons.createdAt') }}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody class="divide-y divide-border">
-          <TableRow v-if="couponsLoading">
-            <TableCell colspan="7" class="px-6 py-8 text-center text-muted-foreground">{{ t('admin.common.loading') }}</TableCell>
-          </TableRow>
-          <TableRow v-else-if="couponUsages.length === 0">
-            <TableCell colspan="7" class="px-6 py-8 text-center text-muted-foreground">{{ t('admin.userDetail.empty') }}</TableCell>
-          </TableRow>
-          <TableRow v-for="usage in couponUsages" :key="usage.id" class="hover:bg-muted/30">
-            <TableCell class="px-6 py-4">
-              <IdCell :value="usage.id" />
-            </TableCell>
-            <TableCell class="min-w-[180px] px-6 py-4">
-              <div class="text-foreground font-mono">{{ usage.coupon_code || '-' }}</div>
-              <div class="text-xs text-muted-foreground">#{{ usage.coupon_id }}</div>
-            </TableCell>
-            <TableCell class="px-6 py-4 text-xs text-muted-foreground">{{ formatCouponType(usage.coupon_type) }}</TableCell>
-            <TableCell class="min-w-[220px] px-6 py-4 text-xs text-muted-foreground break-words">{{ formatScopeProducts(usage.scope_products) }}</TableCell>
-            <TableCell class="px-6 py-4 text-foreground font-mono">
-              <router-link
-                v-if="usage.order_id"
-                :to="orderLink(usage.order_id)"
-                class="text-primary underline-offset-4 hover:underline"
-              >
-                #{{ usage.order_id }}
-              </router-link>
-              <span v-else>-</span>
-            </TableCell>
-            <TableCell class="px-6 py-4 text-foreground font-mono">{{ formatMoney(usage.discount_amount) }}</TableCell>
-            <TableCell class="px-6 py-4 text-xs text-muted-foreground">{{ formatDate(usage.created_at) }}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-      <ListPagination
-        :page="couponsPagination.page"
-        :total-page="couponsPagination.total_page"
-        :total="couponsPagination.total"
-        :page-size="couponsPagination.page_size"
-        :page-size-options="pageSizeOptions"
-        @change-page="changeCouponsPage"
-        @change-page-size="changeCouponsPageSize"
       />
     </div>
 
