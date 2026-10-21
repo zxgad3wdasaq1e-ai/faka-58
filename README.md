@@ -134,6 +134,7 @@ docker compose --profile tools stop adminer
 
 应用数据库账号 `faka-58` 是数据库所有者，不具有 PostgreSQL 超级用户、建库或建角色权限；应用密码位于 `deploy/secrets/postgres_password`，管理员密码另存为 `postgres_admin_password`。PostgreSQL、Redis 和 MinIO S3 端口均不向宿主机公开；管理工具仅监听回环地址。
 
+新安装的应用和 PostgreSQL 共用 `postgres_password` 这一份密码文件，`config.yml` 通过 `database.password_file: /run/secrets/postgres_password` 读取，不再复制密码到 DSN。数据库健康检查会用应用账号通过 TCP 实际登录；快速启动脚本还会在启动应用前执行 `storectl db-check`，认证失败时停止启动并保留错误提示。源码部署也可使用 `docker compose run --rm -T --no-deps --entrypoint /app/storectl app db-check --root /app` 单独检查，命令不会输出密码。设置密码文件后必须确保文件已挂载且可读；程序不会在读取失败时回退到另一份密码。
 
 ## 请求限制与退款佣金
 

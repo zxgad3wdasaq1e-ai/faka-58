@@ -36,6 +36,10 @@ case "$1" in
             "${MOCK_DIGESTS:-ghcr.io/zxgad3wdasaq1e-ai/faka-58@sha256:1111111111111111111111111111111111111111111111111111111111111111}"
         exit ;;
     compose)
+        case "$*" in
+            *'up -d --no-build --wait --wait-timeout 300 postgres') [ "${MOCK_DATABASE_FAILURE:-false}" = false ] || exit 1 ;;
+            *' app db-check '*) [ "${MOCK_DATABASE_CHECK_FAILURE:-false}" = false ] || exit 3 ;;
+        esac
         if [ "$2" = exec ] && [ "${MOCK_SEED_FAILURE:-false}" = true ]; then exit 1; fi
         exit 0 ;;
     run)
@@ -137,6 +141,7 @@ new_case() {
     rm -f "$STORE_TEST_CLOCK"
     unset MOCK_SOURCE_LABEL MOCK_REVISION_LABEL MOCK_DIGESTS MOCK_PULL_FAILURE MOCK_DAEMON_FAILURE
     unset MOCK_DOWNLOAD_FAILURE MOCK_REDIRECT MOCK_INIT_FAILURE MOCK_SEED_FAILURE MOCK_HEALTH_FAILURE
+    unset MOCK_DATABASE_FAILURE MOCK_DATABASE_CHECK_FAILURE
 }
 run_install() { (cd "$case_dir" && "$shell" "$bootstrap" "$@") >"$test_root/output" 2>&1; }
 expect_failure() { if run_install "$@"; then fail 'expected installation failure'; fi; }
@@ -283,6 +288,20 @@ unset MOCK_INIT_FAILURE
 (cd "$case_dir" && "$shell" deploy/start.sh --seed) >"$test_root/output" 2>&1
 assert_no_secret_output
 printf 'ok - initialization failure retains configuration for retry\n'
+
+new_case
+MOCK_DATABASE_FAILURE=true; export MOCK_DATABASE_FAILURE
+expect_failure --local
+if grep -q 'compose.*up.*300$' "$STORE_TEST_LOG"; then fail 'unhealthy database did not block app startup'; fi
+assert_no_secret_output
+printf 'ok - database authentication health failure blocks application startup\n'
+
+new_case
+MOCK_DATABASE_CHECK_FAILURE=true; export MOCK_DATABASE_CHECK_FAILURE
+expect_failure --local
+if grep -q 'compose.*up.*300$' "$STORE_TEST_LOG"; then fail 'invalid application credentials did not block startup'; fi
+assert_no_secret_output
+printf 'ok - application credentials are verified before application startup\n'
 
 new_case
 MOCK_HEALTH_FAILURE=true; export MOCK_HEALTH_FAILURE

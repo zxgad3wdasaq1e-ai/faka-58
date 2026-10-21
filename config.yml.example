@@ -28,6 +28,7 @@ log:
 database:
   driver: sqlite  # sqlite / postgres
   dsn: ./db/faka-58.db
+  password_file: ""  # PostgreSQL 可填写密码文件；Compose 自动使用 /run/secrets/postgres_password 覆盖 DSN 密码
   pool:
     max_open_conns: 1
     max_idle_conns: 1

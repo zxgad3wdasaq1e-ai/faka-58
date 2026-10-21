@@ -1,7 +1,8 @@
-// storectl initializes a prebuilt storefront using only the Go standard library.
+// storectl initializes and maintains a prebuilt storefront installation.
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -11,8 +12,12 @@ import (
 func main() { os.Exit(runCLI(os.Args[1:], os.Stdout, os.Stderr)) }
 
 func runCLI(args []string, stdout, stderr io.Writer) int {
+	return runCLIWithDatabaseConnector(args, stdout, stderr, connectPostgres)
+}
+
+func runCLIWithDatabaseConnector(args []string, stdout, stderr io.Writer, connect databaseConnector) int {
 	if len(args) == 0 {
-		fmt.Fprintln(stderr, "用法: storectl init|info|seed [选项]")
+		fmt.Fprintln(stderr, "用法: storectl init|info|seed|db-check [选项]")
 		return 2
 	}
 	flags := flag.NewFlagSet(args[0], flag.ContinueOnError)
@@ -50,8 +55,16 @@ func runCLI(args []string, stdout, stderr io.Writer) int {
 	case "seed":
 		baseURL := flags.String("base-url", "http://127.0.0.1:8080", "管理 API origin（远程仅允许 HTTPS）")
 		action = func() error { return seedFromConfig(*root, *baseURL, stdout) }
+	case "db-check":
+		action = func() error {
+			if err := checkDatabase(*root, connect); err != nil {
+				return err
+			}
+			fmt.Fprintln(stdout, "PostgreSQL 凭据验证成功。")
+			return nil
+		}
 	default:
-		fmt.Fprintln(stderr, "仅支持 init、info、seed 子命令。")
+		fmt.Fprintln(stderr, "仅支持 init、info、seed、db-check 子命令。")
 		return 2
 	}
 	if err := flags.Parse(args[1:]); err != nil {
@@ -63,6 +76,9 @@ func runCLI(args []string, stdout, stderr io.Writer) int {
 	}
 	if err := action(); err != nil {
 		fmt.Fprintln(stderr, "操作未完成:", err)
+		if errors.Is(err, errDatabaseAuthentication) {
+			return 3
+		}
 		return 1
 	}
 	return 0

@@ -11,6 +11,7 @@ services:
     init: true
     environment:
       TZ: Asia/Shanghai
+    secrets: [postgres_password]
     volumes:
       - ./config.yml:/app/config.yml:ro
       - uploads:/app/uploads
@@ -44,7 +45,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./deploy/postgres-init.sh:/docker-entrypoint-initdb.d/10-store-user.sh:ro
     healthcheck:
-      test: [CMD-SHELL, 'pg_isready -h 127.0.0.1 -U "$${POSTGRES_APP_USER}" -d "$${POSTGRES_DB}"']
+      test: [CMD-SHELL, 'PGPASSWORD="$$(cat /run/secrets/postgres_password)" psql -X -w -h 127.0.0.1 -U "$${POSTGRES_APP_USER}" -d "$${POSTGRES_DB}" -qAt -c "SELECT 1" >/dev/null 2>&1']
       interval: 5s
       timeout: 5s
       retries: 30

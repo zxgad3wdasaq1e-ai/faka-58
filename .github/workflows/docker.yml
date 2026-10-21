@@ -45,6 +45,10 @@ jobs:
           assert current['name'] == 'faka-58'
           assert current['services']['postgres']['environment']['POSTGRES_DB'] == 'faka-58'
           assert current['services']['postgres']['environment']['POSTGRES_APP_USER'] == 'faka-58'
+          assert 'postgres_password' in [secret['source'] for secret in current['services']['app']['secrets']]
+          config = json.loads(pathlib.Path('config.yml').read_text(encoding='utf-8'))
+          assert config['database']['password_file'] == '/run/secrets/postgres_password'
+          assert 'password=' not in config['database']['dsn']
           with tempfile.TemporaryDirectory() as temporary:
               legacy_env = pathlib.Path(temporary) / 'legacy.env'
               legacy_env.write_text('COMPOSE_PROJECT_NAME=getgpt\n', encoding='utf-8')
@@ -58,6 +62,7 @@ jobs:
         run: docker compose up -d --build --wait --wait-timeout 300
       - name: Verify database, API, catalog and idempotent initialization
         run: |
+          docker compose exec -T app /app/storectl db-check --root /app
           curl --fail --retry 20 --retry-delay 2 --retry-connrefused http://localhost:8080/health
           python3 scripts/seed-catalog.py --base-url http://localhost:8080
           python3 scripts/seed-catalog.py --base-url http://localhost:8080

@@ -234,7 +234,7 @@ func initialize(options initOptions) (installationState, bool, error) {
 	config := map[string]any{
 		"app":      map[string]any{"secret_key": appKey, "totp_issuer": "faka-58"},
 		"server":   map[string]any{"host": "0.0.0.0", "port": 8080, "mode": "release", "trusted_proxies": []string{proxyIP + "/32"}},
-		"database": map[string]any{"driver": "postgres", "dsn": fmt.Sprintf("host=postgres user=faka-58 password=%s dbname=faka-58 port=5432 sslmode=disable TimeZone=Asia/Shanghai", pgPassword), "pool": map[string]int{"max_open_conns": 20, "max_idle_conns": 5, "conn_max_lifetime_seconds": 1800, "conn_max_idle_time_seconds": 300}},
+		"database": map[string]any{"driver": "postgres", "dsn": "host=postgres user=faka-58 dbname=faka-58 port=5432 sslmode=disable TimeZone=Asia/Shanghai", "password_file": "/run/secrets/postgres_password", "pool": map[string]int{"max_open_conns": 20, "max_idle_conns": 5, "conn_max_lifetime_seconds": 1800, "conn_max_idle_time_seconds": 300}},
 		"jwt":      map[string]any{"secret": jwtKey, "expire_hours": 12}, "user_jwt": map[string]any{"secret": userKey, "expire_hours": 24, "remember_me_expire_hours": 168},
 		"bootstrap":     map[string]string{"default_admin_username": options.AdminUser, "default_admin_password": adminPassword},
 		"redis":         map[string]any{"enabled": true, "host": "redis", "port": 6379, "password": redisPassword, "db": 0, "prefix": "faka-58"},

@@ -31,6 +31,9 @@ case "$image_registry" in
 esac
 docker compose version >/dev/null 2>&1 || die 'Docker Compose v2 不可用。'
 docker compose pull || die '镜像拉取失败，请检查网络或 GHCR public/login 设置。'
+# PostgreSQL health must include real application-password authentication.
+docker compose up -d --no-build --wait --wait-timeout 300 postgres || die '数据库认证未就绪；请检查 postgres 日志及应用密码文件。'
+docker compose run --rm -T --no-deps --entrypoint /app/storectl app db-check --root /app || die '应用数据库认证失败；请核对 database.password_file 挂载和数据库账号配置，尚未启动应用。'
 docker compose up -d --no-build --wait --wait-timeout 300 || die '服务未通过健康检查；使用 docker compose logs 排查后重试本脚本。'
 origin=$(docker run --rm --network none --user "$(id -u):$(id -g)" --volume "$root:/workspace:ro" --entrypoint /app/storectl "$image" info --root /workspace --field origin) || die '无法读取安装状态中的站点地址。'
 case "$origin" in

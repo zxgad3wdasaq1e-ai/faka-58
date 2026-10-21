@@ -93,7 +93,8 @@ def initialize(args: argparse.Namespace) -> dict:
         "server": {"host": "0.0.0.0", "port": 8080, "mode": "release", "trusted_proxies": [proxy_ip + "/32"]},
         "database": {
             "driver": "postgres",
-            "dsn": f"host=postgres user=faka-58 password={pg_password} dbname=faka-58 port=5432 sslmode=disable TimeZone=Asia/Shanghai",
+            "dsn": "host=postgres user=faka-58 dbname=faka-58 port=5432 sslmode=disable TimeZone=Asia/Shanghai",
+            "password_file": "/run/secrets/postgres_password",
             "pool": {"max_open_conns": 20, "max_idle_conns": 5, "conn_max_lifetime_seconds": 1800, "conn_max_idle_time_seconds": 300},
         },
         "jwt": {"secret": random_secret(), "expire_hours": 12},

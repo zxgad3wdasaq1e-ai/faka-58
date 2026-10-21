@@ -83,9 +83,10 @@ type DatabasePoolConfig struct {
 
 // DatabaseConfig 数据库配置
 type DatabaseConfig struct {
-	Driver string             `mapstructure:"driver"` // 数据库驱动（sqlite/postgres）
-	DSN    string             `mapstructure:"dsn"`    // 数据库连接串
-	Pool   DatabasePoolConfig `mapstructure:"pool"`
+	Driver       string             `mapstructure:"driver"` // 数据库驱动（sqlite/postgres）
+	DSN          string             `mapstructure:"dsn"`    // 数据库连接串
+	PasswordFile string             `mapstructure:"password_file"`
+	Pool         DatabasePoolConfig `mapstructure:"pool"`
 }
 
 // JWTConfig JWT 配置
@@ -371,6 +372,7 @@ func Load() *Config {
 	viper.SetDefault("log.compress", true)
 	viper.SetDefault("database.driver", "sqlite")
 	viper.SetDefault("database.dsn", defaultSQLiteDSN())
+	viper.SetDefault("database.password_file", "")
 	viper.SetDefault("database.pool.max_open_conns", 1)
 	viper.SetDefault("database.pool.max_idle_conns", 1)
 	viper.SetDefault("database.pool.conn_max_lifetime_seconds", 0)
@@ -519,6 +521,11 @@ func Load() *Config {
 
 	cfg.App.TOTPIssuer = mailbrand.NormalizeName(cfg.App.TOTPIssuer)
 	cfg.Email.FromName = mailbrand.NormalizeName(cfg.Email.FromName)
+	resolvedDSN, err := cfg.Database.ResolveDSN()
+	if err != nil {
+		panic(err)
+	}
+	cfg.Database.DSN = resolvedDSN
 	return &cfg
 }
 

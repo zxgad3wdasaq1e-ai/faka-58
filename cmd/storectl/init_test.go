@@ -81,6 +81,18 @@ func TestInitCompatibleConfigurationAndPermissions(t *testing.T) {
 	if !strings.Contains(dsn, "user=faka-58 ") || !strings.Contains(dsn, "dbname=faka-58 ") {
 		t.Fatal("PostgreSQL defaults must use the current project name")
 	}
+	database := config["database"].(map[string]any)
+	if strings.Contains(dsn, "password=") || database["password_file"] != "/run/secrets/postgres_password" {
+		t.Fatal("PostgreSQL must read its password only from the shared mounted secret")
+	}
+	postgresSecret, err := os.ReadFile(filepath.Join(options.Root, "deploy", "secrets", "postgres_password"))
+	if err != nil || len(strings.TrimSuffix(string(postgresSecret), "\n")) != 64 {
+		t.Fatal("PostgreSQL password secret was not generated")
+	}
+	encodedConfig, err := os.ReadFile(filepath.Join(options.Root, "config.yml"))
+	if err != nil || bytes.Contains(encodedConfig, bytes.TrimSuffix(postgresSecret, []byte("\n"))) {
+		t.Fatal("PostgreSQL password was duplicated into application configuration")
+	}
 	proxies := config["server"].(map[string]any)["trusted_proxies"].([]any)
 	if len(proxies) != 1 || proxies[0] != "172.29.240.10/32" {
 		t.Fatal("Gin must only trust the exact Caddy container address")
