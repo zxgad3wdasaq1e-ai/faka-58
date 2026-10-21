@@ -25,6 +25,7 @@ import (
 // transport without leaking concrete implementations into transport.
 func NewHandler(c *container.Container) *upstreamtransport.Handler {
 	return upstreamtransport.New(upstreamtransport.Dependencies{
+		UniformPricing:    c.Config.Order.UniformPricing,
 		Categories:        c.CategoryRepo,
 		Products:          productServiceAdapter{products: c.ProductReadService},
 		Users:             c.UserStore,

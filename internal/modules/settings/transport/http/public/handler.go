@@ -78,6 +78,12 @@ type ResellerOverlay interface {
 	ApplyPublicConfigOverlay(ctx context.Context, tenant reseller.TenantContext, base map[string]interface{}) (map[string]interface{}, error)
 }
 
+// StoreFeatures 是由启动配置决定的店铺功能，不从缓存或数据库设置中读取。
+type StoreFeatures struct {
+	UniformPricing  bool
+	ResellerEnabled bool
+}
+
 // Handler 处理公开站点配置 HTTP 请求。
 type Handler struct {
 	cache          ConfigCache
@@ -89,6 +95,7 @@ type Handler struct {
 	google         GoogleAuthPublic
 	googleFallback GoogleAuthFallback
 	overlay        ResellerOverlay
+	features       StoreFeatures
 }
 
 func NewHandler(
@@ -101,6 +108,7 @@ func NewHandler(
 	google GoogleAuthPublic,
 	googleFallback GoogleAuthFallback,
 	overlay ResellerOverlay,
+	features StoreFeatures,
 ) *Handler {
 	if cache == nil {
 		panic("public config handler: cache is nil")
@@ -121,6 +129,7 @@ func NewHandler(
 		google:         google,
 		googleFallback: googleFallback,
 		overlay:        overlay,
+		features:       features,
 	}
 }
 
@@ -142,6 +151,8 @@ func (h *Handler) GetConfig(c *gin.Context) {
 
 	var cached map[string]interface{}
 	if hit, err := h.cache.GetJSON(c.Request.Context(), cacheKey, &cached); err == nil && hit {
+		cached["uniform_pricing"] = h.features.UniformPricing
+		cached["reseller_enabled"] = h.features.ResellerEnabled
 		cached["server_time"] = time.Now().UnixMilli()
 		cached["app_version"] = version.Version
 		response.Success(c, cached)
@@ -240,6 +251,8 @@ func (h *Handler) GetConfig(c *gin.Context) {
 		data["tenant"] = map[string]interface{}{"mode": "main", "host": tenant.Host}
 	}
 
+	data["uniform_pricing"] = h.features.UniformPricing
+	data["reseller_enabled"] = h.features.ResellerEnabled
 	_ = h.cache.SetJSON(c.Request.Context(), cacheKey, data, publicConfigCacheTTL)
 	data["server_time"] = time.Now().UnixMilli()
 	data["app_version"] = version.Version

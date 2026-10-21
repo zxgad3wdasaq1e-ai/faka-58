@@ -141,8 +141,9 @@ type QueueConfig struct {
 
 // OrderConfig 订单配置
 type OrderConfig struct {
-	PaymentExpireMinutes int `mapstructure:"payment_expire_minutes"`
-	MaxRefundDays        int `mapstructure:"max_refund_days"`
+	UniformPricing       bool `mapstructure:"uniform_pricing"` // 新订单统一使用 SKU 售价，不叠加营销折扣。
+	PaymentExpireMinutes int  `mapstructure:"payment_expire_minutes"`
+	MaxRefundDays        int  `mapstructure:"max_refund_days"`
 }
 
 // EmailConfig 邮件服务配置
@@ -467,6 +468,7 @@ func Load() *Config {
 	}
 
 	var cfg Config
+	viper.SetDefault("order.uniform_pricing", true)
 	if err := viper.Unmarshal(&cfg); err != nil {
 		logger.Errorw("config_unmarshal_failed", "error", err)
 		panic(fmt.Errorf("配置解析失败: %w", err))

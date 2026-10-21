@@ -33,6 +33,7 @@ export function useLocalized() {
 
 export function useProductLabels() {
   const { t } = useI18n()
+  const appStore = useAppStore()
 
   const getPurchaseTypeLabel = (purchaseType: string) => {
     return purchaseType === 'guest' ? t('productPurchase.guest') : t('productPurchase.member')
@@ -80,6 +81,7 @@ export function useProductLabels() {
   const getPromotionPriceAmount = (product: any) => product?.promotion_price_amount
 
   const hasPromotionPrice = (product: any) => {
+    if (appStore.uniformPricing) return false
     if (!product) return false
     const original = parsePriceAmount(product.price_amount)
     const promotion = parsePriceAmount(product.promotion_price_amount)
@@ -88,6 +90,7 @@ export function useProductLabels() {
   }
 
   const getPromotionSaveAmount = (product: any) => {
+    if (appStore.uniformPricing) return '0.00'
     const original = parsePriceAmount(product?.price_amount)
     const promotion = parsePriceAmount(product?.promotion_price_amount)
     if (original === null || promotion === null || promotion >= original) {
@@ -97,6 +100,7 @@ export function useProductLabels() {
   }
 
   const hasSkuPromotionPrice = (sku: any) => {
+    if (appStore.uniformPricing) return false
     if (!sku) return false
     const original = parsePriceAmount(sku.price_amount)
     const promotion = parsePriceAmount(sku.promotion_price_amount)
@@ -107,6 +111,7 @@ export function useProductLabels() {
   const getSkuPromotionPriceAmount = (sku: any) => sku?.promotion_price_amount
 
   const getSkuPromotionSaveAmount = (sku: any) => {
+    if (appStore.uniformPricing) return '0.00'
     const original = parsePriceAmount(sku?.price_amount)
     const promotion = parsePriceAmount(sku?.promotion_price_amount)
     if (original === null || promotion === null || promotion >= original) {
@@ -115,8 +120,8 @@ export function useProductLabels() {
     return centsToAmount(original - promotion)
   }
 
-  const hasPromotionRules = (product: any) => product?.promotion_rules?.length > 0
-  const getPromotionRules = (product: any): any[] => product?.promotion_rules ?? []
+  const hasPromotionRules = (product: any) => !appStore.uniformPricing && product?.promotion_rules?.length > 0
+  const getPromotionRules = (product: any): any[] => appStore.uniformPricing ? [] : product?.promotion_rules ?? []
 
   const normalizeText = (value: unknown) => String(value ?? '').trim()
   const normalizeSkuId = (value: unknown) => {
@@ -125,6 +130,7 @@ export function useProductLabels() {
   }
   const normalizeSkuCode = (value: unknown) => normalizeText(value).toLowerCase()
   const allWholesalePrices = (product: any): any[] => {
+    if (appStore.uniformPricing) return []
     if (Array.isArray(product?.wholesale_prices)) return product.wholesale_prices
     if (Array.isArray(product?.wholesalePrices)) return product.wholesalePrices
     return []
@@ -175,6 +181,7 @@ export function useProductLabels() {
   }
 
   const resolveMemberPriceAmount = (product: any, skuId: any, basePrice: any, memberLevelId: any, discountRate?: any) => {
+    if (appStore.uniformPricing) return null
     const base = parsePriceAmount(basePrice)
     const levelId = Number(memberLevelId || 0)
     if (base === null || base <= 0 || !Number.isFinite(levelId) || levelId <= 0) return null

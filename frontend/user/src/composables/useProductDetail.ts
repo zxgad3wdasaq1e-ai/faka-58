@@ -91,6 +91,7 @@ export function useProductDetail(options: { onLoaded?: () => void } = {}) {
   })
 
   const ensureMemberLevels = () => {
+    if (appStore.uniformPricing) return
     if (userMemberLevelId.value > 0 && userProfileStore.memberLevels.length === 0) {
       void userProfileStore.loadMemberLevels()
     }
@@ -400,7 +401,7 @@ export function useProductDetail(options: { onLoaded?: () => void } = {}) {
     slug: product.value.slug,
     title: product.value.title,
     priceAmount: String(sku?.price_amount || product.value.price_amount || '0.00'),
-    wholesalePrices: Array.isArray(product.value.wholesale_prices) ? product.value.wholesale_prices : undefined,
+    wholesalePrices: getWholesalePrices(product.value),
     image: images.value[0],
     minPurchaseQuantity: normalizeOptionalLimitNumber(product.value.min_purchase_quantity) ?? undefined,
     maxPurchaseQuantity: normalizeOptionalLimitNumber(product.value.max_purchase_quantity) ?? undefined,

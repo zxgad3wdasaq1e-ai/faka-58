@@ -64,13 +64,14 @@ type RelatedPostReader interface {
 
 // PublicHandler 处理公开商品目录 HTTP 请求。
 type PublicHandler struct {
-	products     PublicProductQueries
-	pricer       ResellerDisplayPricer
-	promotions   ProductPromotionDecorator
-	memberLevels MemberLevelPricing
-	mappings     LocalProductMappingReader
-	skuMappings  SKUMappingLookup
-	relatedPosts RelatedPostReader
+	products       PublicProductQueries
+	pricer         ResellerDisplayPricer
+	promotions     ProductPromotionDecorator
+	memberLevels   MemberLevelPricing
+	mappings       LocalProductMappingReader
+	skuMappings    SKUMappingLookup
+	relatedPosts   RelatedPostReader
+	uniformPricing bool
 }
 
 // NewPublicHandler 创建公开商品目录 Handler。
@@ -82,18 +83,20 @@ func NewPublicHandler(
 	mappings LocalProductMappingReader,
 	skuMappings SKUMappingLookup,
 	relatedPosts RelatedPostReader,
+	uniformPricing bool,
 ) *PublicHandler {
 	if products == nil || relatedPosts == nil {
 		panic("catalog public handler: required dependency is nil")
 	}
 	return &PublicHandler{
-		products:     products,
-		pricer:       pricer,
-		promotions:   promotions,
-		memberLevels: memberLevels,
-		mappings:     mappings,
-		skuMappings:  skuMappings,
-		relatedPosts: relatedPosts,
+		products:       products,
+		pricer:         pricer,
+		promotions:     promotions,
+		memberLevels:   memberLevels,
+		mappings:       mappings,
+		skuMappings:    skuMappings,
+		relatedPosts:   relatedPosts,
+		uniformPricing: uniformPricing,
 	}
 }
 

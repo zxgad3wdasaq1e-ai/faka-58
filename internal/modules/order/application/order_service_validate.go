@@ -37,6 +37,9 @@ func (s *OrderService) buildOrderResult(input orderCreateParams) (*orderBuildRes
 		}
 	}
 	resellerOrder := isResellerOrderContext(input.Tenant)
+	if s.uniformPricing && strings.TrimSpace(input.CouponCode) != "" {
+		return nil, couponcontract.ErrInvalid
+	}
 	if resellerOrder && strings.TrimSpace(input.CouponCode) != "" {
 		return nil, ErrResellerCouponNotAllowed
 	}
@@ -72,7 +75,7 @@ func (s *OrderService) buildOrderResult(input orderCreateParams) (*orderBuildRes
 	// 解析用户会员等级
 	var userMemberLevelID uint
 	var memberLevelIDSnapshot *uint
-	if !resellerOrder && input.UserID > 0 && s.userRepo != nil {
+	if !s.uniformPricing && !resellerOrder && input.UserID > 0 && s.userRepo != nil {
 		user, _ := s.userRepo.GetByID(input.UserID)
 		if user != nil && user.MemberLevelID > 0 {
 			userMemberLevelID = user.MemberLevelID
@@ -82,7 +85,7 @@ func (s *OrderService) buildOrderResult(input orderCreateParams) (*orderBuildRes
 	}
 
 	var promotionService *promotionapp.Service
-	if !resellerOrder {
+	if !s.uniformPricing && !resellerOrder {
 		promotionService = promotionapp.NewService(s.promotionRepo)
 	}
 	manualFormData := input.ManualFormData
@@ -148,7 +151,7 @@ func (s *OrderService) buildOrderResult(input orderCreateParams) (*orderBuildRes
 		var wholesaleUnitPrice decimal.Decimal
 		wholesaleDiscount := decimal.Zero
 		wholesaleMatched := false
-		if !resellerOrder {
+		if !s.uniformPricing && !resellerOrder {
 			wholesaleUnitPrice, wholesaleDiscount, wholesaleMatched = productdomain.ResolveWholesaleUnitPriceForSKU(product, basePrice, sku.ID, sku.SKUCode, wholesaleMatchQuantity, item.Quantity)
 		}
 		if wholesaleMatched && wholesaleUnitPrice.LessThan(unitPriceAmount) {
@@ -165,7 +168,7 @@ func (s *OrderService) buildOrderResult(input orderCreateParams) (*orderBuildRes
 
 		// 3. 在已命中的商品级优惠单价基础上应用会员价。
 		itemMemberDiscount := decimal.Zero
-		if !resellerOrder && userMemberLevelID > 0 && s.memberLevelService != nil {
+		if !s.uniformPricing && !resellerOrder && userMemberLevelID > 0 && s.memberLevelService != nil {
 			memberUnitPrice, _ := s.memberLevelService.ResolveMemberPrice(userMemberLevelID, product.ID, sku.ID, unitPriceAmount)
 			if memberUnitPrice.LessThan(unitPriceAmount) {
 				itemMemberDiscount = unitPriceAmount.Sub(memberUnitPrice).

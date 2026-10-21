@@ -100,14 +100,15 @@ func SetupRouter(cfg *config.Config, c *container.Container) *gin.Engine {
 		c.ContentBannerService,
 	)
 	publicCatalogHandler := catalogproductbootstrap.NewPublicHTTP(catalogproductbootstrap.PublicHTTPDependencies{
-		Products:     c.ProductReadService,
-		Hidden:       c.ResellerStore,
-		Pricer:       c.ResellerPricingResolver,
-		Promotions:   c.PromotionRepo,
-		MemberLevels: c.MemberLevelService,
-		Mappings:     c.ProductMappingRepo,
-		SKUMappings:  c.SKUMappingRepo,
-		RelatedPosts: c.ContentPostService,
+		Products:       c.ProductReadService,
+		Hidden:         c.ResellerStore,
+		Pricer:         c.ResellerPricingResolver,
+		Promotions:     c.PromotionRepo,
+		MemberLevels:   c.MemberLevelService,
+		Mappings:       c.ProductMappingRepo,
+		SKUMappings:    c.SKUMappingRepo,
+		RelatedPosts:   c.ContentPostService,
+		UniformPricing: c.Config.Order.UniformPricing,
 	})
 	publicCategoryHandler := categoryhttp.NewPublicHandler(c.CategoryService)
 	adminContentHandler := contenttransport.NewAdminHandler(

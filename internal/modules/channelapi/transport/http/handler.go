@@ -209,6 +209,7 @@ type PaymentStoresitory interface {
 }
 
 type Dependencies struct {
+	UniformPricing     bool
 	CategoryService    CategoryService
 	CategoryRepo       CategoryRepository
 	ProductService     ProductService

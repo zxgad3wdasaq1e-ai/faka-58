@@ -47,7 +47,7 @@
 
         <!-- 概览 -->
         <template v-if="currentSection === 'overview'">
-          <div class="grid gap-3.5 grid-cols-2 lg:grid-cols-4">
+          <div class="grid gap-3.5 grid-cols-2" :class="uniformPricing ? 'lg:grid-cols-2' : 'lg:grid-cols-4'">
             <div class="flex items-center gap-3 rounded-lg border bg-card p-4">
               <div class="grid h-[42px] w-[42px] flex-none place-items-center rounded-xl bg-primary/10 text-primary"><ShoppingBag class="h-5 w-5" /></div>
               <div>
@@ -55,7 +55,7 @@
                 <div class="mt-[3px] text-lg font-extrabold tabular-nums">{{ userProfileStore.loadingOrders ? '—' : userProfileStore.ordersTotal }}</div>
               </div>
             </div>
-            <div class="flex items-center gap-3 rounded-lg border bg-card p-4">
+            <div v-if="!uniformPricing" class="flex items-center gap-3 rounded-lg border bg-card p-4">
               <div class="grid h-[42px] w-[42px] flex-none place-items-center rounded-xl bg-[color:var(--plum-soft)] text-[color:var(--plum)]"><Crown class="h-5 w-5" /></div>
               <div>
                 <div class="text-xs text-muted-foreground">{{ t('personalCenter.memberLevel.currentLevel') }}</div>
@@ -65,7 +65,7 @@
                 </div>
               </div>
             </div>
-            <div class="flex items-center gap-3 rounded-lg border bg-card p-4">
+            <div v-if="!uniformPricing" class="flex items-center gap-3 rounded-lg border bg-card p-4">
               <div class="grid h-[42px] w-[42px] flex-none place-items-center rounded-xl bg-[color:var(--gold-soft)] text-[color:var(--gold-strong)]"><Percent class="h-5 w-5" /></div>
               <div>
                 <div class="text-xs text-muted-foreground">{{ t('personalCenter.memberLevel.discountRate') }}</div>
@@ -82,7 +82,7 @@
           </div>
 
           <!-- 会员等级卡 -->
-          <div v-if="userProfileStore.memberLevels.length > 0" class="rounded-xl border bg-card p-[22px]">
+          <div v-if="!uniformPricing && userProfileStore.memberLevels.length > 0" class="rounded-xl border bg-card p-[22px]">
             <div class="flex flex-wrap items-center justify-between gap-3.5">
               <div class="flex items-center gap-3.5">
                 <div class="grid h-[46px] w-[46px] flex-none place-items-center rounded-md bg-primary/10 text-[22px]">
@@ -209,7 +209,7 @@ const props = withDefaults(defineProps<{ section?: PersonalSection }>(), {
 })
 
 const {
-  userProfileStore, canAccessResellerConsole, visibleSectionItems, currentSection, globalAlert,
+  userProfileStore, canAccessResellerConsole, uniformPricing, visibleSectionItems, currentSection, globalAlert,
   displayInitial, switchSection, statusLabel, statusVariant, formatMoney, formatDate,
   emailVerifiedLabel, emailVerifiedVariant, discountText, isImagePath, levelName,
 } = usePersonalCenter(() => props.section)

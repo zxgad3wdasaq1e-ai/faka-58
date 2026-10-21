@@ -11,14 +11,15 @@ import (
 
 // PublicHTTPDependencies 是公开 Product HTTP 入口的显式装配依赖。
 type PublicHTTPDependencies struct {
-	Products     *productapplication.Service
-	Hidden       productapplication.HiddenProductRepository
-	Pricer       producthttp.ResellerDisplayPricer
-	Promotions   promotioncontract.Repository
-	MemberLevels producthttp.MemberLevelPricing
-	Mappings     producthttp.LocalProductMappingReader
-	SKUMappings  producthttp.SKUMappingLookup
-	RelatedPosts producthttp.RelatedPostReader
+	Products       *productapplication.Service
+	Hidden         productapplication.HiddenProductRepository
+	Pricer         producthttp.ResellerDisplayPricer
+	Promotions     promotioncontract.Repository
+	MemberLevels   producthttp.MemberLevelPricing
+	Mappings       producthttp.LocalProductMappingReader
+	SKUMappings    producthttp.SKUMappingLookup
+	RelatedPosts   producthttp.RelatedPostReader
+	UniformPricing bool
 }
 
 // publicProductAdapter 将 Product 查询服务和租户隐藏策略组合成公开查询端口。
@@ -60,5 +61,6 @@ func NewPublicHTTP(dependencies PublicHTTPDependencies) *producthttp.PublicHandl
 		dependencies.Mappings,
 		dependencies.SKUMappings,
 		dependencies.RelatedPosts,
+		dependencies.UniformPricing,
 	)
 }

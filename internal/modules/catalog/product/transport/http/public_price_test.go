@@ -6,6 +6,8 @@ import (
 
 	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
 	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	memberleveldomain "github.com/dujiao-next/internal/modules/memberlevel/domain"
+	promotiondomain "github.com/dujiao-next/internal/modules/promotion/domain"
 
 	reseller "github.com/dujiao-next/internal/modules/reseller/contract"
 	"github.com/dujiao-next/internal/shared/money"
@@ -182,5 +184,53 @@ func TestDecoratePublicProductForTenantInvalidDisplayPricingIsHidden(t *testing.
 				t.Fatalf("expected ErrResellerProductNotListed, got %v", err)
 			}
 		})
+	}
+}
+
+type marketingPriceStub struct{ calls int }
+
+func (s *marketingPriceStub) GetProductPromotions(uint) ([]promotiondomain.Promotion, error) {
+	s.calls++
+	return []promotiondomain.Promotion{{ID: 1}}, nil
+}
+func (s *marketingPriceStub) ApplyPromotion(product *productdomain.Product, _ int) (*promotiondomain.Promotion, money.Amount, error) {
+	s.calls++
+	return &promotiondomain.Promotion{ID: 1}, money.FromDecimal(product.PriceAmount.Decimal.Sub(decimal.NewFromInt(10))), nil
+}
+func (s *marketingPriceStub) GetLevelPricesByProduct(uint) ([]memberleveldomain.MemberLevelPrice, error) {
+	s.calls++
+	return []memberleveldomain.MemberLevelPrice{{MemberLevelID: 1, SKUID: 11, PriceAmount: money.FromDecimal(decimal.NewFromInt(60))}}, nil
+}
+func (s *marketingPriceStub) ResolveMemberPrice(_, _, _ uint, price decimal.Decimal) (decimal.Decimal, decimal.Decimal) {
+	s.calls++
+	return price.Sub(decimal.NewFromInt(20)), decimal.NewFromInt(20)
+}
+
+func TestUniformPublicPricingHidesMarketingAndKeepsSKUPrices(t *testing.T) {
+	product := &productdomain.Product{
+		ID: 1, PriceAmount: money.FromDecimal(decimal.NewFromInt(100)),
+		WholesalePrices: productdomain.WholesalePriceTiers{{MinQuantity: 2, UnitPrice: money.FromDecimal(decimal.NewFromInt(50))}},
+		SKUs:            []productdomain.ProductSKU{{ID: 11, IsActive: true, PriceAmount: money.FromDecimal(decimal.NewFromInt(80))}},
+	}
+	for _, uniform := range []bool{true, false} {
+		marketing := &marketingPriceStub{}
+		h := &PublicHandler{uniformPricing: uniform, memberLevels: marketing}
+		item, err := h.decoratePublicProduct(product, marketing, 1)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if item.PriceAmount.String() != "80.00" || len(item.SKUs) != 1 || item.SKUs[0].PriceAmount.String() != "80.00" {
+			t.Fatalf("SKU base price changed: %#v", item)
+		}
+		if uniform {
+			if marketing.calls != 0 || len(item.WholesalePrices) != 0 || len(item.MemberPrices) != 0 || len(item.PromotionRules) != 0 || item.PromotionPriceAmount != nil || item.SKUs[0].MemberPriceAmount != nil || item.SKUs[0].PromotionPriceAmount != nil {
+				t.Fatalf("uniform prices expose marketing: %#v calls=%d", item, marketing.calls)
+			}
+		} else if marketing.calls == 0 || len(item.WholesalePrices) != 1 || len(item.MemberPrices) != 1 || item.PromotionPriceAmount == nil || item.SKUs[0].MemberPriceAmount == nil {
+			t.Fatalf("legacy marketing missing: %#v", item)
+		}
+		if len(product.WholesalePrices) != 1 {
+			t.Fatal("decorating must not mutate stored wholesale prices")
+		}
 	}
 }

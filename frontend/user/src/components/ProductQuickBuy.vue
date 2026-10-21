@@ -433,6 +433,7 @@ const currentMemberDiscountRate = computed(() => {
 })
 
 const ensureMemberLevels = () => {
+  if (appStore.uniformPricing) return
   if (userMemberLevelId.value > 0 && userProfileStore.memberLevels.length === 0) {
     void userProfileStore.loadMemberLevels()
   }
@@ -752,7 +753,7 @@ const handleAddToCart = () => {
     slug: props.product.slug,
     title: props.product.title,
     priceAmount: String(sku?.price_amount || props.product.price_amount || '0.00'),
-    wholesalePrices: Array.isArray(props.product.wholesale_prices) ? props.product.wholesale_prices : undefined,
+    wholesalePrices: getWholesalePrices(props.product),
     image: images[0] || '',
     minPurchaseQuantity: normalizeOptionalLimitNumber(props.product.min_purchase_quantity) ?? undefined,
     maxPurchaseQuantity: normalizeOptionalLimitNumber(props.product.max_purchase_quantity) ?? undefined,
@@ -806,7 +807,7 @@ const handleBuyNow = () => {
     slug: props.product.slug,
     title: props.product.title,
     priceAmount: String(sku?.price_amount || props.product.price_amount || '0.00'),
-    wholesalePrices: Array.isArray(props.product.wholesale_prices) ? props.product.wholesale_prices : undefined,
+    wholesalePrices: getWholesalePrices(props.product),
     image: images[0] || '',
     minPurchaseQuantity: normalizeOptionalLimitNumber(props.product.min_purchase_quantity) ?? undefined,
     maxPurchaseQuantity: normalizeOptionalLimitNumber(props.product.max_purchase_quantity) ?? undefined,

@@ -1,5 +1,9 @@
 import type { ResellerManagementSnapshotData } from '../api'
 
+export const canAccessResellerConsole = (config?: { reseller_enabled?: unknown; tenant?: { mode?: unknown } } | null) => {
+  return config?.reseller_enabled === true && String(config?.tenant?.mode || '').trim().toLowerCase() !== 'reseller'
+}
+
 export type ResellerModuleKey =
   | 'apply'
   | 'dashboard'

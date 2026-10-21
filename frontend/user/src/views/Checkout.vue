@@ -95,7 +95,7 @@
             :manual-field-error="manualFieldError"
           />
 
-          <div v-if="!isResellerTenant" class="rounded-2xl border bg-card text-card-foreground p-6">
+          <div v-if="showMarketing" class="rounded-2xl border bg-card text-card-foreground p-6">
             <h2 class="mb-4 text-lg font-bold text-foreground">{{ t('checkout.couponTitle') }}</h2>
             <Input
               v-model="couponCode"
@@ -184,7 +184,7 @@
               <span>{{ t('checkout.previewOriginal') }}</span>
               <span class="font-mono text-foreground">{{ formatPrice(previewOriginal, previewCurrency) }}</span>
             </div>
-            <template v-if="!isResellerTenant">
+            <template v-if="showMarketing">
               <div class="flex items-center justify-between">
                 <span>{{ t('checkout.previewCoupon') }}</span>
                 <span
@@ -213,7 +213,7 @@
                 </span>
               </div>
             </template>
-            <div v-if="Number(previewMemberDiscount) > 0" class="flex items-center justify-between">
+            <div v-if="showMarketing && Number(previewMemberDiscount) > 0" class="flex items-center justify-between">
               <span>{{ t('checkout.previewMemberDiscount') }}</span>
               <span class="font-mono text-amber-600 dark:text-amber-300">-{{ formatPrice(previewMemberDiscount, previewCurrency) }}</span>
             </div>
@@ -332,7 +332,7 @@ const {
   itemStockExceeded, itemStockHint,
   checkoutItemCurrency, checkoutItemPriceParts, checkoutItemOriginalPriceParts, checkoutItemHasPriceDiscount,
   manualFormProducts, manualFormData, submitAttempted, getManualFieldLabel, getManualFieldPlaceholder, manualFieldError,
-  couponCode, isResellerTenant,
+  couponCode, showMarketing,
   checkoutMode, guestEmail, guestPassword, guestEmailValid,
   guestCaptchaEnabled, captchaProvider, guestCaptchaPayload, guestTurnstileToken, guestTurnstileSiteKey,
   guestImageCaptchaRef, guestTurnstileRef, handleGuestCaptchaConfigStale,

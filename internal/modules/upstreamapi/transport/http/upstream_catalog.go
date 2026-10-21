@@ -123,7 +123,7 @@ func (h *Handler) ListProducts(c *gin.Context) {
 	// 获取下游用户的会员等级
 	userID := getUpstreamUserID(c)
 	var memberLevelID uint
-	if userID > 0 {
+	if !h.UniformPricing && userID > 0 {
 		user, err := h.Users.GetByID(userID)
 		if err == nil && user != nil {
 			memberLevelID = user.MemberLevelID
@@ -183,7 +183,7 @@ func (h *Handler) GetProduct(c *gin.Context) {
 	// 获取下游用户的会员等级
 	userID := getUpstreamUserID(c)
 	var memberLevelID uint
-	if userID > 0 {
+	if !h.UniformPricing && userID > 0 {
 		user, err := h.Users.GetByID(userID)
 		if err == nil && user != nil {
 			memberLevelID = user.MemberLevelID
@@ -248,6 +248,15 @@ func (h *Handler) resolveEffectiveFulfillmentTypes(products []productdomain.Prod
 }
 
 func (h *Handler) toUpstreamProductWithMemberPrice(p productdomain.Product, memberLevelID uint, fulfillmentTypeMap map[uint]string) upstreamProduct {
+	if h.UniformPricing {
+		p.WholesalePrices = nil
+		for _, sku := range p.SKUs {
+			if sku.IsActive {
+				p.PriceAmount = sku.PriceAmount
+				break
+			}
+		}
+	}
 	skus := make([]upstreamSKU, 0, len(p.SKUs))
 	for _, s := range p.SKUs {
 		if !s.IsActive {
@@ -263,7 +272,7 @@ func (h *Handler) toUpstreamProductWithMemberPrice(p productdomain.Product, memb
 			StockQuantity: stockQuantity,
 			IsActive:      s.IsActive,
 		}
-		if memberLevelID > 0 && h.MemberLevels != nil {
+		if !h.UniformPricing && memberLevelID > 0 && h.MemberLevels != nil {
 			mp, _ := h.MemberLevels.ResolveMemberPrice(memberLevelID, p.ID, s.ID, s.PriceAmount.Decimal)
 			if mp.LessThan(s.PriceAmount.Decimal) {
 				si.OriginalPrice = si.PriceAmount
@@ -300,7 +309,7 @@ func (h *Handler) toUpstreamProductWithMemberPrice(p productdomain.Product, memb
 		UpdatedAt:        p.UpdatedAt,
 	}
 
-	if memberLevelID > 0 && h.MemberLevels != nil {
+	if !h.UniformPricing && memberLevelID > 0 && h.MemberLevels != nil {
 		mp, _ := h.MemberLevels.ResolveMemberPrice(memberLevelID, p.ID, 0, p.PriceAmount.Decimal)
 		if mp.LessThan(p.PriceAmount.Decimal) {
 			result.OriginalPrice = result.PriceAmount

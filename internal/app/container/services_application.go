@@ -73,7 +73,7 @@ func (c *Container) initApplicationServices() {
 		panic(err)
 	}
 	c.SitemapService = sitemapService
-	c.CartService = cartapp.NewService(c.CartRepo, c.ProductRepo, c.ProductSKURepo, c.PromotionRepo, c.SettingService)
+	c.CartService = cartapp.NewService(c.CartRepo, c.ProductRepo, c.ProductSKURepo, c.PromotionRepo, c.SettingService, c.Config.Order.UniformPricing)
 	c.WalletService = walletapp.NewService(walletapp.Options{
 		Repository: c.WalletRepo, Transactions: c.WalletRepo,
 	})
@@ -109,6 +109,7 @@ func (c *Container) initApplicationServices() {
 		ResellerAccounting:      c.ResellerAccountingLedger,
 		RiskControlService:      c.OrderRiskControlService,
 		ExpireMinutes:           c.Config.Order.PaymentExpireMinutes,
+		UniformPricing:          c.Config.Order.UniformPricing,
 	})
 	c.FulfillmentService = fulfillmentapp.New(fulfillmentapp.Options{
 		OrderStore:            c.OrderStore,

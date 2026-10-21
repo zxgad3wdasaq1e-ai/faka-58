@@ -146,6 +146,7 @@ type SecretDecrypter interface {
 }
 
 type Dependencies struct {
+	UniformPricing    bool
 	Categories        CategoryRepository
 	Products          ProductService
 	Users             UserRepository

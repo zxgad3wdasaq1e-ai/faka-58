@@ -51,6 +51,7 @@ type OrderService struct {
 	riskControlSvc          orderriskcontract.Controller
 	productMappingService   upstreamStockEnsurer
 	expireMinutes           int
+	uniformPricing          bool
 }
 
 type OrderMemberLevelService interface {
@@ -101,6 +102,7 @@ type OrderServiceOptions struct {
 	RiskControlService      orderriskcontract.Controller
 	ProductMappingService   upstreamStockEnsurer
 	ExpireMinutes           int
+	UniformPricing          bool
 }
 
 // SetProductMappingService 注入商品映射服务（用于下单前上游库存兜底校验）。
@@ -133,6 +135,7 @@ func NewOrderService(opts OrderServiceOptions) *OrderService {
 		riskControlSvc:          opts.RiskControlService,
 		productMappingService:   opts.ProductMappingService,
 		expireMinutes:           opts.ExpireMinutes,
+		uniformPricing:          opts.UniformPricing,
 	}
 }
 

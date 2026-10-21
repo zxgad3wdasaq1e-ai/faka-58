@@ -49,6 +49,7 @@ export function useCheckout() {
   const cartStore = useCartStore()
   const buyNowStore = useBuyNowStore()
   const appStore = useAppStore()
+  const showMarketing = computed(() => !appStore.uniformPricing && !appStore.isResellerTenant)
   const userAuthStore = useUserAuthStore()
   const { t } = useI18n()
 
@@ -64,7 +65,7 @@ export function useCheckout() {
   })
   const totalItems = computed(() => cartItems.value.reduce((sum, item) => sum + item.quantity, 0))
   const couponCode = ref('')
-  const normalizedCouponCode = computed(() => couponCode.value.trim())
+  const normalizedCouponCode = computed(() => showMarketing.value ? couponCode.value.trim() : '')
   const submitting = ref(false)
   const error = ref('')
   const preview = ref<any>(null)
@@ -121,9 +122,6 @@ export function useCheckout() {
   })
 
   const walletOnlyPayment = computed(() => !!appStore.config?.wallet_only_payment)
-  // 分销白标店内后端会清零优惠券/促销/会员/批发等所有折扣（reseller 定价为固定加价），
-  // 据此在结算页隐藏优惠券输入与恒为 0 的折扣预览行，避免买家填了无效优惠码。
-  const isResellerTenant = computed(() => appStore.isResellerTenant)
   const showBalanceOption = computed(() => userAuthStore.isAuthenticated)
   const expectedWalletPaidCents = computed(() => {
     if (!showBalanceOption.value || !useBalance.value) return 0
@@ -700,7 +698,7 @@ export function useCheckout() {
     if (syncingStock.value) return
     syncingStock.value = true
     try {
-      await refreshCartStockSnapshots(cartStore)
+      await refreshCartStockSnapshots(cartStore, appStore.uniformPricing)
     } finally {
       syncingStock.value = false
     }
@@ -866,7 +864,7 @@ export function useCheckout() {
   }
 
   watch(
-    () => [cartItems.value, manualFormFingerprint.value, normalizedCouponCode.value, checkoutMode.value, guestEmail.value, guestPassword.value, userAuthStore.isAuthenticated],
+    () => [cartItems.value, manualFormFingerprint.value, normalizedCouponCode.value, appStore.uniformPricing, checkoutMode.value, guestEmail.value, guestPassword.value, userAuthStore.isAuthenticated],
     () => {
       debouncedLoadPreview()
     },
@@ -1130,7 +1128,7 @@ export function useCheckout() {
     manualFieldError,
     // coupon
     couponCode,
-    isResellerTenant,
+    showMarketing,
     // mode select / guest
     checkoutMode,
     guestEmail,

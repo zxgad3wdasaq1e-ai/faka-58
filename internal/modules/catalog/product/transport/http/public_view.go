@@ -142,6 +142,10 @@ func (h *PublicHandler) decoratePublicProduct(product *productdomain.Product, pr
 	}
 
 	item := publicProductView{Product: *product}
+	if h.uniformPricing {
+		item.Product.WholesalePrices = nil
+		promotions = nil
+	}
 	displayPrice := resolvePublicDisplayPrice(product)
 	displaySKUID := resolvePublicDisplaySKUID(product)
 	item.Product.PriceAmount = displayPrice
@@ -170,7 +174,7 @@ func (h *PublicHandler) decoratePublicProduct(product *productdomain.Product, pr
 	if len(userMemberLevelID) > 0 {
 		memberLevelID = userMemberLevelID[0]
 	}
-	if h.memberLevels != nil {
+	if !h.uniformPricing && h.memberLevels != nil {
 		levelPrices, _ := h.memberLevels.GetLevelPricesByProduct(product.ID)
 		if len(levelPrices) > 0 {
 			views := make([]productpresenter.MemberLevelPrice, 0, len(levelPrices))
@@ -194,7 +198,7 @@ func (h *PublicHandler) decoratePublicProduct(product *productdomain.Product, pr
 		sv := publicSKUView{ProductSKU: sku}
 
 		// 计算当前用户的会员价
-		if memberLevelID > 0 && h.memberLevels != nil && sku.IsActive {
+		if !h.uniformPricing && memberLevelID > 0 && h.memberLevels != nil && sku.IsActive {
 			memberPrice, _ := h.memberLevels.ResolveMemberPrice(memberLevelID, product.ID, sku.ID, sku.PriceAmount.Decimal)
 			if memberPrice.LessThan(sku.PriceAmount.Decimal) {
 				mp := money.FromDecimal(memberPrice)

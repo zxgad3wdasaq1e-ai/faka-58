@@ -248,7 +248,7 @@
                 <div class="text-foreground font-mono mt-1">{{ formatMoney(order.original_amount,
                   order.currency) }}</div>
               </div>
-              <div class="bg-secondary border rounded-xl p-3">
+              <div v-if="hasDiscountAmount(order.discount_amount)" class="bg-secondary border rounded-xl p-3">
                 <div class="text-xs text-muted-foreground">{{ t('orderDetail.amountDiscount') }}</div>
                 <div
                   class="font-mono mt-1"
@@ -257,7 +257,7 @@
                   {{ formatDiscountMoney(order.discount_amount, order.currency) }}
                 </div>
               </div>
-              <div class="bg-secondary border rounded-xl p-3">
+              <div v-if="hasDiscountAmount(order.promotion_discount_amount)" class="bg-secondary border rounded-xl p-3">
                 <div class="text-xs text-muted-foreground">{{ t('orderDetail.promotionDiscountLabel') }}</div>
                 <div
                   class="font-mono mt-1"

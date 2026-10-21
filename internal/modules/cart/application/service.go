@@ -20,16 +20,18 @@ type Service struct {
 	productSKURepo contract.SKUReader
 	promotionRepo  promotioncontract.Repository
 	currencyReader contract.CurrencyReader
+	uniformPricing bool
 }
 
 // NewService 创建购物车服务。
-func NewService(cartRepo contract.Repository, productRepo contract.ProductReader, productSKURepo contract.SKUReader, promotionRepo promotioncontract.Repository, currencyReader contract.CurrencyReader) *Service {
+func NewService(cartRepo contract.Repository, productRepo contract.ProductReader, productSKURepo contract.SKUReader, promotionRepo promotioncontract.Repository, currencyReader contract.CurrencyReader, uniformPricing bool) *Service {
 	return &Service{
 		cartRepo:       cartRepo,
 		productRepo:    productRepo,
 		productSKURepo: productSKURepo,
 		promotionRepo:  promotionRepo,
 		currencyReader: currencyReader,
+		uniformPricing: uniformPricing,
 	}
 }
 
@@ -83,7 +85,7 @@ func (s *Service) ListByUser(userID uint) ([]ItemDetail, error) {
 		priceCarrier := *product
 		priceCarrier.PriceAmount = sku.PriceAmount
 		unitPrice := sku.PriceAmount
-		if promotionService != nil {
+		if !s.uniformPricing && promotionService != nil {
 			_, discounted, err := promotionService.ApplyPromotion(&priceCarrier, item.Quantity)
 			if err != nil {
 				return nil, err

@@ -199,3 +199,4 @@ web:
   # 强烈建议改成不易猜测的字符串以降低自动化扫描风险
   # 例如: "/dj-mgmt-7x9k2" 或 "/console-private"
   admin_path: "/admin"
+  uniform_pricing: true # 新订单按 SKU 售价计价，停用优惠券、活动价、会员价和批发价；历史订单不变

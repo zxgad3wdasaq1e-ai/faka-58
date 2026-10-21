@@ -94,7 +94,7 @@ func TestPublicProductHTTPPromotionUsesDisplayPrice(t *testing.T) {
 		},
 	}}
 	promotions := promotionapp.NewService(promotiongormstore.New(db))
-	handler := producthttp.NewPublicHandler(queries, nil, promotions, nil, nil, nil, emptyRelatedPostReader{})
+	handler := producthttp.NewPublicHandler(queries, nil, promotions, nil, nil, nil, emptyRelatedPostReader{}, false)
 
 	router := gin.New()
 	producthttp.RegisterPublicRoutes(router, handler)

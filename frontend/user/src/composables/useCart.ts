@@ -186,7 +186,7 @@ export function useCart() {
   const quantityWarning = (item: CartItem) => quantityWarnings.value[cartItemKey(item)] || ''
 
   onMounted(() => {
-    void refreshCartStockSnapshots(cartStore)
+    void refreshCartStockSnapshots(cartStore, appStore.uniformPricing)
   })
 
   return {

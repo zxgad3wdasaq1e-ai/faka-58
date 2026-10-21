@@ -24,7 +24,12 @@ func NewHandler(c *container.Container) *publicconfigtransport.Handler {
 	}
 	fallback := publicconfigtransport.TelegramAuthFallback{}
 	googleFallback := publicconfigtransport.GoogleAuthFallback{}
+	features := publicconfigtransport.StoreFeatures{}
 	if c.Config != nil {
+		features = publicconfigtransport.StoreFeatures{
+			UniformPricing:  c.Config.Order.UniformPricing,
+			ResellerEnabled: c.Config.Reseller.Enabled,
+		}
 		fallback = publicconfigtransport.TelegramAuthFallback{
 			Enabled:     c.Config.TelegramAuth.Enabled,
 			BotUsername: c.Config.TelegramAuth.BotUsername,
@@ -45,5 +50,6 @@ func NewHandler(c *container.Container) *publicconfigtransport.Handler {
 		google,
 		googleFallback,
 		overlay,
+		features,
 	)
 }

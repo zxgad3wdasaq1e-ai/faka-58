@@ -30,6 +30,7 @@ import (
 // depend on narrow contracts only.
 func NewHandler(c *container.Container) *channeltransport.Handler {
 	return channeltransport.New(channeltransport.Dependencies{
+		UniformPricing:  c.Config.Order.UniformPricing,
 		CategoryService: c.CategoryService, CategoryRepo: c.CategoryRepo,
 		ProductService: c.ProductReadService, ProductRepo: c.ProductRepo,
 		ProductMappingRepo: c.ProductMappingRepo, SKUMappingRepo: c.SKUMappingRepo,

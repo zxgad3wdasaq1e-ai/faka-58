@@ -158,7 +158,7 @@ func (h *Handler) GetProducts(c *gin.Context) {
 
 	// 可选：通过 channel_user_id 获取用户会员等级
 	var memberLevelID uint
-	if cuid := channelUserIDFromQuery(c); cuid != "" {
+	if cuid := channelUserIDFromQuery(c); !h.UniformPricing && cuid != "" {
 		user, _, err := h.UserAuthService.ResolveTelegramChannelIdentity(TelegramIdentityInput{
 			ChannelUserID: cuid,
 		})
@@ -188,6 +188,15 @@ func (h *Handler) GetProducts(c *gin.Context) {
 
 	items := make([]productItem, 0, len(products))
 	for _, p := range products {
+		if h.UniformPricing {
+			p.WholesalePrices = nil
+			for _, sku := range p.SKUs {
+				if sku.IsActive {
+					p.PriceAmount = sku.PriceAmount
+					break
+				}
+			}
+		}
 		title := resolveLocalizedJSON(p.TitleJSON, locale, defaultLocale)
 		desc := resolveLocalizedJSON(p.DescriptionJSON, locale, defaultLocale)
 		summary := truncate(stripHTML(desc), 100)
@@ -225,7 +234,7 @@ func (h *Handler) GetProducts(c *gin.Context) {
 		}
 
 		// 计算会员价
-		if memberLevelID > 0 && h.MemberLevelService != nil {
+		if !h.UniformPricing && memberLevelID > 0 && h.MemberLevelService != nil {
 			memberPrice, _ := h.MemberLevelService.ResolveMemberPrice(memberLevelID, p.ID, 0, p.PriceAmount.Decimal)
 			if memberPrice.LessThan(p.PriceAmount.Decimal) {
 				item.MemberPriceFrom = money.FromDecimal(memberPrice).String()
@@ -270,6 +279,15 @@ func (h *Handler) GetProductDetail(c *gin.Context) {
 	}
 	fulfillmentTypeMap := h.applyUpstreamMappings(stockSlice)
 	*product = stockSlice[0]
+	if h.UniformPricing {
+		product.WholesalePrices = nil
+		for _, sku := range product.SKUs {
+			if sku.IsActive {
+				product.PriceAmount = sku.PriceAmount
+				break
+			}
+		}
+	}
 
 	currency, err := h.SettingService.GetSiteCurrency("CNY")
 	if err != nil {
@@ -292,7 +310,7 @@ func (h *Handler) GetProductDetail(c *gin.Context) {
 
 	// 可选：通过 channel_user_id 获取用户会员等级
 	var memberLevelID uint
-	if cuid := channelUserIDFromQuery(c); cuid != "" {
+	if cuid := channelUserIDFromQuery(c); !h.UniformPricing && cuid != "" {
 		user, _, err := h.UserAuthService.ResolveTelegramChannelIdentity(TelegramIdentityInput{
 			ChannelUserID: cuid,
 		})
@@ -338,7 +356,7 @@ func (h *Handler) GetProductDetail(c *gin.Context) {
 			StockRangeMax:       stockDisplay.RangeMax,
 			StockQuantityHidden: stockDisplay.QuantityHidden,
 		}
-		if memberLevelID > 0 && h.MemberLevelService != nil {
+		if !h.UniformPricing && memberLevelID > 0 && h.MemberLevelService != nil {
 			memberPrice, _ := h.MemberLevelService.ResolveMemberPrice(memberLevelID, product.ID, sku.ID, sku.PriceAmount.Decimal)
 			if memberPrice.LessThan(sku.PriceAmount.Decimal) {
 				si.MemberPrice = money.FromDecimal(memberPrice).String()
@@ -349,7 +367,7 @@ func (h *Handler) GetProductDetail(c *gin.Context) {
 
 	// 商品级会员价
 	var memberPriceFrom string
-	if memberLevelID > 0 && h.MemberLevelService != nil {
+	if !h.UniformPricing && memberLevelID > 0 && h.MemberLevelService != nil {
 		mp, _ := h.MemberLevelService.ResolveMemberPrice(memberLevelID, product.ID, 0, product.PriceAmount.Decimal)
 		if mp.LessThan(product.PriceAmount.Decimal) {
 			memberPriceFrom = money.FromDecimal(mp).String()

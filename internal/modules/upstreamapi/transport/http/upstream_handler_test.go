@@ -16,7 +16,9 @@ import (
 	procurementcontract "github.com/dujiao-next/internal/modules/procurement/contract"
 	procurementdomain "github.com/dujiao-next/internal/modules/procurement/domain"
 	siteconnectiondomain "github.com/dujiao-next/internal/modules/siteconnection/domain"
+	"github.com/dujiao-next/internal/shared/money"
 	upstreamadapter "github.com/dujiao-next/internal/upstream"
+	"github.com/shopspring/decimal"
 
 	"github.com/gin-gonic/gin"
 )
@@ -235,5 +237,38 @@ func TestCreateOrderRecreatesWhenSameDownstreamNoWasCanceled(t *testing.T) {
 	}
 	if orders.received.Items == nil {
 		t.Fatalf("expected a new order to be created, body=%s", recorder.Body.String())
+	}
+}
+
+type uniformMemberPrices struct {
+	MemberLevelService
+	calls int
+}
+
+func (s *uniformMemberPrices) ResolveMemberPrice(_, _, _ uint, price decimal.Decimal) (decimal.Decimal, decimal.Decimal) {
+	s.calls++
+	return price.Sub(decimal.NewFromInt(10)), decimal.NewFromInt(10)
+}
+
+func TestUpstreamCatalogUniformPricingIgnoresMemberAndWholesalePrices(t *testing.T) {
+	product := productdomain.Product{
+		ID: 1, PriceAmount: money.FromDecimal(decimal.NewFromInt(100)),
+		WholesalePrices: productdomain.WholesalePriceTiers{{MinQuantity: 2, UnitPrice: money.FromDecimal(decimal.NewFromInt(50))}},
+		SKUs:            []productdomain.ProductSKU{{ID: 11, IsActive: true, PriceAmount: money.FromDecimal(decimal.NewFromInt(80))}},
+	}
+	for _, uniform := range []bool{true, false} {
+		members := &uniformMemberPrices{}
+		h := &Handler{Dependencies: Dependencies{UniformPricing: uniform, MemberLevels: members}}
+		result := h.toUpstreamProductWithMemberPrice(product, 1, nil)
+		if uniform {
+			if result.PriceAmount != "80.00" || len(result.WholesalePrices) != 0 || result.MemberPrice != "" || result.OriginalPrice != "" || len(result.SKUs) != 1 || result.SKUs[0].PriceAmount != "80.00" || result.SKUs[0].MemberPrice != "" || members.calls != 0 {
+				t.Fatalf("unexpected uniform upstream prices: %#v, calls=%d", result, members.calls)
+			}
+		} else if result.PriceAmount != "90.00" || len(result.WholesalePrices) != 1 || result.MemberPrice != "90.00" || result.SKUs[0].PriceAmount != "70.00" || members.calls != 2 {
+			t.Fatalf("legacy upstream marketing missing: %#v", result)
+		}
+		if len(product.WholesalePrices) != 1 {
+			t.Fatal("stored wholesale prices changed")
+		}
 	}
 }

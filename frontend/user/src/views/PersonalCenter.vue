@@ -87,7 +87,7 @@
 
           <template v-if="currentSection === 'overview'">
             <!-- 数据一览 -->
-            <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+            <div class="grid grid-cols-2 gap-4" :class="uniformPricing ? 'lg:grid-cols-2' : 'lg:grid-cols-4'">
               <StatCard
                 :label="t('personalCenter.tabs.orders')"
                 :value="userProfileStore.loadingOrders ? '—' : userProfileStore.ordersTotal"
@@ -95,7 +95,7 @@
                 tone="info"
                 mono
               />
-              <StatCard :label="t('personalCenter.memberLevel.currentLevel')" :icon="Crown" tone="accent">
+              <StatCard v-if="!uniformPricing" :label="t('personalCenter.memberLevel.currentLevel')" :icon="Crown" tone="accent">
                 <template #value>
                   <span class="flex items-center gap-1.5">
                     <img v-if="isImagePath(userProfileStore.currentLevel?.icon)" :src="getImageUrl(userProfileStore.currentLevel!.icon)" class="h-5 w-5 shrink-0 object-contain" alt="" />
@@ -104,6 +104,7 @@
                 </template>
               </StatCard>
               <StatCard
+                v-if="!uniformPricing"
                 :label="t('personalCenter.memberLevel.discountRate')"
                 :value="discountText"
                 :icon="Percent"
@@ -121,7 +122,7 @@
             </div>
 
             <!-- Member level card -->
-            <div v-if="userProfileStore.memberLevels.length > 0" class="rounded-2xl border bg-card p-6 shadow-sm">
+            <div v-if="!uniformPricing && userProfileStore.memberLevels.length > 0" class="rounded-2xl border bg-card p-6 shadow-sm">
               <!-- Current level header -->
               <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex items-center gap-3.5">
@@ -308,7 +309,7 @@ const props = withDefaults(defineProps<{ section?: PersonalSection }>(), {
 })
 
 const {
-  userProfileStore, canAccessResellerConsole, visibleSectionItems, currentSection, globalAlert,
+  userProfileStore, canAccessResellerConsole, uniformPricing, visibleSectionItems, currentSection, globalAlert,
   displayInitial, switchSection, statusLabel, statusVariant, formatMoney, formatDate,
   emailVerifiedLabel, emailVerifiedVariant, discountText, isImagePath, levelName,
 } = usePersonalCenter(() => props.section)

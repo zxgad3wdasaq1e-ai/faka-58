@@ -2,6 +2,7 @@ package channelhttp
 
 import (
 	"encoding/json"
+	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
 	"testing"
 	"time"
 
@@ -555,5 +556,88 @@ func TestProvisionTelegramIdentityInviteErrorCodes(t *testing.T) {
 	respondChannelIdentityServiceError(c, userauthapp.ErrRegistrationDisabled)
 	if recorder.Code != http.StatusForbidden || !strings.Contains(recorder.Body.String(), `"error_code":"registration_disabled"`) {
 		t.Fatalf("registration disabled: status=%d body=%s", recorder.Code, recorder.Body.String())
+	}
+}
+
+type uniformCatalogProducts struct {
+	ProductService
+	product productdomain.Product
+}
+
+func (s uniformCatalogProducts) ListPublic(string, string, int, int) ([]productdomain.Product, int64, error) {
+	return []productdomain.Product{s.product}, 1, nil
+}
+func (s uniformCatalogProducts) ApplyAutoStockCounts([]productdomain.Product) error { return nil }
+func (s uniformCatalogProducts) GetByID(string) (*productdomain.Product, error) {
+	p := s.product
+	return &p, nil
+}
+
+type uniformCatalogSettings struct{ Settings }
+
+func (uniformCatalogSettings) GetSiteCurrency(string) (string, error) { return "CNY", nil }
+
+type uniformCatalogIdentity struct{ IdentityService }
+
+func (uniformCatalogIdentity) ResolveTelegramChannelIdentity(TelegramIdentityInput) (*userdomain.User, *externalidentitydomain.Identity, error) {
+	return &userdomain.User{MemberLevelID: 1}, nil, nil
+}
+
+type uniformCatalogMembers struct{ calls int }
+
+func (s *uniformCatalogMembers) ResolveMemberPrice(_, _, _ uint, price decimal.Decimal) (decimal.Decimal, decimal.Decimal) {
+	s.calls++
+	return price.Sub(decimal.NewFromInt(10)), decimal.NewFromInt(10)
+}
+
+func TestTelegramCatalogUniformPricingMatchesSKUAndHidesMarketing(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	product := productdomain.Product{
+		ID: 1, IsActive: true, PriceAmount: money.FromDecimal(decimal.NewFromInt(100)),
+		WholesalePrices: productdomain.WholesalePriceTiers{{MinQuantity: 2, UnitPrice: money.FromDecimal(decimal.NewFromInt(50))}},
+		SKUs:            []productdomain.ProductSKU{{ID: 11, IsActive: true, PriceAmount: money.FromDecimal(decimal.NewFromInt(80))}},
+	}
+	product.Category.IsActive = true
+	products := uniformCatalogProducts{product: product}
+	for _, uniform := range []bool{true, false} {
+		members := &uniformCatalogMembers{}
+		h := &Handler{Dependencies: Dependencies{UniformPricing: uniform, ProductService: products, ProductRepo: products, SettingService: uniformCatalogSettings{}, UserAuthService: uniformCatalogIdentity{}, MemberLevelService: members}}
+		router := gin.New()
+		router.GET("/products", h.GetProducts)
+		router.GET("/products/:id", h.GetProductDetail)
+		for _, path := range []string{"/products?channel_user_id=1", "/products/1?channel_user_id=1"} {
+			recorder := httptest.NewRecorder()
+			router.ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, path, nil))
+			var envelope struct {
+				Data map[string]interface{} `json:"data"`
+			}
+			if err := json.Unmarshal(recorder.Body.Bytes(), &envelope); err != nil {
+				t.Fatal(err)
+			}
+			item := envelope.Data
+			if rows, ok := item["items"].([]interface{}); ok {
+				item = rows[0].(map[string]interface{})
+			}
+			wholesale, _ := item["wholesale_prices"].([]interface{})
+			if uniform {
+				if item["price_from"] != "80.00" || len(wholesale) != 0 || members.calls != 0 {
+					t.Fatalf("uniform telegram prices=%s, calls=%d", recorder.Body.String(), members.calls)
+				}
+				if price, _ := item["member_price_from"].(string); price != "" {
+					t.Fatalf("unexpected member price: %s", recorder.Body.String())
+				}
+			} else if item["price_from"] != "100.00" || item["member_price_from"] != "90.00" || len(wholesale) != 1 {
+				t.Fatalf("legacy telegram marketing missing: %s", recorder.Body.String())
+			}
+			if skus, ok := item["skus"].([]interface{}); ok {
+				sku := skus[0].(map[string]interface{})
+				if sku["price"] != "80.00" {
+					t.Fatalf("SKU base price changed: %#v", sku)
+				}
+				if uniform && sku["member_price"] != nil {
+					t.Fatalf("unexpected SKU member price: %#v", sku)
+				}
+			}
+		}
 	}
 }

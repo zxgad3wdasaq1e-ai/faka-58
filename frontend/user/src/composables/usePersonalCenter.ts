@@ -1,7 +1,7 @@
 import { computed, onMounted, ref, type Component } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Banknote, Home, ShoppingBag, Wallet, Gift, ShieldCheck, UserCircle, Megaphone, Key } from 'lucide-vue-next'
+import { Banknote, Home, ShoppingBag, Wallet, ShieldCheck, UserCircle, Megaphone } from 'lucide-vue-next'
 import { orderStatusLabel, orderStatusVariant } from '../utils/status'
 import type { PageAlert } from '../utils/alerts'
 import { useAppStore } from '../stores/app'
@@ -31,9 +31,7 @@ export function usePersonalCenter(sectionGetter: () => PersonalSection) {
     { key: 'wallet', label: 'personalCenter.tabs.wallet', icon: Wallet },
     { key: 'affiliate', label: 'personalCenter.tabs.affiliate', icon: Megaphone },
     { key: 'reseller', label: 'personalCenter.tabs.reseller', icon: Banknote },
-    { key: 'giftCard', label: 'personalCenter.tabs.giftCard', icon: Gift },
     { key: 'security', label: 'personalCenter.tabs.security', icon: ShieldCheck },
-    { key: 'api', label: 'personalCenter.tabs.api', icon: Key },
     { key: 'profile', label: 'personalCenter.tabs.profile', icon: UserCircle },
   ]
 
@@ -50,6 +48,7 @@ export function usePersonalCenter(sectionGetter: () => PersonalSection) {
   }
 
   const canAccessResellerConsole = computed(() => appStore.canAccessResellerConsole)
+  const uniformPricing = computed(() => appStore.uniformPricing)
   const visibleSectionItems = computed(() => {
     return sectionItems.filter((item) => item.key !== 'reseller' || canAccessResellerConsole.value)
   })
@@ -133,7 +132,7 @@ export function usePersonalCenter(sectionGetter: () => PersonalSection) {
     const [profileOk] = await Promise.all([
       userProfileStore.loadProfile(),
       userProfileStore.loadRecentOrders(5),
-      userProfileStore.loadMemberLevels(),
+      ...(!uniformPricing.value ? [userProfileStore.loadMemberLevels()] : []),
     ])
     if (!profileOk) {
       globalAlert.value = {
@@ -150,6 +149,7 @@ export function usePersonalCenter(sectionGetter: () => PersonalSection) {
   return {
     userProfileStore,
     canAccessResellerConsole,
+    uniformPricing,
     visibleSectionItems,
     currentSection,
     globalAlert,
