@@ -3,8 +3,8 @@ package domain
 import (
 	"time"
 
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
-	"github.com/dujiao-next/internal/shared/money"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 // Order 订单表

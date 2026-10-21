@@ -3,7 +3,7 @@ package productcontract
 import (
 	"time"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 )
 
 // ListFilter 描述 Catalog 商品列表的持久化筛选条件。

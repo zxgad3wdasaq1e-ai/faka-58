@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/shopspring/decimal"
 )
@@ -18,7 +18,7 @@ func TestGetOverviewUsesOrderCreationWindowForPaidGMV(t *testing.T) {
 
 	paidOutsideWindow := now.Add(24 * time.Hour)
 	inWindowOrder := &orderdomain.Order{
-		OrderNo:        "DJ-GMV-IN-WINDOW",
+		OrderNo:        "FAKA-58-GMV-IN-WINDOW",
 		UserID:         1,
 		Status:         constants.OrderStatusPaid,
 		Currency:       "CNY",
@@ -34,7 +34,7 @@ func TestGetOverviewUsesOrderCreationWindowForPaidGMV(t *testing.T) {
 
 	paidInsideWindow := now
 	outOfWindowOrder := &orderdomain.Order{
-		OrderNo:        "DJ-GMV-OUT-WINDOW",
+		OrderNo:        "FAKA-58-GMV-OUT-WINDOW",
 		UserID:         1,
 		Status:         constants.OrderStatusPaid,
 		Currency:       "CNY",
@@ -50,7 +50,7 @@ func TestGetOverviewUsesOrderCreationWindowForPaidGMV(t *testing.T) {
 
 	deletedAt := now.Add(time.Minute)
 	deletedInWindowOrder := &orderdomain.Order{
-		OrderNo:        "DJ-GMV-DELETED-IN-WINDOW",
+		OrderNo:        "FAKA-58-GMV-DELETED-IN-WINDOW",
 		UserID:         1,
 		Status:         constants.OrderStatusPaid,
 		Currency:       "CNY",

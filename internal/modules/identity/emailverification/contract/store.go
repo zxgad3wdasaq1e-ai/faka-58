@@ -3,7 +3,7 @@ package emailverificationcontract
 import (
 	"time"
 
-	emailverificationdomain "github.com/dujiao-next/internal/modules/identity/emailverification/domain"
+	emailverificationdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/emailverification/domain"
 )
 
 type Store interface {

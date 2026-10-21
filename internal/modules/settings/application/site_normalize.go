@@ -1,14 +1,16 @@
 package settingsapp
 
 import (
-	settingsvalue "github.com/dujiao-next/internal/modules/settings/schema/value"
+	settingsvalue "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/value"
+	"maps"
 	"regexp"
 	"strings"
 
-	"github.com/dujiao-next/internal/constants"
-	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
-	"github.com/dujiao-next/internal/shared/contactlink"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	settingsstorefront "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/storefront"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/contactlink"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/mailbrand"
 )
 
 var settingSupportedLanguages = append([]string(nil), constants.SupportedLocales...)
@@ -33,6 +35,7 @@ const (
 
 // normalizeSiteSetting 归一化站点配置结构。
 func normalizeSiteSetting(value map[string]interface{}) jsonmap.JSON {
+	value = normalizeLegacySiteIdentity(value)
 	normalized := make(jsonmap.JSON, len(value)+8)
 	for key, raw := range value {
 		normalized[key] = raw
@@ -334,15 +337,15 @@ func normalizeSiteTemplateMode(raw interface{}) string {
 	return "card"
 }
 
-// normalizeStorefrontTemplate 保留已选模板，新安装默认使用 getgpt。
+// normalizeStorefrontTemplate 保留已选模板，新安装默认使用 faka-58，兼容旧 getgpt 配置。
 func normalizeStorefrontTemplate(raw interface{}) string {
 	switch normalizeSettingText(raw) {
 	case constants.StorefrontTemplateClassic:
 		return constants.StorefrontTemplateClassic
 	case constants.StorefrontTemplateVault:
 		return constants.StorefrontTemplateVault
-	case constants.StorefrontTemplateGetgpt:
-		return constants.StorefrontTemplateGetgpt
+	case constants.StorefrontTemplateFaka58, "getgpt":
+		return constants.StorefrontTemplateFaka58
 	}
 	return constants.StorefrontTemplateDefault
 }
@@ -524,4 +527,52 @@ func normalizeRegistrationSetting(value map[string]interface{}) jsonmap.JSON {
 	normalized[constants.SettingFieldRegistrationInviteOnly] = settingsvalue.ParseBool(value[constants.SettingFieldRegistrationInviteOnly])
 
 	return normalized
+}
+
+// Normalize only known built-in values on read and when settings are saved.
+// Never mutate the stored map or rewrite an operator's custom brand or links.
+func normalizeLegacySiteIdentity(value jsonmap.JSON) jsonmap.JSON {
+	if value == nil {
+		return nil
+	}
+	result := maps.Clone(value)
+	if brand := settingsvalue.ToStringAnyMap(value["brand"]); brand != nil {
+		brand = maps.Clone(brand)
+		if name, ok := brand["site_name"].(string); ok {
+			brand["site_name"] = mailbrand.NormalizeName(name)
+		}
+		result["brand"] = brand
+	}
+	if template, ok := value[constants.SettingFieldStorefrontTemplate].(string); ok && template == "getgpt" {
+		result[constants.SettingFieldStorefrontTemplate] = constants.StorefrontTemplateFaka58
+	}
+	if contact := settingsvalue.ToStringAnyMap(value["contact"]); contact != nil {
+		contact = maps.Clone(contact)
+		if contact["telegram"] == "https://telegram.me/dujiaoka" || contact["telegram"] == "https://t.me/dujiaoka" {
+			contact["telegram"] = ""
+		}
+		if contact["whatsapp"] == "https://wa.me/1234567890" {
+			contact["whatsapp"] = ""
+		}
+		result["contact"] = contact
+	}
+	if seo := settingsvalue.ToStringAnyMap(value["seo"]); seo != nil {
+		seo = maps.Clone(seo)
+		if titles := settingsvalue.ToStringAnyMap(seo["title"]); titles != nil {
+			titles = maps.Clone(titles)
+			for locale, title := range titles {
+				switch title {
+				case "XOPEN AI · AI 订阅与数字商品", "XIOEN AI · AI 订阅与数字商品":
+					titles[locale] = "faka-58 · AI 订阅与数字商品"
+				case "XOPEN AI · AI 訂閱與數位商品", "XIOEN AI · AI 訂閱與數位商品":
+					titles[locale] = "faka-58 · AI 訂閱與數位商品"
+				case "XOPEN AI · AI subscriptions and digital services", "XIOEN AI · AI subscriptions and digital services":
+					titles[locale] = "faka-58 · AI subscriptions and digital services"
+				}
+			}
+			seo["title"] = titles
+		}
+		result["seo"] = seo
+	}
+	return result
 }

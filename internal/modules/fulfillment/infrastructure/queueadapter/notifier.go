@@ -3,9 +3,9 @@ package queueadapter
 import (
 	"strings"
 
-	fulfillmentapp "github.com/dujiao-next/internal/modules/fulfillment/application"
+	fulfillmentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/application"
 
-	"github.com/dujiao-next/internal/queue"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
 )
 
 // BotNotifier 把平台队列适配成交付通知端口。

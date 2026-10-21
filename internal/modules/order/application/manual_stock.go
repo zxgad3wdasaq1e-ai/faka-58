@@ -4,11 +4,11 @@ import (
 	"strconv"
 	"strings"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
 
-	"github.com/dujiao-next/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
 )
 
 type manualStockSummary struct {

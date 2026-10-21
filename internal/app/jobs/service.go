@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 
-	jobconsumer "github.com/dujiao-next/internal/app/jobs/consumer"
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/logger"
-	settingsintegration "github.com/dujiao-next/internal/modules/settings/schema/integration"
-	"github.com/dujiao-next/internal/queue"
+	jobconsumer "github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/jobs/consumer"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	settingsintegration "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/integration"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
 
 	"github.com/hibiken/asynq"
 )

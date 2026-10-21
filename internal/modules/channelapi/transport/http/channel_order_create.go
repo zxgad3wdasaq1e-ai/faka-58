@@ -1,9 +1,9 @@
 package channelhttp
 
 import (
-	"github.com/dujiao-next/internal/logger"
-	"github.com/dujiao-next/internal/platform/http/response"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 
 	"github.com/gin-gonic/gin"
 )

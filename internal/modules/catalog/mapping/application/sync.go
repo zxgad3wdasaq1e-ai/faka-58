@@ -8,20 +8,20 @@ import (
 	"sync"
 	"time"
 
-	mappingcontract "github.com/dujiao-next/internal/modules/catalog/mapping/contract"
-	mappingdomain "github.com/dujiao-next/internal/modules/catalog/mapping/domain"
-	siteconnectioncontract "github.com/dujiao-next/internal/modules/siteconnection/contract"
+	mappingcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/contract"
+	mappingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/domain"
+	siteconnectioncontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/contract"
 
-	siteconnectiondomain "github.com/dujiao-next/internal/modules/siteconnection/domain"
+	siteconnectiondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/domain"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	"github.com/dujiao-next/internal/cache"
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/logger"
-	settingsintegration "github.com/dujiao-next/internal/modules/settings/schema/integration"
-	"github.com/dujiao-next/internal/shared/money"
-	"github.com/dujiao-next/internal/upstream"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/cache"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	settingsintegration "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/integration"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/upstream"
 
 	"github.com/shopspring/decimal"
 )

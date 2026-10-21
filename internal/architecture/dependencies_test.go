@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-const moduleImportPath = "github.com/dujiao-next"
+const moduleImportPath = "github.com/zxgad3wdasaq1e-ai/faka-58"
 
 type importViolation struct {
 	file       string

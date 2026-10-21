@@ -4,8 +4,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/logger"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
 
 	"go.uber.org/zap"
 )

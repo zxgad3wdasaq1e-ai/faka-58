@@ -4,14 +4,14 @@ import (
 	"context"
 	"errors"
 
-	mappingapp "github.com/dujiao-next/internal/modules/catalog/mapping/application"
-	mappingcontract "github.com/dujiao-next/internal/modules/catalog/mapping/contract"
-	mappingdomain "github.com/dujiao-next/internal/modules/catalog/mapping/domain"
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	siteconnectioncontract "github.com/dujiao-next/internal/modules/siteconnection/contract"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
-	"github.com/dujiao-next/internal/upstream"
+	mappingapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/application"
+	mappingcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/contract"
+	mappingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/domain"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	siteconnectioncontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/upstream"
 
 	"github.com/gin-gonic/gin"
 )

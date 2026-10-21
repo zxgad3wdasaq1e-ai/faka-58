@@ -1,8 +1,8 @@
 package settingshttp
 
 import (
-	captcha "github.com/dujiao-next/internal/modules/captcha/contract"
-	settingssecurity "github.com/dujiao-next/internal/modules/settings/schema/security"
+	captcha "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/contract"
+	settingssecurity "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/security"
 
 	"github.com/gin-gonic/gin"
 )

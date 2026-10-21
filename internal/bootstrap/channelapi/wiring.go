@@ -4,25 +4,25 @@ import (
 	"errors"
 	"fmt"
 
-	paymentapp "github.com/dujiao-next/internal/modules/payment/application"
-	paymentcontract "github.com/dujiao-next/internal/modules/payment/contract"
+	paymentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/application"
+	paymentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/contract"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	orderapp "github.com/dujiao-next/internal/modules/order/application"
-	ordercontract "github.com/dujiao-next/internal/modules/order/contract"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application"
+	ordercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/contract"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/app/container"
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	"github.com/dujiao-next/internal/modules/catalog/product/manualform"
-	channeltransport "github.com/dujiao-next/internal/modules/channelapi/transport/http"
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
-	userauthapp "github.com/dujiao-next/internal/modules/identity/userauth/application"
-	orderriskcontract "github.com/dujiao-next/internal/modules/orderrisk/contract"
-	walletcontract "github.com/dujiao-next/internal/modules/wallet/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/manualform"
+	channeltransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/channelapi/transport/http"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
+	userauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/application"
+	orderriskcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/orderrisk/contract"
+	walletcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/contract"
 )
 
 // NewHandler connects application services to the channel HTTP

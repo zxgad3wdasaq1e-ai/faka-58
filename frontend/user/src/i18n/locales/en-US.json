@@ -1,6 +1,6 @@
 {
   "common": {
-    "siteName": "XOPEN AI",
+    "siteName": "faka-58",
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
@@ -115,7 +115,7 @@
   },
   "home": {
     "hero": {
-      "title": "XOPEN AI",
+      "title": "faka-58",
       "subtitle": "Professional Products and Services Provider",
       "cta": "Browse Products",
       "badge": "Next Gen Digital Store"
@@ -262,8 +262,8 @@
   },
   "about": {
     "title": "About Us",
-    "subtitle": "Learn about XOPEN AI",
-    "introduction": "XOPEN AI provides AI subscriptions and digital goods, with online ordering, payments, and order tracking. Product descriptions explain the included content, delivery methods, and after-sales terms.",
+    "subtitle": "Learn about faka-58",
+    "introduction": "faka-58 provides AI subscriptions and digital goods, with online ordering, payments, and order tracking. Product descriptions explain the included content, delivery methods, and after-sales terms.",
     "ourServices": "Our Services",
     "service1": "Premium Product Recommendations & Sales",
     "service2": "Professional Pre-sales Consulting",

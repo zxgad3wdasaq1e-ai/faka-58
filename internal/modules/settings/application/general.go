@@ -3,15 +3,15 @@ package settingsapp
 import (
 	"encoding/json"
 	"errors"
-	settingsvalue "github.com/dujiao-next/internal/modules/settings/schema/value"
+	settingsvalue "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/value"
 	"net/mail"
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/constants"
-	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	settingsstorefront "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/storefront"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 var (

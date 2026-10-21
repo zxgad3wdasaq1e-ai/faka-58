@@ -123,10 +123,10 @@ const router = createRouter({
         { path: '/codex', redirect: '/products?search=Codex' },
         { path: '/purchase-go', redirect: '/products?search=Go' },
         { path: '/purchase_credits', redirect: '/products?search=Codex' },
-        { path: '/gptpro', component: () => import('../templates/getgpt/Pro.vue') },
-        { path: '/faq', component: () => import('../templates/getgpt/Faq.vue') },
-        { path: '/guide', component: () => import('../templates/getgpt/Guide.vue') },
-        { path: '/help', component: () => import('../templates/getgpt/Guide.vue') },
+        { path: '/gptpro', component: () => import('../templates/faka-58/Pro.vue') },
+        { path: '/faq', component: () => import('../templates/faka-58/Faq.vue') },
+        { path: '/guide', component: () => import('../templates/faka-58/Guide.vue') },
+        { path: '/help', component: () => import('../templates/faka-58/Guide.vue') },
         {
             path: '/',
             name: 'home',
@@ -137,7 +137,7 @@ const router = createRouter({
             name: 'products',
             component: () => {
                 const appStore = useAppStore()
-                return getActiveTemplate() !== 'getgpt' && appStore.config?.template_mode === 'list'
+                return getActiveTemplate() !== 'faka-58' && appStore.config?.template_mode === 'list'
                     ? templateView('Home', homeViewLoader)()
                     : templateView('Products', productsViewLoader)()
             },
@@ -147,7 +147,7 @@ const router = createRouter({
             name: 'category-products',
             component: () => {
                 const appStore = useAppStore()
-                return getActiveTemplate() !== 'getgpt' && appStore.config?.template_mode === 'list'
+                return getActiveTemplate() !== 'faka-58' && appStore.config?.template_mode === 'list'
                     ? templateView('Home', homeViewLoader)()
                     : templateView('Products', productsViewLoader)()
             },

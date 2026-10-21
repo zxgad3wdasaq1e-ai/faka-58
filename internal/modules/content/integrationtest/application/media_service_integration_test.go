@@ -8,12 +8,12 @@ import (
 	"testing"
 	"time"
 
-	contentapp "github.com/dujiao-next/internal/modules/content/application"
-	contentcontract "github.com/dujiao-next/internal/modules/content/contract"
-	contentdomain "github.com/dujiao-next/internal/modules/content/domain"
-	localfilestore "github.com/dujiao-next/internal/modules/content/infrastructure/filestore/local"
-	"github.com/dujiao-next/internal/modules/content/infrastructure/gormstore"
 	"github.com/glebarez/sqlite"
+	contentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/application"
+	contentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/contract"
+	contentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/domain"
+	localfilestore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/infrastructure/filestore/local"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/infrastructure/gormstore"
 	"gorm.io/gorm"
 )
 

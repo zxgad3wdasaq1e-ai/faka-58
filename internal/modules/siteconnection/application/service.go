@@ -5,12 +5,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/crypto"
-	"github.com/dujiao-next/internal/logger"
-	siteconnectioncontract "github.com/dujiao-next/internal/modules/siteconnection/contract"
-	siteconnectiondomain "github.com/dujiao-next/internal/modules/siteconnection/domain"
-	"github.com/dujiao-next/internal/upstream"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/crypto"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	siteconnectioncontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/contract"
+	siteconnectiondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/upstream"
 
 	"github.com/shopspring/decimal"
 )

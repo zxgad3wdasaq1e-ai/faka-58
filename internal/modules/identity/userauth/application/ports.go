@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
-	googleauthapp "github.com/dujiao-next/internal/modules/identity/googleauth/application"
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	"github.com/dujiao-next/internal/shared/mailbrand"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
+	googleauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/googleauth/application"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/mailbrand"
 )
 
 // VerificationEmailSender defines the only email capability required by user

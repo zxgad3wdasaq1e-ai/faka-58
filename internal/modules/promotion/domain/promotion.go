@@ -3,7 +3,7 @@ package domain
 import (
 	"time"
 
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 // Promotion 活动价/折扣规则

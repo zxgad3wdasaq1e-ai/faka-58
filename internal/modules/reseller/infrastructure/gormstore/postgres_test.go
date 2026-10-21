@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

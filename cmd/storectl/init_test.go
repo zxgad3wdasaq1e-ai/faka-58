@@ -74,6 +74,13 @@ func TestInitCompatibleConfigurationAndPermissions(t *testing.T) {
 	if config["email"].(map[string]any)["enabled"] != false || config["upload"].(map[string]any)["storage"] != "local" {
 		t.Fatal("new installation must disable mail and use local image storage")
 	}
+	if config["app"].(map[string]any)["totp_issuer"] != "faka-58" || config["email"].(map[string]any)["from_name"] != "faka-58" || config["redis"].(map[string]any)["prefix"] != "faka-58" {
+		t.Fatal("new installation must use the current project identity")
+	}
+	dsn := config["database"].(map[string]any)["dsn"].(string)
+	if !strings.Contains(dsn, "user=faka-58 ") || !strings.Contains(dsn, "dbname=faka-58 ") {
+		t.Fatal("PostgreSQL defaults must use the current project name")
+	}
 	proxies := config["server"].(map[string]any)["trusted_proxies"].([]any)
 	if len(proxies) != 1 || proxies[0] != "172.29.240.10/32" {
 		t.Fatal("Gin must only trust the exact Caddy container address")
@@ -83,11 +90,14 @@ func TestInitCompatibleConfigurationAndPermissions(t *testing.T) {
 		t.Fatal("initial administrator password does not satisfy policy")
 	}
 	env, err := os.ReadFile(filepath.Join(options.Root, ".env"))
-	if err != nil || !strings.Contains(string(env), "APP_IMAGE="+testImage+"\n") || !strings.Contains(string(env), "COMPOSE_PROJECT_NAME=getgpt\n") {
+	if err != nil || !strings.Contains(string(env), "APP_IMAGE="+testImage+"\n") || !strings.Contains(string(env), "COMPOSE_PROJECT_NAME=faka-58\n") {
 		t.Fatal("environment image or project does not match installation state")
 	}
 	if !strings.Contains(string(env), "CADDY_PROXY_MODE=direct\n") {
 		t.Fatal("fresh installs must explicitly default to direct proxy mode")
+	}
+	if !strings.Contains(string(env), "POSTGRES_DB=faka-58\n") || !strings.Contains(string(env), "POSTGRES_APP_USER=faka-58\n") {
+		t.Fatal("PostgreSQL container defaults must match the generated DSN")
 	}
 	template, _ := os.ReadFile(filepath.Join(options.Root, "deploy", "Caddyfile"))
 	generated, err := os.ReadFile(filepath.Join(options.Root, "deploy", "runtime", "Caddyfile"))

@@ -1,8 +1,8 @@
 package categorypresenter
 
 import (
-	categorydomain "github.com/dujiao-next/internal/modules/catalog/category/domain"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	categorydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 // Category 是公开分类响应；不暴露数据库软删除和内部时间字段。

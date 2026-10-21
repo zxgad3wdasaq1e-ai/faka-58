@@ -5,37 +5,37 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	userauthgormstore "github.com/dujiao-next/internal/modules/identity/userauth/infrastructure/gormstore"
+	userauthgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/infrastructure/gormstore"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	affiliatedomain "github.com/dujiao-next/internal/modules/affiliate/domain"
-	affiliategormstore "github.com/dujiao-next/internal/modules/affiliate/infrastructure/gormstore"
+	affiliatedomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/domain"
+	affiliategormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/infrastructure/gormstore"
 
-	userstore "github.com/dujiao-next/internal/modules/identity/user/infrastructure/gormstore"
+	userstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/infrastructure/gormstore"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
-	settingsstore "github.com/dujiao-next/internal/modules/settings/infrastructure/gormstore"
-	settingsintegration "github.com/dujiao-next/internal/modules/settings/schema/integration"
-	"github.com/dujiao-next/internal/shared/money"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
+	settingsstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/infrastructure/gormstore"
+	settingsintegration "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/integration"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/constants"
-	affiliateapp "github.com/dujiao-next/internal/modules/affiliate/application"
-	affiliatetransport "github.com/dujiao-next/internal/modules/affiliate/transport/http"
-	emailverificationdomain "github.com/dujiao-next/internal/modules/identity/emailverification/domain"
-	emailverificationstore "github.com/dujiao-next/internal/modules/identity/emailverification/infrastructure/gormstore"
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
-	externalidentitystore "github.com/dujiao-next/internal/modules/identity/externalidentity/infrastructure/gormstore"
-	userauthapp "github.com/dujiao-next/internal/modules/identity/userauth/application"
-	"github.com/dujiao-next/internal/platform/database/gormdb"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	affiliateapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/application"
+	affiliatetransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/transport/http"
+	emailverificationdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/emailverification/domain"
+	emailverificationstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/emailverification/infrastructure/gormstore"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
+	externalidentitystore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/infrastructure/gormstore"
+	userauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/database/gormdb"
 
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"
@@ -252,7 +252,7 @@ func TestChannelAffiliateListsCommissionAndWithdrawRecords(t *testing.T) {
 	}
 	order := orderdomain.Order{
 		UserID:         user.ID,
-		OrderNo:        "DJ-AFF-001",
+		OrderNo:        "FAKA-58-AFF-001",
 		Status:         constants.OrderStatusPaid,
 		Currency:       "CNY",
 		OriginalAmount: money.FromDecimal(decimal.RequireFromString("100.00")),
@@ -307,8 +307,8 @@ func TestChannelAffiliateListsCommissionAndWithdrawRecords(t *testing.T) {
 	if !ok {
 		t.Fatalf("expected commission item map, got=%T", items[0])
 	}
-	if item["order_no"] != "DJ-AFF-001" {
-		t.Fatalf("expected order_no=DJ-AFF-001, got=%v", item["order_no"])
+	if item["order_no"] != "FAKA-58-AFF-001" {
+		t.Fatalf("expected order_no=FAKA-58-AFF-001, got=%v", item["order_no"])
 	}
 	if item["commission_amount"] != "10.00" {
 		t.Fatalf("expected commission_amount=10.00, got=%v", item["commission_amount"])
@@ -450,7 +450,7 @@ func TestChannelAffiliateApplyWithdraw(t *testing.T) {
 	}
 	order := orderdomain.Order{
 		UserID:         user.ID,
-		OrderNo:        "DJ-AFF-WD-001",
+		OrderNo:        "FAKA-58-AFF-WD-001",
 		Status:         constants.OrderStatusPaid,
 		Currency:       "CNY",
 		OriginalAmount: money.FromDecimal(decimal.RequireFromString("200.00")),

@@ -2,13 +2,13 @@ package userstore
 
 import (
 	"errors"
-	"github.com/dujiao-next/internal/persistence/gormutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/persistence/gormutil"
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	usercontract "github.com/dujiao-next/internal/modules/identity/user/contract"
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	usercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/contract"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
 	"gorm.io/gorm"
 )

@@ -63,7 +63,7 @@ def backup(output: Path) -> None:
             compose("stop", *stopped)
         # Binary stdout is written by Python, avoiding PowerShell text encoding.
         with (output / "database.dump").open("wb") as handle:
-            compose("exec", "-T", "postgres", "pg_dump", "-U", "postgres", "-d", "getgpt", "-Fc", stdout=handle)
+            compose("exec", "-T", "postgres", "sh", "-ec", 'exec pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc', stdout=handle)
         for relative in (".env", "config.yml", "deploy/secrets", "deploy/runtime"):
             source = ROOT / relative
             destination = output / "private" / relative
@@ -112,7 +112,7 @@ def restore(source: Path, confirmed: bool) -> None:
     else:
         if any((ROOT / item).exists() for item in (".env", "config.yml", "deploy/secrets", "deploy/runtime")):
             raise ValueError("当前目录已有部署配置。请在全新的 Git checkout 中恢复；不会覆盖现有密钥。")
-        project = "getgpt"
+        project = "faka-58"
         for line in (source / "private/.env").read_text(encoding="utf-8").splitlines():
             if line.startswith("COMPOSE_PROJECT_NAME="):
                 project = line.partition("=")[2].strip()
@@ -166,7 +166,7 @@ def restore(source: Path, confirmed: bool) -> None:
     if not progress["database_restored"]:
         compose("up", "-d", "--wait", "postgres")
         with (source / "database.dump").open("rb") as handle:
-            compose("exec", "-T", "postgres", "pg_restore", "-U", "postgres", "-d", "getgpt", "--clean", "--if-exists", "--exit-on-error", "--single-transaction", stdin=handle)
+            compose("exec", "-T", "postgres", "sh", "-ec", 'exec pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" --clean --if-exists --exit-on-error --single-transaction', stdin=handle)
         progress["database_restored"] = True
         checkpoint()
     state = json.loads((ROOT / "deploy/runtime/installation.json").read_text(encoding="utf-8"))

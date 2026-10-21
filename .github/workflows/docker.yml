@@ -35,6 +35,25 @@ jobs:
             python3 scripts/setup.py --local
           fi
           docker compose config --quiet
+      - name: Verify new and existing deployment names
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, subprocess, tempfile
+          def rendered(*arguments):
+              return json.loads(subprocess.check_output(['docker', 'compose', *arguments, 'config', '--format', 'json'], text=True))
+          current = rendered()
+          assert current['name'] == 'faka-58'
+          assert current['services']['postgres']['environment']['POSTGRES_DB'] == 'faka-58'
+          assert current['services']['postgres']['environment']['POSTGRES_APP_USER'] == 'faka-58'
+          with tempfile.TemporaryDirectory() as temporary:
+              legacy_env = pathlib.Path(temporary) / 'legacy.env'
+              legacy_env.write_text('COMPOSE_PROJECT_NAME=getgpt\n', encoding='utf-8')
+              legacy = rendered('--env-file', str(legacy_env))
+          assert legacy['name'] == 'getgpt'
+          assert legacy['services']['postgres']['environment']['POSTGRES_DB'] == 'getgpt'
+          assert legacy['services']['postgres']['environment']['POSTGRES_APP_USER'] == 'getgpt'
+          assert legacy['volumes']['postgres_data']['name'] == 'getgpt_postgres_data'
+          PY
       - name: Build and start services
         run: docker compose up -d --build --wait --wait-timeout 300
       - name: Verify database, API, catalog and idempotent initialization
@@ -51,7 +70,7 @@ jobs:
           for slug in ('chatgpt-plus', 'chatgpt-pro-100', 'chatgpt-pro-200'):
               assert slugs.count(slug) == 1, slugs
           with urllib.request.urlopen(base + '/') as response:
-              assert 'XOPEN AI' in response.read().decode()
+              assert 'faka-58' in response.read().decode()
           PY
       - name: Save diagnostic logs
         if: failure()

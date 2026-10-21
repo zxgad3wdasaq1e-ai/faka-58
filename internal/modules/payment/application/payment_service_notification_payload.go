@@ -4,17 +4,17 @@ import (
 	"fmt"
 	"strings"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	orderapp "github.com/dujiao-next/internal/modules/order/application"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	walletdomain "github.com/dujiao-next/internal/modules/wallet/domain"
+	walletdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	notificationformat "github.com/dujiao-next/internal/modules/notification/application/format"
-	settingsmessaging "github.com/dujiao-next/internal/modules/settings/schema/messaging"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	notificationformat "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/application/format"
+	settingsmessaging "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/messaging"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 
 	"github.com/shopspring/decimal"
 )

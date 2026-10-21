@@ -1,6 +1,6 @@
 package application
 
-import procurementcontract "github.com/dujiao-next/internal/modules/procurement/contract"
+import procurementcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/procurement/contract"
 
 type Options struct {
 	Repository         procurementcontract.Repository

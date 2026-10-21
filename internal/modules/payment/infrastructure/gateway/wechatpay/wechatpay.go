@@ -19,8 +19,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/common"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/common"
 
 	"github.com/shopspring/decimal"
 	"github.com/wechatpay-apiv3/wechatpay-go/core"
@@ -752,7 +752,7 @@ func newSecurityEchoMessage() (string, error) {
 	if _, err := rand.Read(randomBytes); err != nil {
 		return "", err
 	}
-	return "dujiao-next-" + hex.EncodeToString(randomBytes), nil
+	return "faka-58-" + hex.EncodeToString(randomBytes), nil
 }
 
 func validatePrivateKey(raw string) error {

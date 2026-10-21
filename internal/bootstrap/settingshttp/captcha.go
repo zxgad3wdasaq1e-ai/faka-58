@@ -1,10 +1,10 @@
 package settingsbootstrap
 
 import (
-	"github.com/dujiao-next/internal/config"
-	captchaapp "github.com/dujiao-next/internal/modules/captcha/application"
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
-	settingssecurity "github.com/dujiao-next/internal/modules/settings/schema/security"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	captchaapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/application"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
+	settingssecurity "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/security"
 )
 
 type settingsCaptchaAdapter struct {

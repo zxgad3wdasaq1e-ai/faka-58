@@ -3,11 +3,11 @@ package gatewayconfig_test
 import (
 	"testing"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/shopspring/decimal"
 )

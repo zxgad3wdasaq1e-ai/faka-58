@@ -140,7 +140,7 @@ def download_runtime_file(revision: str, relative: str, staging: Path) -> None:
     if not REVISION.fullmatch(revision) or relative not in RUNTIME_FILES:
         raise InstallError("拒绝下载不在固定清单中的运行文件或未固定提交的源码。")
     url = f"{RAW_BASE}/{revision}/{relative}"
-    request = urllib.request.Request(url, headers={"User-Agent": "xopen-store-installer/1"})
+    request = urllib.request.Request(url, headers={"User-Agent": "faka-58-installer/1"})
     with urllib.request.urlopen(request, timeout=30) as response:
         if response.geturl() != url or response.status != 200:
             raise InstallError("运行文件下载被重定向或返回异常状态，已拒绝安装。")
@@ -200,7 +200,7 @@ def install(args: argparse.Namespace, root: Path | None = None) -> str:
     check_docker(root)
     ensure_empty_target(root)
     revision, pinned_image = pull_and_inspect(args.image, root)
-    with tempfile.TemporaryDirectory(prefix="xopen-runtime-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="faka-58-runtime-") as temporary:
         staging = Path(temporary)
         for relative in RUNTIME_FILES:
             download_runtime_file(revision, relative, staging)

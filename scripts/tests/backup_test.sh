@@ -6,7 +6,7 @@ TEST_TMP=$(mktemp -d "${TMPDIR:-/tmp}/faka-backup-test.XXXXXXXX")
 trap 'rm -rf -- "$TEST_TMP"' EXIT
 mkdir -p "$TEST_TMP/bin" "$TEST_TMP/volumes" "$TEST_TMP/helper-tmp"
 export MOCK_LOG="$TEST_TMP/docker.log" MOCK_VOLUMES="$TEST_TMP/volumes" MOCK_HELPER_TMP="$TEST_TMP/helper-tmp"
-export MOCK_ACTIVE='postgres app redis caddy' MOCK_PROJECT=getgpt
+export MOCK_ACTIVE='postgres app redis caddy' MOCK_PROJECT=faka-58
 export PATH="$TEST_TMP/bin:$PATH"
 
 cat > "$TEST_TMP/bin/docker" <<'DOCKER'
@@ -48,12 +48,8 @@ case "$1" in
                 if [[ -n "${MOCK_FAIL_UP:-}" && "$*" == *" ${MOCK_FAIL_UP}" ]]; then exit 17; fi
                 exit 0;;
             exec)
-                if [[ "$*" == *pg_dump* ]]; then
-                    [[ "${MOCK_FAIL_DUMP:-no}" != yes ]] || exit 13
-                    printf 'fake-postgres-dump\n'
-                elif [[ "$*" == *pg_restore* ]]; then
-                    cat > "$MOCK_VOLUMES/restored.dump"
-                else exit 88; fi
+                [[ "$4 $5" == 'sh -ec' ]] || exit 88
+                POSTGRES_DB=${MOCK_POSTGRES_DB:-faka-58} POSTGRES_USER=${MOCK_POSTGRES_USER:-postgres} sh -ec "$6"
                 exit 0;;
             *) exit 88;;
         esac;;
@@ -92,6 +88,20 @@ case "$1" in
 esac
 DOCKER
 chmod +x "$TEST_TMP/bin/docker"
+cat > "$TEST_TMP/bin/pg_dump" <<'PGDUMP'
+#!/usr/bin/env bash
+set -euo pipefail
+printf 'pg_dump %s\n' "$*" >> "$MOCK_LOG"
+[[ "${MOCK_FAIL_DUMP:-no}" != yes ]] || exit 13
+printf 'fake-postgres-dump\n'
+PGDUMP
+cat > "$TEST_TMP/bin/pg_restore" <<'PGRESTORE'
+#!/usr/bin/env bash
+set -euo pipefail
+printf 'pg_restore %s\n' "$*" >> "$MOCK_LOG"
+cat > "$MOCK_VOLUMES/restored.dump"
+PGRESTORE
+chmod +x "$TEST_TMP/bin/pg_dump" "$TEST_TMP/bin/pg_restore"
 
 pass_count=0
 pass() { printf 'ok - %s\n' "$1"; pass_count=$((pass_count + 1)); }
@@ -118,7 +128,9 @@ make_installation() {
     make_public "$root"
     mkdir -p "$root/deploy/secrets" "$root/deploy/runtime"
     cat > "$root/.env" <<EOF
-COMPOSE_PROJECT_NAME=getgpt
+COMPOSE_PROJECT_NAME=faka-58
+POSTGRES_DB=faka-58
+POSTGRES_APP_USER=faka-58
 SITE_ADDRESS=http://localhost
 HTTP_PORT=8080
 HTTPS_PORT=8443
@@ -134,8 +146,8 @@ EOF
     printf 'localhost { reverse_proxy app:8080 }\n' > "$root/deploy/runtime/Caddyfile"
     for secret in postgres_password postgres_admin_password redis_password; do printf 'fixture-only-password\n' > "$root/deploy/secrets/$secret"; done
     for volume in postgres_data uploads app_state redis_data caddy_data caddy_config app_logs; do
-        mkdir -p "$MOCK_VOLUMES/getgpt_$volume"
-        printf 'fixture-%s\n' "$volume" > "$MOCK_VOLUMES/getgpt_$volume/data"
+        mkdir -p "$MOCK_VOLUMES/faka-58_$volume"
+        printf 'fixture-%s\n' "$volume" > "$MOCK_VOLUMES/faka-58_$volume/data"
     done
 }
 rehash() {
@@ -155,6 +167,9 @@ success 'backup accepts direct mode without inherited proxy overrides' env CADDY
 contains "$MOCK_LOG" 'up -d --no-deps --no-build --wait --wait-timeout 120 app' 'app was not resumed'
 contains "$MOCK_LOG" 'up -d --no-deps --no-build --wait --wait-timeout 120 caddy' 'caddy was not resumed'
 not_contains "$MOCK_LOG" 'up -d --no-deps --no-build --wait --wait-timeout 120 adminer' 'inactive adminer was started'
+contains "$MOCK_LOG" 'pg_dump -U postgres -d faka-58 -Fc' 'backup ignored the container database'
+success 'backup uses the existing database and administrator identity' env MOCK_POSTGRES_DB=legacy-db MOCK_POSTGRES_USER=legacy-admin sh "$source_root/deploy/backup.sh" backup --output "$TEST_TMP/legacy-database"
+contains "$MOCK_LOG" 'pg_dump -U legacy-admin -d legacy-db -Fc' 'backup replaced the existing database identity'
 failure 'existing backup directories are never overwritten' sh "$source_root/deploy/backup.sh" backup --output "$backup"
 
 cp "$source_root/.env" "$TEST_TMP/original.env"
@@ -251,17 +266,18 @@ else
 fi
 
 # Remove only fixture data under this test-owned temporary volume directory.
-for volume in "$MOCK_VOLUMES"/getgpt_*; do rm -rf -- "$volume"; done
+for volume in "$MOCK_VOLUMES"/faka-58_*; do rm -rf -- "$volume"; done
 export MOCK_EXISTING_CONTAINERS=existing-container
 failure 'an existing Compose project is refused even with empty volumes' sh "$restore_root/deploy/backup.sh" restore --source "$backup" --confirm-replace-database
 unset MOCK_EXISTING_CONTAINERS
 : > "$MOCK_LOG"
-success 'fresh restore imports PostgreSQL transactionally without inherited proxy overrides' env CADDY_PROXY_MODE=cloudflare MOCK_ASSERT_PROXY_MODE_UNSET=yes sh "$restore_root/deploy/backup.sh" restore --source "$backup" --confirm-replace-database
+success 'fresh restore imports PostgreSQL transactionally using its existing database identity' env CADDY_PROXY_MODE=cloudflare MOCK_ASSERT_PROXY_MODE_UNSET=yes MOCK_POSTGRES_DB=legacy-db MOCK_POSTGRES_USER=legacy-admin sh "$restore_root/deploy/backup.sh" restore --source "$backup" --confirm-replace-database
 cmp "$source_root/.env" "$restore_root/.env"
 cmp "$source_root/config.yml" "$restore_root/config.yml"
 contains "$MOCK_LOG" '--exit-on-error --single-transaction' 'restore is not transactional'
+contains "$MOCK_LOG" 'pg_restore -U legacy-admin -d legacy-db --clean --if-exists --exit-on-error --single-transaction' 'restore replaced the configured database identity'
 contains "$MOCK_LOG" 'up -d --no-build --wait --wait-timeout 300' 'restore did not use prebuilt images'
-[[ $(cat "$MOCK_VOLUMES/getgpt_uploads/data") == fixture-uploads ]] || fail 'uploads were not restored'
+[[ $(cat "$MOCK_VOLUMES/faka-58_uploads/data") == fixture-uploads ]] || fail 'uploads were not restored'
 [[ $(cat "$MOCK_VOLUMES/restored.dump") == fake-postgres-dump ]] || fail 'database dump was not restored'
 not_contains "$MOCK_LOG" 'volume rm' 'restore removed a volume'
 printf 'Passed %s backup tests.\n' "$pass_count"

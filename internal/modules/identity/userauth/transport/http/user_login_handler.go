@@ -5,14 +5,14 @@ import (
 	"errors"
 	"time"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	captcha "github.com/dujiao-next/internal/modules/captcha/contract"
-	captchahttp "github.com/dujiao-next/internal/modules/captcha/transport/http"
-	userpresenter "github.com/dujiao-next/internal/modules/identity/userauth/transport/presenter"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	captcha "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/contract"
+	captchahttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/transport/http"
+	userpresenter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/transport/presenter"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

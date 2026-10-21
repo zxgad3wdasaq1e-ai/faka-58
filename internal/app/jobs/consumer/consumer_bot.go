@@ -12,10 +12,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/logger"
-	channelclientapp "github.com/dujiao-next/internal/modules/channelclient/application"
-	"github.com/dujiao-next/internal/queue"
-	"github.com/dujiao-next/internal/upstream"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	channelclientapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/channelclient/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/upstream"
 
 	"github.com/hibiken/asynq"
 )

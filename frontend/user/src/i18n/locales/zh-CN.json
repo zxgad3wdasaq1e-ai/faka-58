@@ -1,6 +1,6 @@
 {
   "common": {
-    "siteName": "XOPEN AI",
+    "siteName": "faka-58",
     "loading": "加载中...",
     "error": "错误",
     "success": "成功",
@@ -115,7 +115,7 @@
   },
   "home": {
     "hero": {
-      "title": "XOPEN AI",
+      "title": "faka-58",
       "subtitle": "专业的产品与服务提供商",
       "cta": "浏览商品",
       "badge": "新一代数字商店"
@@ -215,8 +215,8 @@
   },
   "about": {
     "title": "关于我们",
-    "subtitle": "了解 XOPEN AI",
-    "introduction": "XOPEN AI 提供 AI 订阅与数字商品服务，支持在线选购、支付和订单查询。商品内容、交付方式及售后规则以商品说明为准。",
+    "subtitle": "了解 faka-58",
+    "introduction": "faka-58 提供 AI 订阅与数字商品服务，支持在线选购、支付和订单查询。商品内容、交付方式及售后规则以商品说明为准。",
     "ourServices": "我们的服务",
     "service1": "优质商品推荐与销售",
     "service2": "专业的售前咨询服务",

@@ -3,9 +3,9 @@ package presenter
 import (
 	"time"
 
-	resellermodule "github.com/dujiao-next/internal/modules/reseller/contract"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
+	resellermodule "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 type ResellerOrderResp struct {

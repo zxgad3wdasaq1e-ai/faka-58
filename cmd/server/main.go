@@ -4,7 +4,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/dujiao-next/internal/cache"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/cache"
 	"io"
 	"os"
 	"path/filepath"
@@ -12,18 +12,18 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/dujiao-next/internal/admincmd"
-	"github.com/dujiao-next/internal/app"
-	databasemigrations "github.com/dujiao-next/internal/bootstrap/database/migrations"
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/logger"
-	adminapplication "github.com/dujiao-next/internal/modules/identity/admin/application"
-	adminstore "github.com/dujiao-next/internal/modules/identity/admin/infrastructure/gormstore"
-	"github.com/dujiao-next/internal/platform/database/gormdb"
-	"github.com/dujiao-next/internal/selfupdate"
-	"github.com/dujiao-next/internal/shared/passwordpolicy"
-	"github.com/dujiao-next/internal/version"
-	"github.com/dujiao-next/internal/web"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/admincmd"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app"
+	databasemigrations "github.com/zxgad3wdasaq1e-ai/faka-58/internal/bootstrap/database/migrations"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	adminapplication "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/application"
+	adminstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/infrastructure/gormstore"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/database/gormdb"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/selfupdate"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/passwordpolicy"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/version"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/web"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,7 +39,7 @@ const (
 )
 
 func main() {
-	// admin 子命令短路：./xopen-ai admin <subcommand>
+	// admin 子命令短路：./faka-58 admin <subcommand>
 	// 在 banner / web 提示 / migrate / default admin / app.Run 之前处理，
 	// 避免运维操作时打印一堆无关日志。
 	if len(os.Args) >= 2 && os.Args[1] == "admin" {
@@ -147,7 +147,7 @@ func main() {
 
 	// 初始化默认管理员账号
 	if cfg.Server.Mode == "release" && defaultAdminPass == "" {
-		stdLog.Printf("警告: 未设置 DJ_DEFAULT_ADMIN_PASSWORD 且 bootstrap.default_admin_password 为空，已跳过默认管理员初始化")
+		stdLog.Printf("警告: 未设置 FAKA_58_DEFAULT_ADMIN_PASSWORD 且 bootstrap.default_admin_password 为空，已跳过默认管理员初始化")
 	} else if err := adminapplication.InitDefaultAdmin(adminstore.New(gormdb.DB), defaultAdminUser, defaultAdminPass); err != nil {
 		stdLog.Printf("警告: 初始化默认管理员失败: %v", err)
 	}
@@ -195,7 +195,7 @@ func main() {
 // 之后一次普通回滚就会被错误放行。停在这里是对的 —— 但光报一句 permission denied，
 // 运维根本不知道该动哪个文件，服务就会一直起不来。
 func printUpdateStateRecoveryHint() {
-	backup, metadata := "<安装目录>/xopen-ai.backup", "<安装目录>/xopen-ai.backup.json"
+	backup, metadata := "<安装目录>/faka-58.backup", "<安装目录>/faka-58.backup.json"
 	if execPath, err := selfupdate.ExecutablePath(); err == nil {
 		backup = execPath + ".backup"
 		metadata = execPath + ".backup.json"
@@ -218,7 +218,7 @@ func printStartupBanner() {
 
 func writeStartupBanner(w io.Writer) {
 	fmt.Fprintln(w, ansiBrightMag+"=============================================================="+ansiReset)
-	fmt.Fprintln(w, ansiCyan+ansiBold+"                         XOPEN AI"+ansiReset)
+	fmt.Fprintln(w, ansiCyan+ansiBold+"                         faka-58"+ansiReset)
 	fmt.Fprintln(w, ansiBrightMag+"=============================================================="+ansiReset)
 	fmt.Fprintln(w, ansiGreen+"AI subscriptions & digital commerce"+ansiReset)
 	fmt.Fprintln(w, ansiBlue+"Website: https://xopenai.vip"+ansiReset)
@@ -301,7 +301,7 @@ func unsafeBootstrapAdminPassword(cfg *config.Config, password string) bool {
 	return cfg == nil || passwordpolicy.Validate(cfg.Security.PasswordPolicy.ValidationPolicy(), password) != nil
 }
 
-// runRollbackCommand 处理 ./xopen-ai rollback [--force]，把二进制换回升级前的备份。
+// runRollbackCommand 处理 ./faka-58 rollback [--force]，把二进制换回升级前的备份。
 //
 // 这是「新版本起不来」时唯一还能用的恢复路径：后台的回滚接口挂在 HTTP 服务上，
 // 而 HTTP 服务恰恰就是起不来的那部分。所以这里刻意不加载 config、不连数据库，
@@ -350,7 +350,7 @@ func runRollbackCommand(args []string) {
 		} else {
 			fmt.Fprintln(os.Stderr, "已拒绝回滚：元数据不可信，无法确认数据库结构是否已升级。")
 		}
-		fmt.Fprintln(os.Stderr, "确认要承担不兼容风险时，请先备份数据库，再执行：xopen-ai rollback --force")
+		fmt.Fprintln(os.Stderr, "确认要承担不兼容风险时，请先备份数据库，再执行：faka-58 rollback --force")
 		os.Exit(1)
 	default:
 		fmt.Fprintf(os.Stderr, "回滚失败: %v\n", err)
@@ -358,7 +358,7 @@ func runRollbackCommand(args []string) {
 	}
 }
 
-// runAdminSubcommand 处理 ./xopen-ai admin <subcommand>，仅初始化 DB
+// runAdminSubcommand 处理 ./faka-58 admin <subcommand>，仅初始化 DB
 // 后委托给 internal/admincmd 包，不启动 HTTP / worker / web 等服务。
 func runAdminSubcommand(args []string) {
 	cfg := config.Load()
@@ -378,8 +378,8 @@ func runAdminSubcommand(args []string) {
 
 // resolveDefaultAdminCredentials 解析默认管理员初始化凭据（环境变量优先，其次 config.yml）
 func resolveDefaultAdminCredentials(cfg *config.Config) (string, string) {
-	user := strings.TrimSpace(os.Getenv("DJ_DEFAULT_ADMIN_USERNAME"))
-	pass := strings.TrimSpace(os.Getenv("DJ_DEFAULT_ADMIN_PASSWORD"))
+	user := defaultAdminEnvironment("USERNAME")
+	pass := defaultAdminEnvironment("PASSWORD")
 	if cfg == nil {
 		return user, pass
 	}
@@ -390,4 +390,13 @@ func resolveDefaultAdminCredentials(cfg *config.Config) (string, string) {
 		pass = strings.TrimSpace(cfg.Bootstrap.DefaultAdminPassword)
 	}
 	return user, pass
+}
+
+func defaultAdminEnvironment(suffix string) string {
+	value, present := os.LookupEnv("FAKA_58_DEFAULT_ADMIN_" + suffix)
+	if !present {
+		// Existing installations may still export the original bootstrap keys.
+		value = os.Getenv("DJ_DEFAULT_ADMIN_" + suffix)
+	}
+	return strings.TrimSpace(value)
 }

@@ -5,14 +5,14 @@ import (
 	"testing"
 	"time"
 
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
 
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/shared/jsonmap"
 	"github.com/glebarez/sqlite"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 	"gorm.io/gorm"
 )
 

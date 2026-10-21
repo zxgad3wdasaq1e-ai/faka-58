@@ -2,7 +2,7 @@
 // persistence contract for tests outside the settings bounded context.
 package memorysettings
 
-import "github.com/dujiao-next/internal/shared/jsonmap"
+import "github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 
 // Store keeps settings values in memory.
 type Store struct {

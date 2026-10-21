@@ -5,11 +5,11 @@ import (
 	"strings"
 	"time"
 
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
 
-	reportingapp "github.com/dujiao-next/internal/modules/reporting/application"
-	reportingdomain "github.com/dujiao-next/internal/modules/reporting/domain"
 	"github.com/shopspring/decimal"
+	reportingapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reporting/application"
+	reportingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reporting/domain"
 )
 
 type OperationsService struct {

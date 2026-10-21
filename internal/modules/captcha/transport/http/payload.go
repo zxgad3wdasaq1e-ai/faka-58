@@ -3,7 +3,7 @@ package captchahttp
 import (
 	"strings"
 
-	captchacontract "github.com/dujiao-next/internal/modules/captcha/contract"
+	captchacontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/contract"
 )
 
 // CaptchaPayloadRequest 验证码请求载荷。

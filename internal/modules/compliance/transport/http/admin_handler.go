@@ -3,11 +3,11 @@ package compliancehttp
 import (
 	"errors"
 
-	complianceapp "github.com/dujiao-next/internal/modules/compliance/application"
-	compliancecontract "github.com/dujiao-next/internal/modules/compliance/contract"
-	compliancedomain "github.com/dujiao-next/internal/modules/compliance/domain"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	complianceapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/compliance/application"
+	compliancecontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/compliance/contract"
+	compliancedomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/compliance/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

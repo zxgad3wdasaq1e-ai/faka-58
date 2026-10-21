@@ -153,7 +153,7 @@ const oldCodeCooldown = ref(0)
 const newCodeCooldown = ref(0)
 const telegramSectionRef = ref<InstanceType<typeof TelegramBindingSection> | null>(null)
 let cooldownTimer: number | null = null
-const telegramCallbackName = '__dujiaoSecurityTelegramBind'
+const telegramCallbackName = '__faka58SecurityTelegramBind'
 
 const telegramConfig = computed(() => appStore.config?.telegram_auth || null)
 const telegramBotUsername = computed(() => String(telegramConfig.value?.bot_username || '').trim())

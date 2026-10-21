@@ -3,7 +3,7 @@ package epay
 import (
 	"testing"
 
-	"github.com/dujiao-next/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
 )
 
 func TestVerifyCallbackOwnershipV1Success(t *testing.T) {

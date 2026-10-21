@@ -147,7 +147,7 @@ func (api *adminAPI) login(username, password, token string) error {
 		return errors.New("管理员登录响应无效")
 	}
 	if data["requires_totp"] == true {
-		return errors.New("此管理员启用了 2FA；请完成正常登录后通过 XIOEN_ADMIN_TOKEN 提供 Token")
+		return errors.New("此管理员启用了 2FA；请完成正常登录后通过 FAKA_58_ADMIN_TOKEN 提供 Token")
 	}
 	token, ok := data["token"].(string)
 	if !ok || !validToken(token) {
@@ -205,9 +205,9 @@ func localized(cn, tw, en string) map[string]string {
 
 func siteSettings(origin string) map[string]any {
 	return map[string]any{
-		"brand":    map[string]any{"site_name": "XOPEN AI", "site_url": origin, "site_description": localized("AI 订阅与数字商品服务", "AI 訂閱與數位商品服務", "AI subscriptions and digital services")},
-		"currency": "CNY", "storefront_template": "getgpt", "template_mode": "card", "languages": []string{"zh-CN", "zh-TW", "en-US"},
-		"seo": map[string]any{"title": localized("XOPEN AI · AI 订阅与数字商品", "XOPEN AI · AI 訂閱與數位商品", "XOPEN AI · AI subscriptions and digital services"), "description": localized("选购 AI 服务与数字商品，查询订单和交付进度。", "選購 AI 服務與數位商品，查詢訂單和交付進度。", "Explore AI services and digital goods. Track your order and delivery.")},
+		"brand":    map[string]any{"site_name": "faka-58", "site_url": origin, "site_description": localized("AI 订阅与数字商品服务", "AI 訂閱與數位商品服務", "AI subscriptions and digital services")},
+		"currency": "CNY", "storefront_template": "faka-58", "template_mode": "card", "languages": []string{"zh-CN", "zh-TW", "en-US"},
+		"seo": map[string]any{"title": localized("faka-58 · AI 订阅与数字商品", "faka-58 · AI 訂閱與數位商品", "faka-58 · AI subscriptions and digital services"), "description": localized("选购 AI 服务与数字商品，查询订单和交付进度。", "選購 AI 服務與數位商品，查詢訂單和交付進度。", "Explore AI services and digital goods. Track your order and delivery.")},
 	}
 }
 
@@ -255,7 +255,7 @@ func seedCatalog(api *adminAPI, publicOrigin string, output io.Writer) error {
 		if _, err := api.request(http.MethodPut, "/admin/settings", map[string]any{"key": "site_config", "value": siteSettings(publicOrigin)}); err != nil {
 			return err
 		}
-		fmt.Fprintln(output, "已初始化 XOPEN AI 站点配置。")
+		fmt.Fprintln(output, "已初始化 faka-58 站点配置。")
 	} else {
 		fmt.Fprintln(output, "沿用现有站点设置。")
 	}
@@ -340,7 +340,7 @@ func seedFromConfig(root, baseURL string, output io.Writer) error {
 			publicOrigin = validated
 		}
 	}
-	username, password, token := os.Getenv("XIOEN_ADMIN_USERNAME"), os.Getenv("XIOEN_ADMIN_PASSWORD"), os.Getenv("XIOEN_ADMIN_TOKEN")
+	username, password, token := adminEnvironment("USERNAME"), adminEnvironment("PASSWORD"), adminEnvironment("TOKEN")
 	if username == "" {
 		username = config.Bootstrap.Username
 	}
@@ -352,4 +352,13 @@ func seedFromConfig(root, baseURL string, output io.Writer) error {
 		return err
 	}
 	return seedCatalog(api, publicOrigin, output)
+}
+
+// New installations use FAKA_58_ADMIN_*. Keep existing deployment credentials
+// working until operators update their environment; the new key takes priority.
+func adminEnvironment(suffix string) string {
+	if value, ok := os.LookupEnv("FAKA_58_ADMIN_" + suffix); ok {
+		return value
+	}
+	return os.Getenv("XIOEN_ADMIN_" + suffix)
 }

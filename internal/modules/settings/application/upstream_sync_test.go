@@ -3,8 +3,8 @@ package settingsapp
 import (
 	"testing"
 
-	"github.com/dujiao-next/internal/constants"
-	settingsintegration "github.com/dujiao-next/internal/modules/settings/schema/integration"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	settingsintegration "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/integration"
 )
 
 func TestGetUpstreamSyncConfigFallbackToYaml(t *testing.T) {

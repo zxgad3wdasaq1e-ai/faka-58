@@ -1,4 +1,4 @@
-module github.com/dujiao-next
+module github.com/zxgad3wdasaq1e-ai/faka-58
 
 go 1.26.10
 

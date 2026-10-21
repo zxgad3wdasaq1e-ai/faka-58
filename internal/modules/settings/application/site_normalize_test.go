@@ -6,21 +6,21 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/constants"
-	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	settingsstorefront "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/storefront"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 func TestStorefrontTemplateNormalization(t *testing.T) {
-	for _, template := range []string{"classic", "vault", "getgpt"} {
+	for _, template := range []string{"classic", "vault", "faka-58"} {
 		if got := normalizeStorefrontTemplate(template); got != template {
 			t.Fatalf("existing template %q changed to %q", template, got)
 		}
 	}
 	for _, input := range []interface{}{nil, "", "unknown"} {
-		if got := normalizeStorefrontTemplate(input); got != constants.StorefrontTemplateGetgpt {
-			t.Fatalf("unconfigured template = %q, want getgpt", got)
+		if got := normalizeStorefrontTemplate(input); got != constants.StorefrontTemplateFaka58 {
+			t.Fatalf("unconfigured template = %q, want faka-58", got)
 		}
 	}
 }
@@ -807,7 +807,7 @@ func TestHomepagePublicConfigRoundTrip(t *testing.T) {
 	repo := newMockSettingRepo()
 	svc := NewService(repo)
 	updated, err := svc.UpdateWithEffects(constants.SettingKeySiteConfig, map[string]interface{}{
-		"brand":              map[string]interface{}{"site_name": "XIOEN AI"},
+		"brand":              map[string]interface{}{"site_name": "Customized Store"},
 		"existing_extension": "keep",
 		"homepage": map[string]interface{}{
 			"hero_phrases": []interface{}{
@@ -858,7 +858,7 @@ func TestHomepagePublicConfigRoundTrip(t *testing.T) {
 	if !reflect.DeepEqual(public["homepage"], updated.Value["homepage"]) {
 		t.Fatalf("homepage did not survive JSON/public config round trip: %#v", public["homepage"])
 	}
-	if public["existing_extension"] != "keep" || public["brand"].(map[string]interface{})["site_name"] != "XIOEN AI" {
+	if public["existing_extension"] != "keep" || public["brand"].(map[string]interface{})["site_name"] != "Customized Store" {
 		t.Fatalf("existing site config was changed: %#v", public)
 	}
 }
@@ -887,5 +887,55 @@ func TestHomepageReadFiltersLegacyFieldsWithoutMutatingStoredData(t *testing.T) 
 	}
 	if legacy["html"] != "<div>old</div>" || legacy["reviews"].([]interface{})[0].(map[string]interface{})["id"] != "../invalid" {
 		t.Fatal("public config read mutated stored data")
+	}
+}
+
+func TestLegacySiteIdentityReadsCurrentDefaultsWithoutChangingStorage(t *testing.T) {
+	stored := jsonmap.JSON{
+		"brand":               map[string]interface{}{"site_name": "XOPEN AI", "site_url": "https://xopenai.vip"},
+		"storefront_template": "getgpt",
+		"contact":             map[string]interface{}{"telegram": "https://telegram.me/dujiaoka", "whatsapp": "https://wa.me/1234567890"},
+		"seo": map[string]interface{}{"title": map[string]interface{}{
+			"zh-CN": "XOPEN AI · AI 订阅与数字商品",
+			"zh-TW": "XOPEN AI · AI 訂閱與數位商品",
+			"en-US": "XOPEN AI · AI subscriptions and digital services",
+		}},
+	}
+	repo := newMockSettingRepo()
+	repo.store[constants.SettingKeySiteConfig] = stored
+	svc := NewService(repo)
+	public, err := svc.GetConfig(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	brand := public["brand"].(map[string]interface{})
+	if brand["site_name"] != "faka-58" || brand["site_url"] != "https://xopenai.vip" || public["storefront_template"] != "faka-58" {
+		t.Fatalf("legacy identity was not normalized: %#v", public)
+	}
+	contact := public["contact"].(map[string]interface{})
+	if contact["telegram"] != "" || contact["whatsapp"] != "" {
+		t.Fatalf("upstream placeholder contacts are still public: %#v", contact)
+	}
+	if stored["brand"].(map[string]interface{})["site_name"] != "XOPEN AI" || stored["storefront_template"] != "getgpt" || stored["contact"].(map[string]interface{})["telegram"] != "https://telegram.me/dujiaoka" {
+		t.Fatal("reading site settings mutated persisted data")
+	}
+	emailBrand, err := svc.GetSiteBrand()
+	if err != nil || emailBrand.SiteName != "faka-58" {
+		t.Fatalf("email identity = %#v, err = %v", emailBrand, err)
+	}
+}
+
+func TestSiteIdentityPreservesCustomizationAndAcceptsLegacyTemplate(t *testing.T) {
+	custom := jsonmap.JSON{
+		"brand":               map[string]interface{}{"site_name": "Custom Store", "site_url": "https://custom.example"},
+		"contact":             map[string]interface{}{"telegram": "https://t.me/custom_support"},
+		"seo":                 map[string]interface{}{"title": map[string]interface{}{"en-US": "Custom Store title"}},
+		"storefront_template": "classic", "extension": "keep",
+	}
+	if got := normalizeLegacySiteIdentity(custom); !reflect.DeepEqual(got, custom) {
+		t.Fatalf("custom site identity changed: %#v", got)
+	}
+	if got := normalizeStorefrontTemplate("getgpt"); got != "faka-58" {
+		t.Fatalf("legacy template alias = %q", got)
 	}
 }

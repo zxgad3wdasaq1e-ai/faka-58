@@ -4,11 +4,11 @@ import (
 	"testing"
 	"time"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	externalidentitycontract "github.com/dujiao-next/internal/modules/identity/externalidentity/contract"
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
 	"github.com/glebarez/sqlite"
+	externalidentitycontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/contract"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
 	"gorm.io/gorm"
 )
 

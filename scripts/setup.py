@@ -89,17 +89,17 @@ def initialize(args: argparse.Namespace) -> dict:
     upload_user = "upload" + secrets.token_hex(6)
 
     config = {
-        "app": {"secret_key": random_secret(), "totp_issuer": "XOPEN AI"},
+        "app": {"secret_key": random_secret(), "totp_issuer": "faka-58"},
         "server": {"host": "0.0.0.0", "port": 8080, "mode": "release", "trusted_proxies": [proxy_ip + "/32"]},
         "database": {
             "driver": "postgres",
-            "dsn": f"host=postgres user=getgpt password={pg_password} dbname=getgpt port=5432 sslmode=disable TimeZone=Asia/Shanghai",
+            "dsn": f"host=postgres user=faka-58 password={pg_password} dbname=faka-58 port=5432 sslmode=disable TimeZone=Asia/Shanghai",
             "pool": {"max_open_conns": 20, "max_idle_conns": 5, "conn_max_lifetime_seconds": 1800, "conn_max_idle_time_seconds": 300},
         },
         "jwt": {"secret": random_secret(), "expire_hours": 12},
         "user_jwt": {"secret": random_secret(), "expire_hours": 24, "remember_me_expire_hours": 168},
         "bootstrap": {"default_admin_username": args.admin_user, "default_admin_password": admin_password},
-        "redis": {"enabled": True, "host": "redis", "port": 6379, "password": redis_password, "db": 0, "prefix": "xioen"},
+        "redis": {"enabled": True, "host": "redis", "port": 6379, "password": redis_password, "db": 0, "prefix": "faka-58"},
         "queue": {"enabled": True, "host": "redis", "port": 6379, "password": redis_password, "db": 1, "concurrency": 10, "queues": {"default": 10, "critical": 5}},
         "upload": {
             "storage": "s3" if storage == "minio" else "local",
@@ -109,7 +109,7 @@ def initialize(args: argparse.Namespace) -> dict:
             "max_width": 4096, "max_height": 4096,
         },
         "cors": {"allowed_origins": [origin], "allowed_methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], "allowed_headers": ["Content-Type", "Authorization", "X-Requested-With", "X-CSRF-Token"], "allow_credentials": True, "max_age": 600},
-        "email": {"enabled": False, "host": "", "port": 587, "username": "", "password": "", "from": "", "from_name": "XOPEN AI", "use_tls": True, "use_ssl": False},
+        "email": {"enabled": False, "host": "", "port": 587, "username": "", "password": "", "from": "", "from_name": "faka-58", "use_tls": True, "use_ssl": False},
         "telegram_auth": {"enabled": False},
         "google_auth": {"enabled": False},
         "reseller": {"enabled": False, "main_hosts": ["localhost" if args.local else domain], "trusted_forwarded_host": False},
@@ -132,7 +132,7 @@ def initialize(args: argparse.Namespace) -> dict:
             # initializes as uid 999; the parent directory stays host-private 0700.
             (secret_dir / name).chmod(0o444)
 
-    env = ["COMPOSE_PROJECT_NAME=getgpt", f"SITE_ADDRESS={address}", f"HTTP_PORT={8080 if args.local else 80}", f"HTTPS_PORT={8443 if args.local else 443}", f"APP_SUBNET={subnet}", f"CADDY_IP={proxy_ip}", "CADDY_PROXY_MODE=direct", f"APP_IMAGE={requested_image or 'getgpt-store:local'}", "APP_VERSION=v1.0.0-xopen.1"]
+    env = ["COMPOSE_PROJECT_NAME=faka-58", "POSTGRES_DB=faka-58", "POSTGRES_APP_USER=faka-58", f"SITE_ADDRESS={address}", f"HTTP_PORT={8080 if args.local else 80}", f"HTTPS_PORT={8443 if args.local else 443}", f"APP_SUBNET={subnet}", f"CADDY_IP={proxy_ip}", "CADDY_PROXY_MODE=direct", f"APP_IMAGE={requested_image or 'faka-58:local'}", "APP_VERSION=v1.0.0-faka-58.1"]
     if storage == "minio":
         env += ["COMPOSE_PATH_SEPARATOR=|", "COMPOSE_FILE=compose.yml|compose.minio.yml", "COMPOSE_PROFILES=storage"]
     else:

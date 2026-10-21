@@ -8,13 +8,13 @@ import (
 	"testing"
 	"time"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	procurementcontract "github.com/dujiao-next/internal/modules/procurement/contract"
-	procurementdomain "github.com/dujiao-next/internal/modules/procurement/domain"
-	siteconnectionapp "github.com/dujiao-next/internal/modules/siteconnection/application"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	procurementcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/procurement/contract"
+	procurementdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/procurement/domain"
+	siteconnectionapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/shopspring/decimal"
 )

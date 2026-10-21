@@ -3,10 +3,10 @@ package application
 import (
 	"testing"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	"github.com/dujiao-next/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
 )
 
 func TestShouldUseCNYPaymentCurrency(t *testing.T) {

@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	dashboard "github.com/dujiao-next/internal/modules/dashboard/contract"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	dashboard "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/dashboard/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/shopspring/decimal"
 )
@@ -37,8 +37,8 @@ func TestGetProfitOverviewDeductsRefundRecords(t *testing.T) {
 		t.Fatalf("create product failed: %v", err)
 	}
 
-	manualRefundedOrder := createDashboardProfitOrderWithItem(t, db, product, "DJ-PROFIT-MANUAL", constants.OrderStatusRefunded, 100, 40, "利润测试商品", now)
-	walletRefundedOrder := createDashboardProfitOrderWithItem(t, db, product, "DJ-PROFIT-WALLET", constants.OrderStatusPartiallyRefunded, 120, 50, "利润测试商品", now)
+	manualRefundedOrder := createDashboardProfitOrderWithItem(t, db, product, "FAKA-58-PROFIT-MANUAL", constants.OrderStatusRefunded, 100, 40, "利润测试商品", now)
+	walletRefundedOrder := createDashboardProfitOrderWithItem(t, db, product, "FAKA-58-PROFIT-WALLET", constants.OrderStatusPartiallyRefunded, 120, 50, "利润测试商品", now)
 
 	records := []orderdomain.OrderRefundRecord{
 		{
@@ -108,8 +108,8 @@ func TestGetProfitTrendsDeductsRefundRecords(t *testing.T) {
 		t.Fatalf("create product failed: %v", err)
 	}
 
-	day1Order := createDashboardProfitOrderWithItem(t, db, product, "DJ-PROFIT-TREND-DAY1", constants.OrderStatusRefunded, 80, 30, "利润趋势测试商品", base)
-	day2Order := createDashboardProfitOrderWithItem(t, db, product, "DJ-PROFIT-TREND-DAY2", constants.OrderStatusRefunded, 100, 40, "利润趋势测试商品", base.Add(24*time.Hour))
+	day1Order := createDashboardProfitOrderWithItem(t, db, product, "FAKA-58-PROFIT-TREND-DAY1", constants.OrderStatusRefunded, 80, 30, "利润趋势测试商品", base)
+	day2Order := createDashboardProfitOrderWithItem(t, db, product, "FAKA-58-PROFIT-TREND-DAY2", constants.OrderStatusRefunded, 100, 40, "利润趋势测试商品", base.Add(24*time.Hour))
 
 	records := []orderdomain.OrderRefundRecord{
 		{
@@ -184,7 +184,7 @@ func TestProfitStatisticsDeductSuccessfulExternalPaymentFees(t *testing.T) {
 	if err := db.Create(product).Error; err != nil {
 		t.Fatalf("create product failed: %v", err)
 	}
-	order := createDashboardProfitOrderWithItem(t, db, product, "DJ-PROFIT-PAYMENT-FEE", constants.OrderStatusPaid, 100, 40, "手续费利润测试商品", base)
+	order := createDashboardProfitOrderWithItem(t, db, product, "FAKA-58-PROFIT-PAYMENT-FEE", constants.OrderStatusPaid, 100, 40, "手续费利润测试商品", base)
 
 	payments := []paymentdomain.Payment{
 		{
@@ -265,7 +265,7 @@ func TestProfitStatisticsReverseReturnedPaymentFeeOnRefundDay(t *testing.T) {
 	if err := db.Create(product).Error; err != nil {
 		t.Fatalf("create product failed: %v", err)
 	}
-	order := createDashboardProfitOrderWithItem(t, db, product, "DJ-PROFIT-REFUNDED-PAYMENT-FEE", constants.OrderStatusRefunded, 100, 40, "退款手续费冲回测试商品", base)
+	order := createDashboardProfitOrderWithItem(t, db, product, "FAKA-58-PROFIT-REFUNDED-PAYMENT-FEE", constants.OrderStatusRefunded, 100, 40, "退款手续费冲回测试商品", base)
 	if err := db.Create(&paymentdomain.Payment{
 		OrderID: order.ID, ProviderType: constants.PaymentProviderOfficial,
 		ChannelType: constants.PaymentChannelTypeAlipay, InteractionMode: constants.PaymentInteractionRedirect,
@@ -339,7 +339,7 @@ func TestGetProfitOverviewDeductsInWindowRefundForOutOfWindowOrder(t *testing.T)
 	}
 
 	outsideOrder := &orderdomain.Order{
-		OrderNo:        "DJ-PROFIT-OUTSIDE-ORDER",
+		OrderNo:        "FAKA-58-PROFIT-OUTSIDE-ORDER",
 		UserID:         1,
 		Status:         constants.OrderStatusRefunded,
 		Currency:       "CNY",
@@ -369,7 +369,7 @@ func TestGetProfitOverviewDeductsInWindowRefundForOutOfWindowOrder(t *testing.T)
 	}
 
 	inWindowOrder := &orderdomain.Order{
-		OrderNo:        "DJ-PROFIT-IN-WINDOW",
+		OrderNo:        "FAKA-58-PROFIT-IN-WINDOW",
 		UserID:         1,
 		Status:         constants.OrderStatusCompleted,
 		Currency:       "CNY",
@@ -447,7 +447,7 @@ func TestGetProfitTrendsIncludesRefundOnlyDayInWindow(t *testing.T) {
 	}
 
 	inWindowOrder := &orderdomain.Order{
-		OrderNo:        "DJ-PROFIT-TREND-IN-WINDOW",
+		OrderNo:        "FAKA-58-PROFIT-TREND-IN-WINDOW",
 		UserID:         1,
 		Status:         constants.OrderStatusCompleted,
 		Currency:       "CNY",
@@ -477,7 +477,7 @@ func TestGetProfitTrendsIncludesRefundOnlyDayInWindow(t *testing.T) {
 	}
 
 	outsideOrder := &orderdomain.Order{
-		OrderNo:        "DJ-PROFIT-TREND-OUTSIDE-ORDER",
+		OrderNo:        "FAKA-58-PROFIT-TREND-OUTSIDE-ORDER",
 		UserID:         1,
 		Status:         constants.OrderStatusRefunded,
 		Currency:       "CNY",
@@ -558,7 +558,7 @@ func TestProfitMetricsIncludeZeroCostRevenueAndCalculateRefundedCost(t *testing.
 			t,
 			db,
 			product,
-			fmt.Sprintf("DJ-PROFIT-COST-ONE-%d", index+1),
+			fmt.Sprintf("FAKA-58-PROFIT-COST-ONE-%d", index+1),
 			constants.OrderStatusRefunded,
 			1,
 			1,
@@ -570,7 +570,7 @@ func TestProfitMetricsIncludeZeroCostRevenueAndCalculateRefundedCost(t *testing.
 		t,
 		db,
 		product,
-		"DJ-PROFIT-ZERO-COST",
+		"FAKA-58-PROFIT-ZERO-COST",
 		constants.OrderStatusRefunded,
 		49,
 		0,
@@ -633,7 +633,7 @@ func TestRefundedCostUsesParentOrderChildrenCostBasis(t *testing.T) {
 	}
 
 	parent := &orderdomain.Order{
-		OrderNo:        "DJ-PROFIT-PARENT-REFUND",
+		OrderNo:        "FAKA-58-PROFIT-PARENT-REFUND",
 		UserID:         1,
 		Status:         constants.OrderStatusPartiallyRefunded,
 		Currency:       "CNY",
@@ -646,8 +646,8 @@ func TestRefundedCostUsesParentOrderChildrenCostBasis(t *testing.T) {
 		t.Fatalf("create parent order failed: %v", err)
 	}
 	children := []*orderdomain.Order{
-		createDashboardProfitOrderWithItem(t, db, product, "DJ-PROFIT-PARENT-CHILD-1", constants.OrderStatusPartiallyRefunded, 40, 10, "子订单一", now),
-		createDashboardProfitOrderWithItem(t, db, product, "DJ-PROFIT-PARENT-CHILD-2", constants.OrderStatusPartiallyRefunded, 60, 30, "子订单二", now),
+		createDashboardProfitOrderWithItem(t, db, product, "FAKA-58-PROFIT-PARENT-CHILD-1", constants.OrderStatusPartiallyRefunded, 40, 10, "子订单一", now),
+		createDashboardProfitOrderWithItem(t, db, product, "FAKA-58-PROFIT-PARENT-CHILD-2", constants.OrderStatusPartiallyRefunded, 60, 30, "子订单二", now),
 	}
 	for _, child := range children {
 		if err := db.Model(&orderdomain.Order{}).Where("id = ?", child.ID).Update("parent_id", parent.ID).Error; err != nil {

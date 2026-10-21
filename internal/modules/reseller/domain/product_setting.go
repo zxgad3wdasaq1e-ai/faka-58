@@ -3,8 +3,8 @@ package domain
 import (
 	"time"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	"github.com/dujiao-next/internal/shared/money"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 // ProductSetting 分销商商品配置。

@@ -36,7 +36,7 @@ test('guest order detail renders fields only when an order is present and authen
   assert.equal(
     resolveGuestOrderDetailViewState({
       loading: false,
-      order: { order_no: 'DJ-1001' },
+      order: { order_no: 'FAKA58-1001' },
       showAuthForm: false,
     }),
     'detail',

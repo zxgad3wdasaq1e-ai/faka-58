@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	giftcardcontract "github.com/dujiao-next/internal/modules/giftcard/contract"
+	giftcardcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/contract"
 
-	"github.com/dujiao-next/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
 )
 
 // Export 导出礼品卡。

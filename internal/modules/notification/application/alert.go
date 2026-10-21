@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/dujiao-next/internal/logger"
-	"github.com/dujiao-next/internal/modules/notification/application/format"
-	settingsmessaging "github.com/dujiao-next/internal/modules/settings/schema/messaging"
-	"github.com/dujiao-next/internal/queue"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/application/format"
+	settingsmessaging "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/messaging"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
 )
 
 func (s *Service) dispatchExceptionAlertCheck(ctx context.Context, setting settingsmessaging.NotificationCenterSetting, payload queue.NotificationDispatchPayload) error {

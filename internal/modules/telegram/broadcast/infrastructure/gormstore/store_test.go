@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	broadcastcontract "github.com/dujiao-next/internal/modules/telegram/broadcast/contract"
-	broadcastdomain "github.com/dujiao-next/internal/modules/telegram/broadcast/domain"
 	"github.com/glebarez/sqlite"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	broadcastcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/telegram/broadcast/contract"
+	broadcastdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/telegram/broadcast/domain"
 	"gorm.io/gorm"
 )
 

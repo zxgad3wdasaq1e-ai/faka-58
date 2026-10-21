@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	siteconnectioncontract "github.com/dujiao-next/internal/modules/siteconnection/contract"
-	siteconnectiondomain "github.com/dujiao-next/internal/modules/siteconnection/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	siteconnectioncontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/contract"
+	siteconnectiondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/domain"
 
 	"github.com/glebarez/sqlite"
 	"github.com/shopspring/decimal"

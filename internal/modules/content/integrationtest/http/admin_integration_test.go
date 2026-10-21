@@ -10,14 +10,14 @@ import (
 	"testing"
 	"time"
 
-	contentapp "github.com/dujiao-next/internal/modules/content/application"
-	contentdomain "github.com/dujiao-next/internal/modules/content/domain"
-	localfilestore "github.com/dujiao-next/internal/modules/content/infrastructure/filestore/local"
-	"github.com/dujiao-next/internal/modules/content/infrastructure/gormstore"
-	contenttransport "github.com/dujiao-next/internal/modules/content/transport/http"
-	"github.com/dujiao-next/internal/platform/http/response"
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"
+	contentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/application"
+	contentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/domain"
+	localfilestore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/infrastructure/filestore/local"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/infrastructure/gormstore"
+	contenttransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 	"gorm.io/gorm"
 )
 

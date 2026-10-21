@@ -150,7 +150,7 @@ const tw: SiteCopy = {
   proBadge: '為高強度工作而準備', proAll: '查看全部方案', proInfo: '按需購買，從容開始', proInfoDesc: '選擇適合預算和需求的方案。方案名稱不構成固定用量承諾，實際額度由產品提供方決定。',
 }
 
-export function useGetgptCopy() {
+export function useFaka58Copy() {
   const app = useAppStore()
   return computed(() => app.locale === 'en-US' ? en : app.locale === 'zh-TW' ? tw : zh)
 }

@@ -3,8 +3,8 @@ package contract
 import (
 	"time"
 
-	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	settingsstorefront "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/storefront"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 // Repository is the persistence port consumed by the dashboard use cases.

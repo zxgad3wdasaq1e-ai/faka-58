@@ -67,7 +67,7 @@
 | `internal/web/` 或 embed 相关 | 额外：`go build -tags release,fullstack ./cmd/server`（需先构建两个前端并拷到 `internal/web/dist/`，见 README） |
 | `frontend/admin/` | `cd frontend/admin && pnpm run test && pnpm run build` |
 | `frontend/user/` | `cd frontend/user && pnpm run test && pnpm run build` |
-| `scripts/dujiao-next-manager.sh` | `bash -n` + `shellcheck -x -S warning`，以及 `scripts/tests/` 下的测试 |
+| `scripts/faka-58-manager.sh` | `bash -n` + `shellcheck -x -S warning`，以及 `scripts/tests/` 下的测试 |
 
 验证结束后：删除产生的构建产物（`frontend/*/dist/`、`internal/web/dist/`、根目录二进制等），关闭启动过的 dev server / 后端进程。
 

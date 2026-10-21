@@ -56,8 +56,13 @@ class SetupTests(unittest.TestCase):
     def test_source_default_and_image_state_match_environment(self) -> None:
         state = self.initialize()
         self.assertEqual(state["image"], "")
-        self.assertIn("APP_IMAGE=getgpt-store:local\n", (self.root / ".env").read_text(encoding="utf-8"))
+        self.assertIn("APP_IMAGE=faka-58:local\n", (self.root / ".env").read_text(encoding="utf-8"))
         config = json.loads((self.root / "config.yml").read_text(encoding="utf-8"))
+        self.assertEqual(config["app"]["totp_issuer"], "faka-58")
+        self.assertIn("user=faka-58 ", config["database"]["dsn"])
+        self.assertIn("dbname=faka-58 ", config["database"]["dsn"])
+        self.assertEqual(config["redis"]["prefix"], "faka-58")
+        self.assertIn("POSTGRES_DB=faka-58\nPOSTGRES_APP_USER=faka-58\n", (self.root / ".env").read_text(encoding="utf-8"))
         self.assertFalse(config["email"]["enabled"])
         self.assertEqual(config["upload"]["storage"], "local")
         self.assertEqual(config["server"]["trusted_proxies"], ["172.29.240.10/32"])
@@ -129,6 +134,18 @@ class SetupTests(unittest.TestCase):
             self.initialize(image=IMAGE)
         self.assertEqual(self.private_snapshot(), before)
 
+    def test_legacy_names_and_database_are_preserved_on_retry(self) -> None:
+        state = self.initialize()
+        env = self.root / ".env"
+        env.write_text(env.read_text(encoding="utf-8").replace("COMPOSE_PROJECT_NAME=faka-58", "COMPOSE_PROJECT_NAME=getgpt").replace("POSTGRES_DB=faka-58\nPOSTGRES_APP_USER=faka-58\n", ""), encoding="utf-8")
+        path = self.root / "config.yml"
+        config = json.loads(path.read_text(encoding="utf-8"))
+        config["database"]["dsn"] = "host=postgres user=getgpt password=fixture dbname=getgpt"
+        path.write_text(json.dumps(config), encoding="utf-8")
+        before = self.private_snapshot()
+        self.assertEqual(self.initialize(), state)
+        self.assertEqual(self.private_snapshot(), before)
+
     def test_incomplete_existing_configuration_is_not_overwritten(self) -> None:
         (self.root / ".env").write_text("existing-private-data", encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "不完整"):
@@ -165,7 +182,7 @@ class RestoreTests(unittest.TestCase):
         root.mkdir()
         private = source / "private"
         files = {
-            ".env": "COMPOSE_PROJECT_NAME=getgpt\nAPP_IMAGE=" + (image or "getgpt-store:local") + "\n",
+            ".env": "COMPOSE_PROJECT_NAME=faka-58\nAPP_IMAGE=" + (image or "faka-58:local") + "\n",
             "config.yml": "{}",
             "deploy/runtime/installation.json": json.dumps({} if image is None else {"image": image}),
             "deploy/runtime/Caddyfile": "localhost {\n reverse_proxy app:8080\n}",

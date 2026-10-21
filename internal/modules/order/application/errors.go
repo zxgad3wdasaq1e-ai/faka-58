@@ -3,9 +3,9 @@ package application
 import (
 	"errors"
 
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
 )
 
 var (

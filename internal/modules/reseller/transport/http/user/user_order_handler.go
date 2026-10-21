@@ -4,10 +4,10 @@ import (
 	"strings"
 	"time"
 
-	resellermodule "github.com/dujiao-next/internal/modules/reseller/contract"
-	dto "github.com/dujiao-next/internal/modules/reseller/transport/http/presenter"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	resellermodule "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	dto "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/transport/http/presenter"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

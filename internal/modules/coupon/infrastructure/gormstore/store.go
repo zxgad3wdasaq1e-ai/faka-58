@@ -3,11 +3,11 @@ package gormstore
 import (
 	"errors"
 	"fmt"
-	"github.com/dujiao-next/internal/persistence/gormutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/persistence/gormutil"
 	"time"
 
-	couponcontract "github.com/dujiao-next/internal/modules/coupon/contract"
-	coupondomain "github.com/dujiao-next/internal/modules/coupon/domain"
+	couponcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/contract"
+	coupondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/domain"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"

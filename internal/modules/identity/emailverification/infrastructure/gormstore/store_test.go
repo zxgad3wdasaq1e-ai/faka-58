@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	emailverificationdomain "github.com/dujiao-next/internal/modules/identity/emailverification/domain"
 	"github.com/glebarez/sqlite"
+	emailverificationdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/emailverification/domain"
 	"gorm.io/gorm"
 )
 

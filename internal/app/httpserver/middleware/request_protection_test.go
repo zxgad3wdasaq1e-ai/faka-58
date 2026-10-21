@@ -14,17 +14,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/constants"
-	captchacontract "github.com/dujiao-next/internal/modules/captcha/contract"
-	captchahttp "github.com/dujiao-next/internal/modules/captcha/transport/http"
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	userauthhttp "github.com/dujiao-next/internal/modules/identity/userauth/transport/http"
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
-	paymenthttp "github.com/dujiao-next/internal/modules/payment/transport/http"
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
-	"github.com/dujiao-next/internal/shared/jsonmap"
 	"github.com/gin-gonic/gin"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	captchacontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/contract"
+	captchahttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/transport/http"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	userauthhttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/transport/http"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
+	paymenthttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/transport/http"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 func TestPublicProtectionLimitsBeforeHandlersAndSeparatesSensitiveBuckets(t *testing.T) {

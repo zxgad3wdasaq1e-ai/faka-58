@@ -7,9 +7,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/dujiao-next/internal/modules/compliance/contract"
-	"github.com/dujiao-next/internal/modules/compliance/domain"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/compliance/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/compliance/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 const (

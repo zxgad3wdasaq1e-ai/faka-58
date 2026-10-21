@@ -5,12 +5,12 @@ import (
 	"strings"
 	"time"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	"github.com/dujiao-next/internal/shared/passwordpolicy"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/passwordpolicy"
 
-	"github.com/dujiao-next/internal/cache"
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/telegramidentity"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/cache"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/telegramidentity"
 
 	"golang.org/x/crypto/bcrypt"
 )

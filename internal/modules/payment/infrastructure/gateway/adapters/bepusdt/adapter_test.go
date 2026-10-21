@@ -8,13 +8,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	paymentcontract "github.com/dujiao-next/internal/modules/payment/contract"
+	paymentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/contract"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/bepusdt"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/bepusdt"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 func TestBepusdtAdapter_Type(t *testing.T) {

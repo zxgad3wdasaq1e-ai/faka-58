@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	affiliatedomain "github.com/dujiao-next/internal/modules/affiliate/domain"
+	affiliatedomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/domain"
 
-	"github.com/dujiao-next/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
 )
 
 // UpdateAffiliateProfileStatus 管理端更新返利用户状态

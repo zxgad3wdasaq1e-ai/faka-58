@@ -22,7 +22,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
 
 	"github.com/wechatpay-apiv3/wechatpay-go/core"
 )
@@ -248,7 +248,7 @@ func TestWechatPayPublicKeySecurityEchoSuccess(t *testing.T) {
 			t.Error("public-key signature test must not include encrypted_echo_message")
 		}
 		echoMessage, _ := payload["echo_message"].(string)
-		if !strings.HasPrefix(echoMessage, "dujiao-next-") {
+		if !strings.HasPrefix(echoMessage, "faka-58-") {
 			t.Errorf("unexpected echo_message: %q", echoMessage)
 		}
 		responseBody, err := json.Marshal(map[string]string{"echo_message": echoMessage})

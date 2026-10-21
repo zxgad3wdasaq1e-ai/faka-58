@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/dujiao-next/internal/constants"
-	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	settingsstorefront "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/storefront"
 )
 
 func thresholdValueByAlertType(setting settingsstorefront.DashboardAlertSetting, alertType string) int64 {

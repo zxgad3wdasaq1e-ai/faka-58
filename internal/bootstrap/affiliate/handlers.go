@@ -1,8 +1,8 @@
 package affiliatebootstrap
 
 import (
-	"github.com/dujiao-next/internal/app/container"
-	affiliatetransport "github.com/dujiao-next/internal/modules/affiliate/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	affiliatetransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/transport/http"
 )
 
 func NewStorefrontHandler(c *container.Container) *affiliatetransport.Handler {

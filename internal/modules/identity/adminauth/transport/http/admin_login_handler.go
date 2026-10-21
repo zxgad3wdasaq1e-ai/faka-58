@@ -3,13 +3,13 @@ package adminauthhttp
 import (
 	"errors"
 
-	ginutil "github.com/dujiao-next/internal/platform/http/ginutil"
+	ginutil "github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/i18n"
-	captcha "github.com/dujiao-next/internal/modules/captcha/contract"
-	captchahttp "github.com/dujiao-next/internal/modules/captcha/transport/http"
-	"github.com/dujiao-next/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/i18n"
+	captcha "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/contract"
+	captchahttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

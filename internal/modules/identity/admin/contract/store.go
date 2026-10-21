@@ -3,7 +3,7 @@ package admincontract
 import (
 	"time"
 
-	admindomain "github.com/dujiao-next/internal/modules/identity/admin/domain"
+	admindomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/domain"
 )
 
 type Store interface {

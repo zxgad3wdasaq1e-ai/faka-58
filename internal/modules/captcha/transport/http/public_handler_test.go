@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	captchacontract "github.com/dujiao-next/internal/modules/captcha/contract"
-	"github.com/dujiao-next/internal/platform/http/response"
+	captchacontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

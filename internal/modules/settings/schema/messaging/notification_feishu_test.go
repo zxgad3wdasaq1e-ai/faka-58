@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	settingsvalue "github.com/dujiao-next/internal/modules/settings/schema/value"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	settingsvalue "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/value"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 func TestNotificationCenterFeishuPatchKeepsSecretAndNormalizesRecipients(t *testing.T) {

@@ -6,11 +6,11 @@ import (
 	"strings"
 	"time"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	dashboard "github.com/dujiao-next/internal/modules/dashboard/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	dashboard "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/dashboard/contract"
 )
 
 func profitOrderStatuses() []string {

@@ -1,6 +1,6 @@
 package refund
 
-import orderapp "github.com/dujiao-next/internal/modules/order/application"
+import orderapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application"
 
 var (
 	ErrOrderFetchFailed         = orderapp.ErrOrderFetchFailed

@@ -3,18 +3,18 @@ package catalogproductbootstrap
 import (
 	"errors"
 
-	paymentcontract "github.com/dujiao-next/internal/modules/payment/contract"
+	paymentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/contract"
 
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
 
-	cardsecretcontract "github.com/dujiao-next/internal/modules/cardsecret/contract"
-	categorycontract "github.com/dujiao-next/internal/modules/catalog/category/contract"
+	cardsecretcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/contract"
+	categorycontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/contract"
 
-	cartgormstore "github.com/dujiao-next/internal/modules/cart/infrastructure/gormstore"
-	mappingcontract "github.com/dujiao-next/internal/modules/catalog/mapping/contract"
-	productapplication "github.com/dujiao-next/internal/modules/catalog/product/application"
-	productadmin "github.com/dujiao-next/internal/modules/catalog/product/application/admin"
-	productwrite "github.com/dujiao-next/internal/modules/catalog/product/application/write"
+	cartgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cart/infrastructure/gormstore"
+	mappingcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/contract"
+	productapplication "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/application"
+	productadmin "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/application/admin"
+	productwrite "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/application/write"
 
 	"gorm.io/gorm"
 )

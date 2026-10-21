@@ -1,8 +1,10 @@
-# XOPEN AI 发卡商城
+# faka-58 发卡商城
 
 基于 [Dujiao-Next](https://github.com/dujiao-next/dujiao-next) 的发卡商城，参考 [GETGPT](https://getgpt.pro/) 公开页面重建店面。面向 `xopenai.vip` 部署，品牌、商品、价格及客服信息可在后台维护。
 
-展示品牌为 XOPEN AI，镜像内主程序为 `xopen-ai`。已有站点的名称、站点 URL 和 SEO 配置保存在数据库中，升级后请在后台「系统设置」同步为 XOPEN AI 和实际访问域名，并在支付平台同步 `https://xopenai.vip/api/v1/payments/callback`。后台版本检查使用本仓库的 GitHub Releases；镜像部署通过 Docker Compose 更新。
+展示品牌为 faka-58，镜像内主程序为 `faka-58`。已有站点的已知旧默认品牌和 SEO 标题会在读取时映射为 faka-58，自定义名称保持不变，数据库中的原始设置保留。站点 URL 可在后台「系统设置」调整为实际访问域名，支付平台回调地址同步为 `https://xopenai.vip/api/v1/payments/callback`。后台版本检查使用本仓库的 GitHub Releases；镜像部署通过 Docker Compose 更新。
+
+新安装使用 `faka-58` 作为 Compose 项目、数据库、应用数据库账号和缓存前缀。已有安装继续保留 `.env`、`config.yml`、密钥与数据卷；不要为统一名称修改 `COMPOSE_PROJECT_NAME`，否则 Compose 会切换到另一组卷。未显式指定数据库名和账号时，Compose 沿用 `.env` 中的项目名，兼容旧安装。曾手工配置不同项目名或数据库名时，升级前在 `.env` 设置 `POSTGRES_DB` 和 `POSTGRES_APP_USER` 为实际旧值，并保留 `config.yml` 的数据库 DSN；备份及恢复从 PostgreSQL 容器读取实际库名与管理员账号。已有站点的数据库内容与缓存前缀不会自动重命名。
 
 包含分类和 SKU、卡密批量导入与自动交付、游客及注册用户购买、购物车、库存预占、订单退款、钱包、推广返利、上游供货对接、Telegram 商城、支付配置、后台 RBAC 和 2FA。初始化目录不含真实卡密、虚构销量或用户评价，展示商品需要先导入库存或配置供货方式。
 
@@ -126,11 +128,12 @@ MinIO 控制台仅绑定 `127.0.0.1:9001`，凭据位于 `deploy/secrets/initial
 ```bash
 docker compose --profile tools up -d adminer
 # SSH 转发后访问 http://127.0.0.1:8090
-# 类型 PostgreSQL，服务器 postgres，数据库/用户名 getgpt
+# 类型 PostgreSQL，服务器 postgres，数据库/用户名 faka-58
 docker compose --profile tools stop adminer
 ```
 
-应用数据库账号 `getgpt` 是数据库所有者，不具有 PostgreSQL 超级用户、建库或建角色权限；应用密码位于 `deploy/secrets/postgres_password`，管理员密码另存为 `postgres_admin_password`。PostgreSQL、Redis 和 MinIO S3 端口均不向宿主机公开；管理工具仅监听回环地址。
+应用数据库账号 `faka-58` 是数据库所有者，不具有 PostgreSQL 超级用户、建库或建角色权限；应用密码位于 `deploy/secrets/postgres_password`，管理员密码另存为 `postgres_admin_password`。PostgreSQL、Redis 和 MinIO S3 端口均不向宿主机公开；管理工具仅监听回环地址。
+
 
 ## 请求限制与退款佣金
 
@@ -209,7 +212,7 @@ pnpm run dev
 前台端口 5173，后台 5174，Vite 代理 API/上传至后端 8080。镜像构建自动构建两前端并使用 `release,fullstack` 标签嵌入：
 
 ```bash
-docker build -t getgpt-store:local .
+docker build -t faka-58:local .
 go vet ./...
 go test ./...
 # 两前端目录各执行 pnpm run test 和 pnpm run build

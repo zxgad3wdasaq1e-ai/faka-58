@@ -5,17 +5,17 @@ import (
 	"errors"
 	"testing"
 
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	"github.com/dujiao-next/internal/app/container"
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/constants"
-	notificationcontract "github.com/dujiao-next/internal/modules/notification/contract"
-	notificationsmtp "github.com/dujiao-next/internal/modules/notification/infrastructure/smtp"
-	"github.com/dujiao-next/internal/queue"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/mailbrand"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	notificationcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/contract"
+	notificationsmtp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/infrastructure/smtp"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/mailbrand"
 )
 
 func TestBuildBotNotifyRequestURLReplacesPath(t *testing.T) {
@@ -222,7 +222,7 @@ func TestHandleOrderStatusEmailSkipsNonRetryableEmailErrors(t *testing.T) {
 			name: "smtp_disabled",
 			order: &orderdomain.Order{
 				ID:          1,
-				OrderNo:     "DJ-ORDER-001",
+				OrderNo:     "FAKA-58-ORDER-001",
 				GuestEmail:  "buyer@example.com",
 				GuestLocale: "zh-CN",
 				Currency:    "CNY",
@@ -234,7 +234,7 @@ func TestHandleOrderStatusEmailSkipsNonRetryableEmailErrors(t *testing.T) {
 			name: "smtp_not_configured",
 			order: &orderdomain.Order{
 				ID:          2,
-				OrderNo:     "DJ-ORDER-002",
+				OrderNo:     "FAKA-58-ORDER-002",
 				GuestEmail:  "buyer@example.com",
 				GuestLocale: "zh-CN",
 				Currency:    "CNY",
@@ -246,7 +246,7 @@ func TestHandleOrderStatusEmailSkipsNonRetryableEmailErrors(t *testing.T) {
 			name: "invalid_receiver_email",
 			order: &orderdomain.Order{
 				ID:          3,
-				OrderNo:     "DJ-ORDER-003",
+				OrderNo:     "FAKA-58-ORDER-003",
 				GuestEmail:  "invalid-email",
 				GuestLocale: "zh-CN",
 				Currency:    "CNY",
@@ -263,7 +263,7 @@ func TestHandleOrderStatusEmailSkipsNonRetryableEmailErrors(t *testing.T) {
 			name: "generic_send_failure_keeps_retryable_error",
 			order: &orderdomain.Order{
 				ID:          4,
-				OrderNo:     "DJ-ORDER-004",
+				OrderNo:     "FAKA-58-ORDER-004",
 				GuestEmail:  "buyer@example.com",
 				GuestLocale: "zh-CN",
 				Currency:    "CNY",
@@ -336,7 +336,7 @@ func TestHandleOrderStatusEmailSkipsCanceledRegisteredOrderWhenPayloadStatusEmpt
 		Container: &container.Container{},
 		orderReader: orderStatusEmailWorkerOrderRepoStub{order: &orderdomain.Order{
 			ID:      107,
-			OrderNo: "DJ-ORDER-107",
+			OrderNo: "FAKA-58-ORDER-107",
 			UserID:  42,
 			Status:  constants.OrderStatusCanceled,
 		}},
@@ -350,26 +350,26 @@ func TestBuildOrderFulfillmentEmailPayloadFromChildren(t *testing.T) {
 	order := &orderdomain.Order{
 		Children: []orderdomain.Order{
 			{
-				OrderNo:     "DJ-CHILD-01",
+				OrderNo:     "FAKA-58-CHILD-01",
 				Fulfillment: &fulfillmentdomain.Fulfillment{Payload: "  SECRET-01  "},
 			},
 			{
-				OrderNo:     "DJ-CHILD-02",
+				OrderNo:     "FAKA-58-CHILD-02",
 				Fulfillment: nil,
 			},
 			{
-				OrderNo:     "DJ-CHILD-03",
+				OrderNo:     "FAKA-58-CHILD-03",
 				Fulfillment: &fulfillmentdomain.Fulfillment{Payload: "    "},
 			},
 			{
-				OrderNo:     "DJ-CHILD-04",
+				OrderNo:     "FAKA-58-CHILD-04",
 				Fulfillment: &fulfillmentdomain.Fulfillment{Payload: "SECRET-04-L1\nSECRET-04-L2"},
 			},
 		},
 	}
 
 	got := buildOrderFulfillmentEmailPayload(order)
-	want := "[DJ-CHILD-01]\nSECRET-01\n\n[DJ-CHILD-04]\nSECRET-04-L1\nSECRET-04-L2"
+	want := "[FAKA-58-CHILD-01]\nSECRET-01\n\n[FAKA-58-CHILD-04]\nSECRET-04-L1\nSECRET-04-L2"
 	if got != want {
 		t.Fatalf("unexpected payload, want %q, got %q", want, got)
 	}

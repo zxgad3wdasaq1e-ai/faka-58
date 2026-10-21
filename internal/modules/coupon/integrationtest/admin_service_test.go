@@ -5,11 +5,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	couponapp "github.com/dujiao-next/internal/modules/coupon/application"
-	coupondomain "github.com/dujiao-next/internal/modules/coupon/domain"
-	coupongormstore "github.com/dujiao-next/internal/modules/coupon/infrastructure/gormstore"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	couponapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/application"
+	coupondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/domain"
+	coupongormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/infrastructure/gormstore"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/glebarez/sqlite"
 	"github.com/shopspring/decimal"

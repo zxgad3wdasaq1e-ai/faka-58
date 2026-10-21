@@ -3,8 +3,8 @@ package settingscurrency
 import (
 	"strings"
 
-	"github.com/dujiao-next/internal/constants"
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
 )
 
 type Provider struct {

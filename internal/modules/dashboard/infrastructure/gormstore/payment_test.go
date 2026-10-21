@@ -4,12 +4,12 @@ import (
 	"testing"
 	"time"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/shopspring/decimal"
 )
@@ -155,7 +155,7 @@ func TestGetPaymentOrderAlertCountsExcludesChildOrdersAndWalletPayments(t *testi
 	now := time.Now().UTC().Truncate(time.Second)
 
 	parentOrder := &orderdomain.Order{
-		OrderNo:        "DJ-PENDING-001",
+		OrderNo:        "FAKA-58-PENDING-001",
 		Status:         constants.OrderStatusPendingPayment,
 		Currency:       "CNY",
 		OriginalAmount: money.FromDecimal(decimal.NewFromInt(100)),
@@ -169,7 +169,7 @@ func TestGetPaymentOrderAlertCountsExcludesChildOrdersAndWalletPayments(t *testi
 	}
 
 	childOrder := &orderdomain.Order{
-		OrderNo:        "DJ-PENDING-001-01",
+		OrderNo:        "FAKA-58-PENDING-001-01",
 		ParentID:       &parentOrder.ID,
 		Status:         constants.OrderStatusPendingPayment,
 		Currency:       "CNY",

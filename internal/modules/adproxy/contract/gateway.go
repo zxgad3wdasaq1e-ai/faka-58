@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/dujiao-next/internal/modules/adproxy/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/adproxy/domain"
 )
 
 // Gateway 是应用层访问广告网关所需的端口。

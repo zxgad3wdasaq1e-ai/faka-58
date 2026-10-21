@@ -5,11 +5,11 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/dujiao-next/internal/constants"
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
-	userpresenter "github.com/dujiao-next/internal/modules/identity/userauth/transport/presenter"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
+	userpresenter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/transport/presenter"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

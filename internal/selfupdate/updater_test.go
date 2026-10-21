@@ -11,23 +11,23 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dujiao-next/internal/version"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/version"
 )
 
 // TestSelectAssets 用 v1.3.1 发行版的真实附件清单验证选择逻辑：
-// 里面同时存在 dujiao-all_* 归档，且校验和文件名带项目名与版本号前缀。
+// 里面同时存在 other-project_* 归档，且校验和文件名带项目名与版本号前缀。
 func TestSelectAssets(t *testing.T) {
 	suffix := PlatformAssetSuffix()
 	assets := []version.Asset{
-		{Name: "dujiao-all_v1.3.1_Linux_arm64.tar.gz", DownloadURL: "https://github.com/all-arm"},
-		{Name: "dujiao-all_v1.3.1_Linux_x86_64.tar.gz", DownloadURL: "https://github.com/all-x86"},
-		{Name: "dujiao-next_1.3.1_checksums.txt", DownloadURL: "https://github.com/sums"},
-		{Name: "dujiao-next_v1.3.1_Darwin_arm64.tar.gz", DownloadURL: "https://github.com/darwin-arm"},
-		{Name: "dujiao-next_v1.3.1_Darwin_x86_64.tar.gz", DownloadURL: "https://github.com/darwin-x86"},
-		{Name: "dujiao-next_v1.3.1_Linux_arm64.tar.gz", DownloadURL: "https://github.com/linux-arm"},
-		{Name: "dujiao-next_v1.3.1_Linux_x86_64.tar.gz", DownloadURL: "https://github.com/linux-x86"},
-		{Name: "dujiao-next_v1.3.1_Windows_arm64.zip", DownloadURL: "https://github.com/win-arm"},
-		{Name: "dujiao-next_v1.3.1_Windows_x86_64.zip", DownloadURL: "https://github.com/win-x86"},
+		{Name: "other-project_v1.3.1_Linux_arm64.tar.gz", DownloadURL: "https://github.com/all-arm"},
+		{Name: "other-project_v1.3.1_Linux_x86_64.tar.gz", DownloadURL: "https://github.com/all-x86"},
+		{Name: "faka-58_1.3.1_checksums.txt", DownloadURL: "https://github.com/sums"},
+		{Name: "faka-58_v1.3.1_Darwin_arm64.tar.gz", DownloadURL: "https://github.com/darwin-arm"},
+		{Name: "faka-58_v1.3.1_Darwin_x86_64.tar.gz", DownloadURL: "https://github.com/darwin-x86"},
+		{Name: "faka-58_v1.3.1_Linux_arm64.tar.gz", DownloadURL: "https://github.com/linux-arm"},
+		{Name: "faka-58_v1.3.1_Linux_x86_64.tar.gz", DownloadURL: "https://github.com/linux-x86"},
+		{Name: "faka-58_v1.3.1_Windows_arm64.zip", DownloadURL: "https://github.com/win-arm"},
+		{Name: "faka-58_v1.3.1_Windows_x86_64.zip", DownloadURL: "https://github.com/win-x86"},
 	}
 
 	archiveURL, checksumURL, assetName, err := selectAssets(assets)
@@ -37,7 +37,7 @@ func TestSelectAssets(t *testing.T) {
 	if !strings.HasSuffix(assetName, suffix) {
 		t.Errorf("picked asset %q does not match platform suffix %q", assetName, suffix)
 	}
-	// dujiao-all_* 的平台后缀与 dujiao-next_* 完全相同，绝不能选中
+	// other-project_* 的平台后缀与 faka-58_* 完全相同，绝不能选中
 	if !strings.HasPrefix(assetName, archivePrefix) {
 		t.Errorf("picked asset %q is not a %s archive", assetName, archivePrefix)
 	}
@@ -49,14 +49,14 @@ func TestSelectAssets(t *testing.T) {
 	}
 }
 
-// TestSelectAssetsIgnoresOtherProjects 只有 dujiao-all 归档时必须报缺失，
+// TestSelectAssetsIgnoresOtherProjects 只有 other-project 归档时必须报缺失，
 // 而不是错误地拿别的项目的产物去替换自己。
 func TestSelectAssetsIgnoresOtherProjects(t *testing.T) {
 	assets := []version.Asset{
-		{Name: "dujiao-all_v1.3.1_Linux_arm64.tar.gz", DownloadURL: "https://github.com/all-arm"},
-		{Name: "dujiao-all_v1.3.1_Linux_x86_64.tar.gz", DownloadURL: "https://github.com/all-x86"},
-		{Name: "dujiao-all_v1.3.1_Darwin_arm64.tar.gz", DownloadURL: "https://github.com/all-darwin-arm"},
-		{Name: "dujiao-all_v1.3.1_Darwin_x86_64.tar.gz", DownloadURL: "https://github.com/all-darwin-x86"},
+		{Name: "other-project_v1.3.1_Linux_arm64.tar.gz", DownloadURL: "https://github.com/all-arm"},
+		{Name: "other-project_v1.3.1_Linux_x86_64.tar.gz", DownloadURL: "https://github.com/all-x86"},
+		{Name: "other-project_v1.3.1_Darwin_arm64.tar.gz", DownloadURL: "https://github.com/all-darwin-arm"},
+		{Name: "other-project_v1.3.1_Darwin_x86_64.tar.gz", DownloadURL: "https://github.com/all-darwin-x86"},
 	}
 	if _, _, _, err := selectAssets(assets); err == nil {
 		t.Fatal("expected ErrAssetNotFound when only other projects' archives are present")
@@ -65,11 +65,11 @@ func TestSelectAssetsIgnoresOtherProjects(t *testing.T) {
 
 func TestIsChecksumAsset(t *testing.T) {
 	cases := map[string]bool{
-		"dujiao-next_1.3.1_checksums.txt":        true, // goreleaser 默认模板
-		"checksums.txt":                          true, // 显式配置成裸文件名
-		"dujiao-all_1.3.1_checksums.txt":         false,
-		"dujiao-next_v1.3.1_Linux_x86_64.tar.gz": false,
-		"notes.txt":                              false,
+		"faka-58_1.3.1_checksums.txt":        true, // goreleaser 默认模板
+		"checksums.txt":                      true, // 显式配置成裸文件名
+		"other-project_1.3.1_checksums.txt":  false,
+		"faka-58_v1.3.1_Linux_x86_64.tar.gz": false,
+		"notes.txt":                          false,
 	}
 	for name, want := range cases {
 		if got := isChecksumAsset(name); got != want {
@@ -90,7 +90,7 @@ func TestValidateDownloadURL(t *testing.T) {
 		raw     string
 		wantErr bool
 	}{
-		{"https://github.com/dujiao-next/dujiao-next/releases/download/v1/x.tar.gz", false},
+		{"https://github.com/zxgad3wdasaq1e-ai/faka-58/releases/download/v1/x.tar.gz", false},
 		{"https://objects.githubusercontent.com/foo", false},
 		{"https://release-assets.githubusercontent.com/foo", false},
 		// 非 HTTPS 一律拒绝
@@ -115,15 +115,15 @@ func TestValidateDownloadURL(t *testing.T) {
 }
 
 func TestLookupChecksum(t *testing.T) {
-	content := `abc123  dujiao-next_v1.5.0_Linux_x86_64.tar.gz
-def456 *dujiao-next_v1.5.0_Darwin_arm64.tar.gz
+	content := `abc123  faka-58_v1.5.0_Linux_x86_64.tar.gz
+def456 *faka-58_v1.5.0_Darwin_arm64.tar.gz
 garbage-line
 `
-	if got := lookupChecksum(content, "dujiao-next_v1.5.0_Linux_x86_64.tar.gz"); got != "abc123" {
+	if got := lookupChecksum(content, "faka-58_v1.5.0_Linux_x86_64.tar.gz"); got != "abc123" {
 		t.Errorf("lookupChecksum = %q, want abc123", got)
 	}
 	// sha256sum 的二进制模式会给文件名加 * 前缀
-	if got := lookupChecksum(content, "dujiao-next_v1.5.0_Darwin_arm64.tar.gz"); got != "def456" {
+	if got := lookupChecksum(content, "faka-58_v1.5.0_Darwin_arm64.tar.gz"); got != "def456" {
 		t.Errorf("lookupChecksum with binary-mode prefix = %q, want def456", got)
 	}
 	if got := lookupChecksum(content, "missing.tar.gz"); got != "" {
@@ -266,7 +266,7 @@ func TestSwapBinaryAndRollback(t *testing.T) {
 func TestFileSHA256(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "f")
-	content := []byte("hello dujiao")
+	content := []byte("hello faka-58")
 	if err := os.WriteFile(path, content, 0o644); err != nil {
 		t.Fatal(err)
 	}

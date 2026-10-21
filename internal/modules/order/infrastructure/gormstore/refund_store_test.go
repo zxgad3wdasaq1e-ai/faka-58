@@ -5,16 +5,16 @@ import (
 	"testing"
 	"time"
 
-	ordercontract "github.com/dujiao-next/internal/modules/order/contract"
+	ordercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/contract"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/glebarez/sqlite"
 	"github.com/shopspring/decimal"
@@ -78,7 +78,7 @@ func TestOrderRefundRecordRepositoryListAdminFilters(t *testing.T) {
 	}
 
 	order1 := &orderdomain.Order{
-		OrderNo:          "DJ-REFUND-001",
+		OrderNo:          "FAKA-58-REFUND-001",
 		UserID:           user1.ID,
 		Status:           constants.OrderStatusCompleted,
 		Currency:         "CNY",
@@ -92,7 +92,7 @@ func TestOrderRefundRecordRepositoryListAdminFilters(t *testing.T) {
 		UpdatedAt:        now.Add(-4 * time.Hour),
 	}
 	order2 := &orderdomain.Order{
-		OrderNo:          "DJ-REFUND-002",
+		OrderNo:          "FAKA-58-REFUND-002",
 		UserID:           0,
 		GuestEmail:       "guest-refund@example.com",
 		Status:           constants.OrderStatusCompleted,
@@ -107,7 +107,7 @@ func TestOrderRefundRecordRepositoryListAdminFilters(t *testing.T) {
 		UpdatedAt:        now.Add(-3 * time.Hour),
 	}
 	order3 := &orderdomain.Order{
-		OrderNo:          "DJ-REFUND-003",
+		OrderNo:          "FAKA-58-REFUND-003",
 		UserID:           user2.ID,
 		Status:           constants.OrderStatusCompleted,
 		Currency:         "CNY",
@@ -227,7 +227,7 @@ func TestOrderRefundRecordRepositoryListAdminFilters(t *testing.T) {
 	rows, total, err = repo.ListRefundRecordsAdmin(ordercontract.RefundRecordListFilter{
 		Page:           1,
 		PageSize:       20,
-		OrderNo:        "DJ-REFUND-002",
+		OrderNo:        "FAKA-58-REFUND-002",
 		GuestEmail:     "guest-refund@example.com",
 		ProductKeyword: "游客商品",
 	})

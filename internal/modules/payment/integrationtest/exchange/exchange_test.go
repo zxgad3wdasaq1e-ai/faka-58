@@ -5,29 +5,29 @@ import (
 	"testing"
 	"time"
 
-	paymentapp "github.com/dujiao-next/internal/modules/payment/application"
+	paymentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/application"
 
-	paymentgormstore "github.com/dujiao-next/internal/modules/payment/infrastructure/gormstore"
+	paymentgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gormstore"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
-	ordergormstore "github.com/dujiao-next/internal/modules/order/infrastructure/gormstore"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
+	ordergormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/infrastructure/gormstore"
 
-	walletdomain "github.com/dujiao-next/internal/modules/wallet/domain"
+	walletdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/domain"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	productgormstore "github.com/dujiao-next/internal/modules/catalog/product/store/gormstore"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	productgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/store/gormstore"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	walletapp "github.com/dujiao-next/internal/modules/wallet/application"
-	walletgormstore "github.com/dujiao-next/internal/modules/wallet/infrastructure/gormstore"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	walletapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/application"
+	walletgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/infrastructure/gormstore"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/platform/database/gormdb"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/database/gormdb"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/glebarez/sqlite"
 	"github.com/shopspring/decimal"

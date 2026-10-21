@@ -3,9 +3,9 @@ package reportinghttp
 import (
 	"strings"
 
-	reportingdomain "github.com/dujiao-next/internal/modules/reporting/domain"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
 	"github.com/gin-gonic/gin"
+	reportingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reporting/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
 )
 
 // ParseQuery parses the common range contract used by operational reports.

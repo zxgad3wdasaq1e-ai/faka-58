@@ -3,21 +3,21 @@ package integrationtest
 import (
 	"testing"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	affiliateapp "github.com/dujiao-next/internal/modules/affiliate/application"
-	affiliatedomain "github.com/dujiao-next/internal/modules/affiliate/domain"
-	affiliategormstore "github.com/dujiao-next/internal/modules/affiliate/infrastructure/gormstore"
-	userstore "github.com/dujiao-next/internal/modules/identity/user/infrastructure/gormstore"
+	affiliateapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/application"
+	affiliatedomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/domain"
+	affiliategormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/infrastructure/gormstore"
+	userstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/infrastructure/gormstore"
 
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
-	settingsintegration "github.com/dujiao-next/internal/modules/settings/schema/integration"
-	"github.com/dujiao-next/internal/testkit/memorysettings"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
+	settingsintegration "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/integration"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/testkit/memorysettings"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 type staticOrderReader struct{ order *orderdomain.Order }

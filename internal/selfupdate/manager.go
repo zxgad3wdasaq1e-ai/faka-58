@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dujiao-next/internal/version"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/version"
 )
 
 // Stage 升级过程中的阶段，用于前端展示进度条文案
@@ -112,7 +112,7 @@ func (m *Manager) Start(ctx context.Context) error {
 	}
 
 	// 跨进程锁也必须在拉 release 之前取得。Manager.running 只能拦住当前
-	// HTTP 进程里的另一个请求，拦不住终端里单独启动的 `dujiao-next rollback`。
+	// HTTP 进程里的另一个请求，拦不住终端里单独启动的 `faka-58 rollback`。
 	// 锁一直交给异步 Apply 持有，覆盖检查、下载、替换和元数据落盘的完整事务。
 	unlock, err := acquireBinaryLock(execPath)
 	if err != nil {

@@ -1,9 +1,9 @@
 package resellerbootstrap
 
 import (
-	"github.com/dujiao-next/internal/app/container"
-	adminhttp "github.com/dujiao-next/internal/modules/reseller/transport/http/admin"
-	userhttp "github.com/dujiao-next/internal/modules/reseller/transport/http/user"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	adminhttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/transport/http/admin"
+	userhttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/transport/http/user"
 )
 
 type Handlers struct {

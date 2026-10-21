@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/i18n"
-	"github.com/dujiao-next/internal/platform/http/response"
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/i18n"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 )
 
 const callbackBodyValidatedKey = "callback_body_validated"

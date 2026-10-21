@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	dashboard "github.com/dujiao-next/internal/modules/dashboard/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	dashboard "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/dashboard/contract"
 )
 
 // GetOrderTrends 获取订单趋势

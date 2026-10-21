@@ -1,8 +1,8 @@
 package gormstore
 
 import (
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
 )
 
 // ListProductSettingsForPricing 批量获取分销定价所需的商品级与 SKU 级配置。

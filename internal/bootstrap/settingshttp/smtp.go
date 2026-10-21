@@ -3,13 +3,13 @@ package settingsbootstrap
 import (
 	"errors"
 
-	notificationcontract "github.com/dujiao-next/internal/modules/notification/contract"
-	notificationsmtp "github.com/dujiao-next/internal/modules/notification/infrastructure/smtp"
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
-	settingsmessaging "github.com/dujiao-next/internal/modules/settings/schema/messaging"
+	notificationcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/contract"
+	notificationsmtp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/infrastructure/smtp"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
+	settingsmessaging "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/messaging"
 
-	"github.com/dujiao-next/internal/config"
-	settingstransport "github.com/dujiao-next/internal/modules/settings/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	settingstransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/transport/http"
 )
 
 type settingsSMTPAdapter struct {

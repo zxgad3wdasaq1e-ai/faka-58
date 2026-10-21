@@ -4,12 +4,12 @@ import (
 	"strings"
 	"time"
 
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
 
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
 
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 // RefreshBalanceAccount 按账务流水重算余额账户缓存。

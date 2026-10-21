@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	cardsecretcontract "github.com/dujiao-next/internal/modules/cardsecret/contract"
-	cardsecretdomain "github.com/dujiao-next/internal/modules/cardsecret/domain"
+	cardsecretcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/contract"
+	cardsecretdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/domain"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"

@@ -10,29 +10,29 @@ import (
 	"strings"
 	"testing"
 
-	mappingdomain "github.com/dujiao-next/internal/modules/catalog/mapping/domain"
+	mappingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/domain"
 
-	siteconnectiondomain "github.com/dujiao-next/internal/modules/siteconnection/domain"
+	siteconnectiondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/domain"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	categorycontract "github.com/dujiao-next/internal/modules/catalog/category/contract"
-	categorydomain "github.com/dujiao-next/internal/modules/catalog/category/domain"
+	categorycontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/contract"
+	categorydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/domain"
 
-	productgormstore "github.com/dujiao-next/internal/modules/catalog/product/store/gormstore"
+	productgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/store/gormstore"
 
-	"github.com/dujiao-next/internal/constants"
-	categorygormstore "github.com/dujiao-next/internal/modules/catalog/category/infrastructure/gormstore"
-	mappingapp "github.com/dujiao-next/internal/modules/catalog/mapping/application"
-	mappingcontract "github.com/dujiao-next/internal/modules/catalog/mapping/contract"
-	mappinggormstore "github.com/dujiao-next/internal/modules/catalog/mapping/infrastructure/gormstore"
-	siteconnectionapp "github.com/dujiao-next/internal/modules/siteconnection/application"
-	siteconnectiongormstore "github.com/dujiao-next/internal/modules/siteconnection/infrastructure/gormstore"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
-	"github.com/dujiao-next/internal/upstream"
 	"github.com/glebarez/sqlite"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	categorygormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/infrastructure/gormstore"
+	mappingapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/application"
+	mappingcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/contract"
+	mappinggormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/infrastructure/gormstore"
+	siteconnectionapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/application"
+	siteconnectiongormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/infrastructure/gormstore"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/upstream"
 	"gorm.io/gorm"
 )
 

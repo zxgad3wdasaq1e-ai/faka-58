@@ -3,7 +3,7 @@ package contract
 import (
 	"time"
 
-	procurementdomain "github.com/dujiao-next/internal/modules/procurement/domain"
+	procurementdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/procurement/domain"
 )
 
 type Repository interface {

@@ -1,8 +1,8 @@
 package gormstore
 
 import (
-	reconciliationcontract "github.com/dujiao-next/internal/modules/reconciliation/contract"
-	reconciliationdomain "github.com/dujiao-next/internal/modules/reconciliation/domain"
+	reconciliationcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reconciliation/contract"
+	reconciliationdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reconciliation/domain"
 
 	"gorm.io/gorm"
 )

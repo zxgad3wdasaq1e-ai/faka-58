@@ -9,15 +9,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	contentapp "github.com/dujiao-next/internal/modules/content/application"
-	contentdomain "github.com/dujiao-next/internal/modules/content/domain"
-	"github.com/dujiao-next/internal/modules/content/infrastructure/gormstore"
-	contenttransport "github.com/dujiao-next/internal/modules/content/transport/http"
-	"github.com/dujiao-next/internal/platform/http/response"
-	"github.com/dujiao-next/internal/shared/jsonmap"
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	contentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/application"
+	contentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/infrastructure/gormstore"
+	contenttransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 	"gorm.io/gorm"
 )
 

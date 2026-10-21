@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/crypto"
-	channelclientcontract "github.com/dujiao-next/internal/modules/channelclient/contract"
-	channelclientdomain "github.com/dujiao-next/internal/modules/channelclient/domain"
-	"github.com/dujiao-next/internal/upstream"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/crypto"
+	channelclientcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/channelclient/contract"
+	channelclientdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/channelclient/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/upstream"
 )
 
 // Service 渠道客户端业务服务。

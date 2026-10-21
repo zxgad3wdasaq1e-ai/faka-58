@@ -7,13 +7,13 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	mappingdomain "github.com/dujiao-next/internal/modules/catalog/mapping/domain"
+	mappingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	procurementcontract "github.com/dujiao-next/internal/modules/procurement/contract"
-	siteconnectionapp "github.com/dujiao-next/internal/modules/siteconnection/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	procurementcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/procurement/contract"
+	siteconnectionapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/application"
 )
 
 // ── SubmitToUpstream tests ──

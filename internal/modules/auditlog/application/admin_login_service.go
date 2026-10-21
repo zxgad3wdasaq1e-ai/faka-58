@@ -4,8 +4,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/modules/auditlog/contract"
-	"github.com/dujiao-next/internal/modules/auditlog/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/domain"
 )
 
 // AdminLoginRecord 描述一次管理员认证或 2FA 操作的审计事实。

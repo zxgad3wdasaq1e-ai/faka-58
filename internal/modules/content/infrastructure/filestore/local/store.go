@@ -5,7 +5,7 @@ import (
 	"io/fs"
 	"os"
 
-	"github.com/dujiao-next/internal/modules/content/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/contract"
 )
 
 // Store 使用当前工作目录下的本地文件系统。

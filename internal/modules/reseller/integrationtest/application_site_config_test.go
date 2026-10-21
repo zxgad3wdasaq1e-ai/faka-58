@@ -5,12 +5,12 @@ import (
 	"errors"
 	"testing"
 
-	resellergormstore "github.com/dujiao-next/internal/modules/reseller/infrastructure/gormstore"
+	resellergormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/infrastructure/gormstore"
 
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
 
-	resellermodule "github.com/dujiao-next/internal/modules/reseller/application"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	resellermodule "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 func TestResellerSiteConfigServiceUserUpdateRequiresActiveProfile(t *testing.T) {

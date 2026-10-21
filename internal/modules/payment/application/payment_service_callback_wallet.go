@@ -4,12 +4,12 @@ import (
 	"strings"
 	"time"
 
-	paymentcontract "github.com/dujiao-next/internal/modules/payment/contract"
+	paymentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/contract"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	walletcontract "github.com/dujiao-next/internal/modules/wallet/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	walletcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/contract"
 )
 
 func (s *PaymentService) handleWalletRechargeCallback(payment *paymentdomain.Payment, status string, input PaymentCallbackInput) (*paymentdomain.Payment, error) {

@@ -1,9 +1,9 @@
 package httpserver
 
 import (
-	"github.com/dujiao-next/internal/app/container"
-	"github.com/dujiao-next/internal/app/httpserver/middleware"
-	upstreamtransport "github.com/dujiao-next/internal/modules/upstreamapi/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/httpserver/middleware"
+	upstreamtransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/upstreamapi/transport/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"

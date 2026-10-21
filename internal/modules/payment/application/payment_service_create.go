@@ -5,18 +5,18 @@ import (
 	"strings"
 	"time"
 
-	paymentcontract "github.com/dujiao-next/internal/modules/payment/contract"
+	paymentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/contract"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	orderapp "github.com/dujiao-next/internal/modules/order/application"
+	orderapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
 
-	"github.com/dujiao-next/internal/constants"
-	walletcontract "github.com/dujiao-next/internal/modules/wallet/contract"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	walletcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/shopspring/decimal"
 )

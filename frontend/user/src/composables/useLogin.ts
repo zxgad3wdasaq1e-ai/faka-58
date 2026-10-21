@@ -39,7 +39,7 @@ export function useLogin() {
 
   const brandSiteName = computed(() => {
     const siteName = String(appStore.config?.brand?.site_name || '').trim()
-    return siteName !== '' ? siteName : 'XOPEN AI'
+    return siteName !== '' ? siteName : 'faka-58'
   })
 
   const email = ref('')
@@ -118,7 +118,7 @@ export function useLogin() {
   ))
   const telegramMiniAppEntryLink = computed(() => buildTelegramMiniAppEntryLink(telegramBotUsername.value, telegramMiniAppURL.value))
   const showTelegramMiniAppEntry = computed(() => !isTelegramMiniApp.value && telegramMiniAppEntryLink.value !== '')
-  const telegramCallbackName = '__dujiaoUserTelegramLogin'
+  const telegramCallbackName = '__faka58UserTelegramLogin'
   const miniAppLoginAttempted = ref(false)
   const attemptingMiniAppLogin = ref(false)
 

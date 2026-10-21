@@ -1,6 +1,6 @@
 package settingsbrand
 
-import settingsapp "github.com/dujiao-next/internal/modules/settings/application"
+import settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
 
 // Reader 从设置应用服务读取站点 URL。
 type Reader struct {

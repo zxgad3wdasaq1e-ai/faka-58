@@ -3,8 +3,8 @@ package contract
 import (
 	"time"
 
-	cardsecretdomain "github.com/dujiao-next/internal/modules/cardsecret/domain"
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	cardsecretdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 )
 
 // Repository 持久化卡密库存并提供订单占用所需的原子状态迁移。

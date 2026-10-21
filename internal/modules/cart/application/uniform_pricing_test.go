@@ -4,14 +4,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/modules/cart/contract"
-	"github.com/dujiao-next/internal/modules/cart/domain"
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	promotioncontract "github.com/dujiao-next/internal/modules/promotion/contract"
-	promotiondomain "github.com/dujiao-next/internal/modules/promotion/domain"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cart/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cart/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	promotioncontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/promotion/contract"
+	promotiondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/promotion/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 type uniformCartItems struct {

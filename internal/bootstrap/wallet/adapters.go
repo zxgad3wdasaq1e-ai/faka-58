@@ -4,18 +4,18 @@ import (
 	"errors"
 	"fmt"
 
-	paymentapp "github.com/dujiao-next/internal/modules/payment/application"
+	paymentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/application"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	orderapp "github.com/dujiao-next/internal/modules/order/application"
-	walletapp "github.com/dujiao-next/internal/modules/wallet/application"
-	walletcontract "github.com/dujiao-next/internal/modules/wallet/contract"
-	walletdomain "github.com/dujiao-next/internal/modules/wallet/domain"
-	wallettransport "github.com/dujiao-next/internal/modules/wallet/transport/http"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	orderapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application"
+	walletapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/application"
+	walletcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/contract"
+	walletdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/domain"
+	wallettransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 // walletTransportAdapter composes wallet use cases with payment capabilities

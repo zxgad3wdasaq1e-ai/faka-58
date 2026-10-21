@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	walletapp "github.com/dujiao-next/internal/modules/wallet/application"
-	walletcontract "github.com/dujiao-next/internal/modules/wallet/contract"
-	walletdomain "github.com/dujiao-next/internal/modules/wallet/domain"
-	walletgormstore "github.com/dujiao-next/internal/modules/wallet/infrastructure/gormstore"
-	"github.com/dujiao-next/internal/shared/money"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	walletapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/application"
+	walletcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/contract"
+	walletdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/domain"
+	walletgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/infrastructure/gormstore"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/glebarez/sqlite"
 	"github.com/shopspring/decimal"

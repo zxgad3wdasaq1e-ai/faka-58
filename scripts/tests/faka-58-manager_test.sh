@@ -3,13 +3,13 @@
 set -Eeuo pipefail
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-MANAGER_SCRIPT=$(cd "${SCRIPT_DIR}/.." && pwd)/dujiao-next-manager.sh
+MANAGER_SCRIPT=$(cd "${SCRIPT_DIR}/.." && pwd)/faka-58-manager.sh
 
-TEST_TMP=$(mktemp -d "${TMPDIR:-/tmp}/dujiao-next-manager-test.XXXXXX")
+TEST_TMP=$(mktemp -d "${TMPDIR:-/tmp}/faka-58-manager-test.XXXXXX")
 trap 'rm -rf -- "$TEST_TMP"' EXIT
-export DUJIAO_MANAGER_TESTING=1
-export DUJIAO_ROOT_PREFIX="${TEST_TMP}/root"
-# shellcheck source=../dujiao-next-manager.sh
+export FAKA_58_MANAGER_TESTING=1
+export FAKA_58_ROOT_PREFIX="${TEST_TMP}/root"
+# shellcheck source=../faka-58-manager.sh
 source "$MANAGER_SCRIPT"
 
 RUN_TMP="${TEST_TMP}/runtime"
@@ -121,7 +121,7 @@ else
   skip "Debian and Ubuntu version matrix" "dpkg is not installed"
 fi
 
-assert_success "accepts generated admin path" validate_admin_path "/dj-a1b2c3"
+assert_success "accepts generated admin path" validate_admin_path "/faka-58-a1b2c3"
 assert_success "accepts multi-segment admin path" validate_admin_path "/ops/private-console"
 assert_failure "rejects reserved API path" validate_admin_path "/api/private"
 assert_failure "rejects prefix of reserved path" validate_admin_path "/api"
@@ -135,8 +135,8 @@ assert_failure "rejects password without uppercase" validate_admin_password "low
 assert_failure "rejects password without number" validate_admin_password "NoNumberHere"
 assert_success "accepts safe admin username" validate_admin_username "root-admin"
 assert_failure "rejects whitespace in admin username" validate_admin_username "root admin"
-assert_success "accepts exact backup destruction phrase" validate_destroy_phrase "DELETE DUJIAO DATA"
-assert_failure "rejects incomplete backup destruction phrase" validate_destroy_phrase "DELETE DUJIAO"
+assert_success "accepts exact backup destruction phrase" validate_destroy_phrase "DELETE FAKA-58 DATA"
+assert_failure "rejects incomplete backup destruction phrase" validate_destroy_phrase "DELETE FAKA-58"
 
 assert_equal "maps amd64 release architecture" "x86_64" "$(platform_asset_arch amd64)"
 assert_equal "maps aarch64 release architecture" "arm64" "$(platform_asset_arch aarch64)"
@@ -144,12 +144,14 @@ assert_failure "rejects unsupported architecture" platform_asset_arch riscv64
 assert_success "accepts semantic release tag" validate_release_tag "v1.5.0"
 assert_failure "rejects partial release tag" validate_release_tag "v1.5"
 assert_equal "builds exact GoReleaser asset name" \
-  "dujiao-next_v1.5.0_Linux_x86_64.tar.gz" \
+  "faka-58_v1.5.0_Linux_x86_64.tar.gz" \
   "$(archive_name_for v1.5.0 x86_64)"
 assert_success "accepts trusted GitHub asset URL" validate_download_url \
-  "https://github.com/dujiao-next/dujiao-next/releases/download/v1.5.0/dujiao-next_v1.5.0_Linux_x86_64.tar.gz"
+  "https://github.com/zxgad3wdasaq1e-ai/faka-58/releases/download/v1.5.0/faka-58_v1.5.0_Linux_x86_64.tar.gz"
 assert_failure "rejects lookalike GitHub host" validate_download_url \
-  "https://github.com.evil.invalid/dujiao-next/dujiao-next/releases/download/v1.5.0/file.tar.gz"
+  "https://github.com.evil.invalid/zxgad3wdasaq1e-ai/faka-58/releases/download/v1.5.0/file.tar.gz"
+assert_failure "rejects assets from another repository" validate_download_url \
+  "https://github.com/other/repository/releases/download/v1.5.0/file.tar.gz"
 assert_success "accepts GitHub release asset CDN" validate_effective_download_url \
   "https://release-assets.githubusercontent.com/github-production-release-asset/example"
 assert_failure "rejects lookalike release asset CDN" validate_effective_download_url \
@@ -161,12 +163,12 @@ cat > "$release_json" <<'JSON'
   "tag_name": "v1.5.0",
   "assets": [
     {
-      "name": "dujiao-next_v1.5.0_Linux_x86_64.tar.gz",
-      "browser_download_url": "https://github.com/dujiao-next/dujiao-next/releases/download/v1.5.0/dujiao-next_v1.5.0_Linux_x86_64.tar.gz"
+      "name": "faka-58_v1.5.0_Linux_x86_64.tar.gz",
+      "browser_download_url": "https://github.com/zxgad3wdasaq1e-ai/faka-58/releases/download/v1.5.0/faka-58_v1.5.0_Linux_x86_64.tar.gz"
     },
     {
-      "name": "dujiao-next_1.5.0_checksums.txt",
-      "browser_download_url": "https://github.com/dujiao-next/dujiao-next/releases/download/v1.5.0/dujiao-next_1.5.0_checksums.txt"
+      "name": "faka-58_1.5.0_checksums.txt",
+      "browser_download_url": "https://github.com/zxgad3wdasaq1e-ai/faka-58/releases/download/v1.5.0/faka-58_1.5.0_checksums.txt"
     }
   ]
 }
@@ -181,14 +183,14 @@ assert_failure "rejects malformed release JSON" resolve_release_metadata "${TEST
 
 printf 'verified release payload' > "${TEST_TMP}/archive.tar.gz"
 archive_digest=$(sha256sum "${TEST_TMP}/archive.tar.gz" | awk '{print $1}')
-printf '%s  %s\n' "$archive_digest" 'dujiao-next_v1.5.0_Linux_x86_64.tar.gz' > "${TEST_TMP}/checksums.txt"
+printf '%s  %s\n' "$archive_digest" 'faka-58_v1.5.0_Linux_x86_64.tar.gz' > "${TEST_TMP}/checksums.txt"
 assert_success "accepts matching release checksum" verify_release_checksum \
-  "${TEST_TMP}/archive.tar.gz" "${TEST_TMP}/checksums.txt" 'dujiao-next_v1.5.0_Linux_x86_64.tar.gz'
-printf '%064d  %s\n' 0 'dujiao-next_v1.5.0_Linux_x86_64.tar.gz' > "${TEST_TMP}/bad-checksums.txt"
+  "${TEST_TMP}/archive.tar.gz" "${TEST_TMP}/checksums.txt" 'faka-58_v1.5.0_Linux_x86_64.tar.gz'
+printf '%064d  %s\n' 0 'faka-58_v1.5.0_Linux_x86_64.tar.gz' > "${TEST_TMP}/bad-checksums.txt"
 assert_failure "rejects mismatched release checksum" verify_release_checksum \
-  "${TEST_TMP}/archive.tar.gz" "${TEST_TMP}/bad-checksums.txt" 'dujiao-next_v1.5.0_Linux_x86_64.tar.gz'
+  "${TEST_TMP}/archive.tar.gz" "${TEST_TMP}/bad-checksums.txt" 'faka-58_v1.5.0_Linux_x86_64.tar.gz'
 
-if printf '%s\n' "dujiao-next" "config.yml.example" "README.md" | validate_archive_listing; then
+if printf '%s\n' "faka-58" "config.yml.example" "README.md" | validate_archive_listing; then
   pass "accepts safe archive listing in current shell"
 else
   fail "accepts safe archive listing in current shell"
@@ -203,7 +205,7 @@ if printf '%s\n' "/etc/passwd" | validate_archive_listing; then
 else
   pass "rejects absolute archive entry"
 fi
-if printf '%s\n' '-rwxr-xr-x root/root 1024 2026-01-01 00:00 dujiao-next' 'drwxr-xr-x root/root 0 2026-01-01 00:00 docs/' | validate_archive_types; then
+if printf '%s\n' '-rwxr-xr-x root/root 1024 2026-01-01 00:00 faka-58' 'drwxr-xr-x root/root 0 2026-01-01 00:00 docs/' | validate_archive_types; then
   pass "accepts regular files and directories in archive"
 else
   fail "accepts regular files and directories in archive"
@@ -213,12 +215,12 @@ if printf '%s\n' 'lrwxrwxrwx root/root 0 2026-01-01 00:00 binary -> /etc/passwd'
 else
   pass "rejects symlink archive entry"
 fi
-printf '%s\n' 'dujiao-next' 'config.yml.example' > "${TEST_TMP}/archive-members.txt"
-assert_equal "selects unique expected archive member" "dujiao-next" \
-  "$(select_archive_member "${TEST_TMP}/archive-members.txt" dujiao-next)"
-printf '%s\n' 'dujiao-next' 'nested/dujiao-next' > "${TEST_TMP}/duplicate-members.txt"
+printf '%s\n' 'faka-58' 'config.yml.example' > "${TEST_TMP}/archive-members.txt"
+assert_equal "selects unique expected archive member" "faka-58" \
+  "$(select_archive_member "${TEST_TMP}/archive-members.txt" faka-58)"
+printf '%s\n' 'faka-58' 'nested/faka-58' > "${TEST_TMP}/duplicate-members.txt"
 assert_failure "rejects duplicate critical archive members" select_archive_member \
-  "${TEST_TMP}/duplicate-members.txt" dujiao-next
+  "${TEST_TMP}/duplicate-members.txt" faka-58
 
 assert_equal "orders installation phases" "4" "$(phase_rank services_ready)"
 assert_success "installed phase satisfies cert stage" phase_at_least installed cert_issued
@@ -241,13 +243,13 @@ assert_contains "Redis unit runs as service user" "$redis_unit" "User=${SERVICE_
 acme_site=$(render_acme_site "shop.example.com")
 assert_contains "ACME site exposes only challenge root" "$acme_site" "location ^~ /.well-known/acme-challenge/"
 assert_contains "ACME site rejects storefront traffic" "$acme_site" "return 404;"
-final_site=$(render_final_nginx_site "shop.example.com" 8080 "dujiao-next-cert")
+final_site=$(render_final_nginx_site "shop.example.com" 8080 "faka-58-cert")
 assert_contains "final site proxies only to loopback" "$final_site" "proxy_pass http://127.0.0.1:8080;"
 assert_contains "final site redirects HTTP to HTTPS" "$final_site" 'return 301 https://$host$request_uri;'
 assert_not_contains "final site does not force HSTS" "$final_site" "Strict-Transport-Security"
 printf '<script type="module" src="./assets/app.js"></script>\n' > "${TEST_TMP}/admin.html"
-assert_equal "resolves admin static asset URL" "https://shop.example.com/dj-safe/assets/app.js" \
-  "$(extract_first_asset_url "${TEST_TMP}/admin.html" "https://shop.example.com/dj-safe/")"
+assert_equal "resolves admin static asset URL" "https://shop.example.com/faka-58-safe/assets/app.js" \
+  "$(extract_first_asset_url "${TEST_TMP}/admin.html" "https://shop.example.com/faka-58-safe/")"
 
 mkdir -p "$(dirname "$APP_UNIT_FILE")"
 printf 'foreign unit' > "$APP_UNIT_FILE"
@@ -279,7 +281,7 @@ if (
     : > "$public_continued"
     return 0
   }
-  verify_public_site "shop.example.com" "/dj-safe"
+  verify_public_site "shop.example.com" "/faka-58-safe"
 ); then
   fail "public verification propagates first failed probe"
 else
@@ -312,9 +314,9 @@ YAML
     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
     "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" \
     "cccccccccccccccccccccccccccccccc" \
-    "redis-secret" "root-admin" 'Adm"in\Pass123' "/dj-safe" \
+    "redis-secret" "root-admin" 'Adm"in\Pass123' "/faka-58-safe" \
     "true" "smtp.example.com" "465" 'smtp-user' 'smtp:pa#ss"word' \
-    "sender@example.com" 'Dujiao: "Next"' "false" "true" \
+    "sender@example.com" 'faka-58: "test"' "false" "true" \
     | python3 "$helper" generate "$template" "$generated"
 
   if python3 - "$generated" <<'PY'
@@ -329,7 +331,7 @@ assert len({cfg["app"]["secret_key"], cfg["jwt"]["secret"], cfg["user_jwt"]["sec
 assert cfg["bootstrap"]["default_admin_password"] == 'Adm"in\\Pass123'
 assert cfg["email"]["password"] == 'smtp:pa#ss"word'
 assert cfg["email"]["use_ssl"] is True and cfg["email"]["use_tls"] is False
-assert cfg["web"]["admin_path"] == "/dj-safe"
+assert cfg["web"]["admin_path"] == "/faka-58-safe"
 PY
   then
     pass "generates safe production YAML with special characters"
@@ -362,7 +364,7 @@ fi
 
 if [[ $(id -u) -eq 0 ]] && command -v jq >/dev/null 2>&1; then
   mkdir -p "$RUN_TMP" "$INSTALL_DIR/db" "$INSTALL_DIR/uploads"
-  state_init "shop.example.com" "admin@example.com" "8080" "6380" "/dj-safe" "dujiao-next-test"
+  state_init "shop.example.com" "admin@example.com" "8080" "6380" "/faka-58-safe" "faka-58-test"
   assert_equal "initial state starts at prerequisites" "prerequisites" "$(state_get phase)"
   state_set phase cert_issued
   assert_success "persisted state supports cert-stage resume" phase_at_least "$(state_get phase)" cert_issued
@@ -387,16 +389,16 @@ if [[ $(id -u) -eq 0 ]] && command -v jq >/dev/null 2>&1; then
     pass "health failure triggers admin-path rollback"
   fi
   assert_equal "admin-path rollback restores original config" "original admin config" "$(cat "$CONFIG_FILE")"
-  assert_equal "admin-path rollback preserves state" "/dj-safe" "$(state_get admin_path)"
+  assert_equal "admin-path rollback preserves state" "/faka-58-safe" "$(state_get admin_path)"
 
-  mkdir -p "$(dirname "$NGINX_ENABLED")" "$(root_path /etc/letsencrypt/live/dujiao-next-test)"
-  printf cert > "$(root_path /etc/letsencrypt/live/dujiao-next-test/fullchain.pem)"
-  printf key > "$(root_path /etc/letsencrypt/live/dujiao-next-test/privkey.pem)"
+  mkdir -p "$(dirname "$NGINX_ENABLED")" "$(root_path /etc/letsencrypt/live/faka-58-test)"
+  printf cert > "$(root_path /etc/letsencrypt/live/faka-58-test/fullchain.pem)"
+  printf key > "$(root_path /etc/letsencrypt/live/faka-58-test/privkey.pem)"
   reload_marker="${TEST_TMP}/nginx-reloaded"
   if (
     nginx() { return 1; }
     systemctl() { printf reloaded > "$reload_marker"; }
-    write_final_nginx_site "shop.example.com" 8080 "dujiao-next-test"
+    write_final_nginx_site "shop.example.com" 8080 "faka-58-test"
   ); then
     fail "Nginx validation failure is propagated"
   else
@@ -405,12 +407,12 @@ if [[ $(id -u) -eq 0 ]] && command -v jq >/dev/null 2>&1; then
   assert_failure "Nginx is not reloaded after failed validation" test -e "$reload_marker"
 
   printf 'app:\n  secret_key: restore-secret\n' > "$CONFIG_FILE"
-  printf 'sqlite data' > "${INSTALL_DIR}/db/dujiao.db"
+  printf 'sqlite data' > "${INSTALL_DIR}/db/faka-58.db"
   printf 'upload data' > "${INSTALL_DIR}/uploads/example.txt"
   backup=$(create_uninstall_backup)
   assert_success "uninstall backup is readable" quiet tar -tzf "$backup"
   backup_listing=$(tar -tzf "$backup")
-  assert_contains "uninstall backup contains SQLite" "$backup_listing" './db/dujiao.db'
+  assert_contains "uninstall backup contains SQLite" "$backup_listing" './db/faka-58.db'
   assert_contains "uninstall backup contains uploads" "$backup_listing" './uploads/example.txt'
   assert_contains "uninstall backup contains decryption config" "$backup_listing" './config.yml'
 
@@ -422,18 +424,18 @@ if [[ $(id -u) -eq 0 ]] && command -v jq >/dev/null 2>&1; then
   else
     pass "backup copy failure is propagated"
   fi
-  assert_success "copy failure leaves SQLite untouched" test -f "${INSTALL_DIR}/db/dujiao.db"
+  assert_success "copy failure leaves SQLite untouched" test -f "${INSTALL_DIR}/db/faka-58.db"
 
   rm -f "$CONFIG_FILE"
   assert_failure "backup failure is reported before destructive uninstall" create_uninstall_backup
-  assert_success "backup failure leaves SQLite untouched" test -f "${INSTALL_DIR}/db/dujiao.db"
+  assert_success "backup failure leaves SQLite untouched" test -f "${INSTALL_DIR}/db/faka-58.db"
 else
   skip "state resume and uninstall-backup safety tests" "requires root and jq"
 fi
 
 if command -v flock >/dev/null 2>&1; then
   acquire_lock
-  if DUJIAO_MANAGER_TESTING=1 DUJIAO_ROOT_PREFIX="$DUJIAO_ROOT_PREFIX" \
+  if FAKA_58_MANAGER_TESTING=1 FAKA_58_ROOT_PREFIX="$FAKA_58_ROOT_PREFIX" \
     bash -c 'source "$1"; RUN_TMP=$(mktemp -d); acquire_lock' _ "$MANAGER_SCRIPT" 9>&-; then
     fail "concurrent manager process is rejected"
   else

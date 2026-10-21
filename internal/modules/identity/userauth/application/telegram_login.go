@@ -5,11 +5,11 @@ import (
 	"errors"
 	"time"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
-	telegramauthapp "github.com/dujiao-next/internal/modules/identity/telegramauth/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
+	telegramauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/telegramauth/application"
 )
 
 // LoginWithTelegramInput Telegram 登录输入

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"sync"
 
-	paymentcontract "github.com/dujiao-next/internal/modules/payment/contract"
+	paymentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/contract"
 )
 
 // Registry 按 (providerType, channelType) 路由 paymentcontract.GatewayProvider 实例。

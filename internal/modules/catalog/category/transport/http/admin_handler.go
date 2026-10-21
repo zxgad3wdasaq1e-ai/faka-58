@@ -3,10 +3,10 @@ package categoryhttp
 import (
 	"errors"
 
-	categoryapp "github.com/dujiao-next/internal/modules/catalog/category/application"
-	categorydomain "github.com/dujiao-next/internal/modules/catalog/category/domain"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	categoryapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/application"
+	categorydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

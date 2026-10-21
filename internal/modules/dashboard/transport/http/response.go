@@ -1,6 +1,6 @@
 package dashboardhttp
 
-import dashboardcontract "github.com/dujiao-next/internal/modules/dashboard/contract"
+import dashboardcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/dashboard/contract"
 
 type inventoryAlertResponse struct {
 	ProductID       uint                   `json:"product_id"`

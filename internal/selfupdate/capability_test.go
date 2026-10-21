@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/dujiao-next/internal/version"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/version"
 )
 
 // TestDetectBlocksSourceBuild 本地构建（BuildType=source）必须被阻断，
@@ -162,7 +162,7 @@ func TestDirWritable(t *testing.T) {
 }
 
 func TestBackupPath(t *testing.T) {
-	if got := backupPath("/opt/dujiao/dujiao-next"); got != "/opt/dujiao/dujiao-next.backup" {
+	if got := backupPath("/opt/faka-58/faka-58"); got != "/opt/faka-58/faka-58.backup" {
 		t.Errorf("backupPath = %q", got)
 	}
 }

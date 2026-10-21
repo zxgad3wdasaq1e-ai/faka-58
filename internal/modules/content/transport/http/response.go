@@ -1,9 +1,9 @@
 package contenthttp
 
 import (
-	contentcontract "github.com/dujiao-next/internal/modules/content/contract"
-	contentdomain "github.com/dujiao-next/internal/modules/content/domain"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	contentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/contract"
+	contentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 // AdminPostProductRef 是后台文章编辑回填使用的关联商品精简结构。

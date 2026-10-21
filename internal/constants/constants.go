@@ -460,7 +460,7 @@ const (
 
 // 缓存默认配置常量
 const (
-	RedisPrefixDefault = "dj"
+	RedisPrefixDefault = "faka-58"
 )
 
 // 设置键常量
@@ -532,8 +532,8 @@ const (
 const (
 	StorefrontTemplateClassic = "classic"
 	StorefrontTemplateVault   = "vault"
-	StorefrontTemplateGetgpt  = "getgpt"
-	StorefrontTemplateDefault = StorefrontTemplateGetgpt
+	StorefrontTemplateFaka58  = "faka-58"
+	StorefrontTemplateDefault = StorefrontTemplateFaka58
 )
 
 // 站点语言常量

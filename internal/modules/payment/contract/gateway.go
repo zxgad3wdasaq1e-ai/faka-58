@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 // GatewayPayloadFiatCurrencySent 标记创建支付时实际提交给网关的法币币种。

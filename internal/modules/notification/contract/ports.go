@@ -4,14 +4,14 @@ import (
 	"context"
 	"time"
 
-	dashboardcontract "github.com/dujiao-next/internal/modules/dashboard/contract"
-	"github.com/dujiao-next/internal/modules/notification/domain"
-	settingsmessaging "github.com/dujiao-next/internal/modules/settings/schema/messaging"
-	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
-	"github.com/dujiao-next/internal/queue"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/mailbrand"
-	"github.com/dujiao-next/internal/shared/money"
+	dashboardcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/dashboard/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/domain"
+	settingsmessaging "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/messaging"
+	settingsstorefront "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/storefront"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/mailbrand"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 type SettingsReader interface {

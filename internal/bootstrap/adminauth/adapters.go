@@ -6,18 +6,18 @@ import (
 	"fmt"
 	"strings"
 
-	totpapplication "github.com/dujiao-next/internal/modules/identity/totp/application"
-	"github.com/dujiao-next/internal/shared/passwordpolicy"
+	totpapplication "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/totp/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/passwordpolicy"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	usertotpapp "github.com/dujiao-next/internal/modules/identity/userauth/totp/application"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	usertotpapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/totp/application"
 
-	"github.com/dujiao-next/internal/cache"
-	auditlogapp "github.com/dujiao-next/internal/modules/auditlog/application"
-	adminauthapp "github.com/dujiao-next/internal/modules/identity/adminauth/application"
-	adminchallenge "github.com/dujiao-next/internal/modules/identity/adminauth/challenge"
-	admintotpapp "github.com/dujiao-next/internal/modules/identity/adminauth/totp/application"
-	adminauthtransport "github.com/dujiao-next/internal/modules/identity/adminauth/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/cache"
+	auditlogapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/application"
+	adminauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/adminauth/application"
+	adminchallenge "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/adminauth/challenge"
+	admintotpapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/adminauth/totp/application"
+	adminauthtransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/adminauth/transport/http"
 )
 
 type admin2FATOTPTransportAdapter struct {

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 )
 
 func TestDisplayNameRules(t *testing.T) {

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	apicredentialcontract "github.com/dujiao-next/internal/modules/apicredential/contract"
-	apicredentialdomain "github.com/dujiao-next/internal/modules/apicredential/domain"
+	apicredentialcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/apicredential/contract"
+	apicredentialdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/apicredential/domain"
 
 	"gorm.io/gorm"
 )

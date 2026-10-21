@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/logger"
-	"github.com/dujiao-next/internal/modules/adproxy/contract"
-	adproxydomain "github.com/dujiao-next/internal/modules/adproxy/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/adproxy/contract"
+	adproxydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/adproxy/domain"
 )
 
 // Client 通过 HTTP 访问广告网关。

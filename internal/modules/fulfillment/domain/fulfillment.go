@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 // PayloadMaxPreviewLines 交付内容截断阈值（API 响应）

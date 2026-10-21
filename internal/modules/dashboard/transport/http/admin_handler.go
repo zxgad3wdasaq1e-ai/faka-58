@@ -4,13 +4,13 @@ import (
 	"context"
 	"errors"
 
-	dashboardapp "github.com/dujiao-next/internal/modules/dashboard/application"
-	dashboardcontract "github.com/dujiao-next/internal/modules/dashboard/contract"
-	reportingdomain "github.com/dujiao-next/internal/modules/reporting/domain"
-	reportinghttp "github.com/dujiao-next/internal/modules/reporting/transport/http"
-	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	dashboardapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/dashboard/application"
+	dashboardcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/dashboard/contract"
+	reportingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reporting/domain"
+	reportinghttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reporting/transport/http"
+	settingsstorefront "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/storefront"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

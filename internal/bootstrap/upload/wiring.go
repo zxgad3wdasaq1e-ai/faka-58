@@ -5,12 +5,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/config"
-	contentcontract "github.com/dujiao-next/internal/modules/content/contract"
-	uploadapp "github.com/dujiao-next/internal/modules/upload/application"
-	uploadcontract "github.com/dujiao-next/internal/modules/upload/contract"
-	"github.com/dujiao-next/internal/modules/upload/infrastructure/localstore"
-	"github.com/dujiao-next/internal/modules/upload/infrastructure/s3store"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	contentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/contract"
+	uploadapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/upload/application"
+	uploadcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/upload/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/upload/infrastructure/localstore"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/upload/infrastructure/s3store"
 )
 
 // NewService 按启动配置选择上传后端，未设置时保持本地存储行为。

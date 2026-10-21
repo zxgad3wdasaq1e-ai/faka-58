@@ -1,6 +1,6 @@
 package categorycontract
 
-import categorydomain "github.com/dujiao-next/internal/modules/catalog/category/domain"
+import categorydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/domain"
 
 // Repository 定义 Category 应用服务和相邻 Catalog 子域共享的持久化契约。
 type Repository interface {

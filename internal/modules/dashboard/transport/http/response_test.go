@@ -3,8 +3,8 @@ package dashboardhttp
 import (
 	"testing"
 
-	dashboardcontract "github.com/dujiao-next/internal/modules/dashboard/contract"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	dashboardcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/dashboard/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 func TestMapInventoryAlertsPreservesLocalizedAndSKUFields(t *testing.T) {

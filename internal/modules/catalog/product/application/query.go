@@ -5,13 +5,13 @@ import (
 	"strings"
 	"time"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	categorydomain "github.com/dujiao-next/internal/modules/catalog/category/domain"
+	categorydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/domain"
 
-	cardsecretcontract "github.com/dujiao-next/internal/modules/cardsecret/contract"
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	reseller "github.com/dujiao-next/internal/modules/reseller/contract"
+	cardsecretcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/contract"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	reseller "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
 )
 
 // ProductRepository 是读取应用服务所需的最小商品持久化端口。

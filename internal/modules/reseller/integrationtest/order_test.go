@@ -6,20 +6,20 @@ import (
 	"testing"
 	"time"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	resellergormstore "github.com/dujiao-next/internal/modules/reseller/infrastructure/gormstore"
+	resellergormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/infrastructure/gormstore"
 
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/glebarez/sqlite"
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 	"gorm.io/gorm"
 )
 
@@ -58,7 +58,7 @@ func seedResellerOrderFixture(t *testing.T, db *gorm.DB, email string) (reseller
 	}
 	paidAt := time.Now().Add(-time.Hour)
 	order := orderdomain.Order{
-		OrderNo:              "DJ-RES-" + uuid.NewString(),
+		OrderNo:              "FAKA-58-RES-" + uuid.NewString(),
 		UserID:               999,
 		Status:               constants.OrderStatusPaid,
 		Currency:             "USD",
@@ -138,7 +138,7 @@ func seedResellerOrderWithChildItemsFixture(t *testing.T, db *gorm.DB, email str
 	}
 	paidAt := time.Now().Add(-time.Hour)
 	parent := orderdomain.Order{
-		OrderNo:              "DJ-RES-PARENT-" + uuid.NewString(),
+		OrderNo:              "FAKA-58-RES-PARENT-" + uuid.NewString(),
 		UserID:               user.ID,
 		Status:               constants.OrderStatusPaid,
 		Currency:             "USD",

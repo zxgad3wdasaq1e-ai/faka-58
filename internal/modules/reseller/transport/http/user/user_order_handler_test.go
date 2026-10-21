@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	resellermodule "github.com/dujiao-next/internal/modules/reseller/contract"
-	"github.com/dujiao-next/internal/platform/http/response"
+	resellermodule "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

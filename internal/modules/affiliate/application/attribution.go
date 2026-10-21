@@ -4,9 +4,9 @@ import (
 	"strings"
 	"time"
 
-	affiliatedomain "github.com/dujiao-next/internal/modules/affiliate/domain"
+	affiliatedomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/domain"
 
-	"github.com/dujiao-next/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
 )
 
 // ResolveOrderAffiliateSnapshot 解析下单归因快照（最近30天最后一次有效点击优先）

@@ -4,9 +4,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/modules/auditlog/contract"
-	"github.com/dujiao-next/internal/modules/auditlog/domain"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 // AuthzRecord 权限审计记录输入

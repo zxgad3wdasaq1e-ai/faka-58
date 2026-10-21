@@ -6,9 +6,9 @@ import (
 	"io/fs"
 	"time"
 
-	"github.com/dujiao-next/internal/modules/content/domain"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 // RelatedProduct 是 Content 从 Catalog 读取的最小商品投影。

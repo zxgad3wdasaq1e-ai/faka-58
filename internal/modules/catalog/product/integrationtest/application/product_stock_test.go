@@ -3,11 +3,11 @@ package integrationtest
 import (
 	"testing"
 
-	cardsecretdomain "github.com/dujiao-next/internal/modules/cardsecret/domain"
-	cardsecretgormstore "github.com/dujiao-next/internal/modules/cardsecret/infrastructure/gormstore"
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	cardsecretdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/domain"
+	cardsecretgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/infrastructure/gormstore"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	"github.com/dujiao-next/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
 )
 
 func TestApplyAutoStockCounts_LegacyStockPrefersDefaultSKU(t *testing.T) {

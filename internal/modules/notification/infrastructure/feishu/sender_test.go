@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/dujiao-next/internal/modules/notification/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/contract"
 
 	larkcore "github.com/larksuite/oapi-sdk-go/v3/core"
 )

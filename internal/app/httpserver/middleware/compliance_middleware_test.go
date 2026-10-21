@@ -5,9 +5,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	settingsstore "github.com/dujiao-next/internal/modules/settings/infrastructure/gormstore"
+	settingsstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/infrastructure/gormstore"
 
-	complianceapp "github.com/dujiao-next/internal/modules/compliance/application"
+	complianceapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/compliance/application"
 
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"

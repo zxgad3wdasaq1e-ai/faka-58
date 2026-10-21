@@ -3,7 +3,7 @@ package domain
 import (
 	"time"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 )
 
 // ApiCredential API 凭证表（用户申请 + admin 审核）

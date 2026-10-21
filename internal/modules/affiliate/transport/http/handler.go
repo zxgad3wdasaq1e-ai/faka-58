@@ -4,13 +4,13 @@ import (
 	"errors"
 	"strings"
 
-	affiliatedomain "github.com/dujiao-next/internal/modules/affiliate/domain"
+	affiliatedomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/domain"
 
-	ginutil "github.com/dujiao-next/internal/platform/http/ginutil"
+	ginutil "github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
 
-	affiliateapp "github.com/dujiao-next/internal/modules/affiliate/application"
-	affiliatepresenter "github.com/dujiao-next/internal/modules/affiliate/transport/presenter"
-	"github.com/dujiao-next/internal/platform/http/response"
+	affiliateapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/application"
+	affiliatepresenter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/transport/presenter"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 	"github.com/shopspring/decimal"

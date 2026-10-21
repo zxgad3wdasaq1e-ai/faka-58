@@ -4,9 +4,9 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/dujiao-next/internal/constants"
-	settingsvalue "github.com/dujiao-next/internal/modules/settings/schema/value"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	settingsvalue "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/value"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 var ErrOrderEmailTemplateConfigInvalid = errors.New("order email template config invalid")

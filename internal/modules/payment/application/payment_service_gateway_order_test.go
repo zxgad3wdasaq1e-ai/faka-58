@@ -10,17 +10,17 @@ import (
 	"testing"
 	"time"
 
-	paymentcontract "github.com/dujiao-next/internal/modules/payment/contract"
+	paymentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/contract"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/jsonslice"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonslice"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
@@ -80,9 +80,9 @@ func TestBuildOrderSubject(t *testing.T) {
 		{
 			name: "trims order number",
 			order: &orderdomain.Order{
-				OrderNo: " DJ-FALLBACK-1 ",
+				OrderNo: " FAKA-58-FALLBACK-1 ",
 			},
-			want: "DJ-FALLBACK-1",
+			want: "FAKA-58-FALLBACK-1",
 		},
 	}
 
@@ -1090,7 +1090,7 @@ func TestCreateOrderPaymentSendsBaseAmountToGatewayAndStoresMerchantFee(t *testi
 		t.Fatalf("create payment channel failed: %v", err)
 	}
 	order := &orderdomain.Order{
-		OrderNo:                 "DJ-MERCHANT-FEE-ORDER",
+		OrderNo:                 "FAKA-58-MERCHANT-FEE-ORDER",
 		Status:                  constants.OrderStatusPendingPayment,
 		Currency:                "CNY",
 		OriginalAmount:          money.FromDecimal(decimal.NewFromInt(100)),
@@ -1237,7 +1237,7 @@ func TestCreateOrderPaymentSnapshotsCustomerSurchargeCompatibilityMode(t *testin
 	}); err != nil {
 		t.Fatalf("enable customer fee compatibility mode: %v", err)
 	}
-	channel, order := createFeePolicyOrderFixture(t, db, "Customer Fee Gateway", "DJ-CUSTOMER-FEE")
+	channel, order := createFeePolicyOrderFixture(t, db, "Customer Fee Gateway", "FAKA-58-CUSTOMER-FEE")
 
 	var gatewayAmount money.Amount
 	registerTestGateway(t, svc, channel.ProviderType, channel.ChannelType, emptyProviderRefProvider{onCreate: func(input paymentcontract.GatewayCreateInput) {
@@ -1349,7 +1349,7 @@ func TestCreateOrderPaymentCanReuseLegacyFeeLinkUntilExpiry(t *testing.T) {
 
 func TestSupersededPaymentLateSuccessIsRecordedWithoutDuplicateFulfillment(t *testing.T) {
 	svc, db := setupPaymentServiceWalletTest(t)
-	channel, order := createFeePolicyOrderFixture(t, db, "Late Callback Gateway", "DJ-LATE-CALLBACK")
+	channel, order := createFeePolicyOrderFixture(t, db, "Late Callback Gateway", "FAKA-58-LATE-CALLBACK")
 	now := time.Now()
 	replacement := &paymentdomain.Payment{
 		OrderID: order.ID, ChannelID: channel.ID, ProviderType: channel.ProviderType, ChannelType: channel.ChannelType,

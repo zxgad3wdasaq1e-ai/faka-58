@@ -4,12 +4,12 @@ import (
 	"net/http"
 	"strings"
 
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
 
-	"github.com/dujiao-next/internal/constants"
-	paymenttransport "github.com/dujiao-next/internal/modules/payment/transport/http"
-	paymentcallbacktransport "github.com/dujiao-next/internal/modules/payment/transport/http/callback"
-	upstreamtransport "github.com/dujiao-next/internal/modules/upstreamapi/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	paymenttransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/transport/http"
+	paymentcallbacktransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/transport/http/callback"
+	upstreamtransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/upstreamapi/transport/http"
 
 	"github.com/gin-gonic/gin"
 )

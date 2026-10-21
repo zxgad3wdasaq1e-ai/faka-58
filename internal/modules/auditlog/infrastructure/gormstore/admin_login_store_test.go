@@ -3,10 +3,10 @@ package gormstore_test
 import (
 	"testing"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/modules/auditlog/contract"
-	"github.com/dujiao-next/internal/modules/auditlog/domain"
-	auditloggormstore "github.com/dujiao-next/internal/modules/auditlog/infrastructure/gormstore"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/domain"
+	auditloggormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/infrastructure/gormstore"
 
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"

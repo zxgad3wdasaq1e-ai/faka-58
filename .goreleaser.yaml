@@ -1,6 +1,6 @@
 version: 2
 
-project_name: dujiao-next
+project_name: faka-58
 
 # 前端在这里构建并拷进 internal/web/dist/，随后由 -tags=fullstack 的 go:embed 打进二进制。
 # 放在 before hooks 而不是 CI step 里，是为了让本地 `goreleaser build --snapshot`
@@ -15,7 +15,7 @@ before:
     - go mod tidy
     - sh -c 'cd frontend/admin && pnpm install --frozen-lockfile'
     - sh -c 'cd frontend/user  && pnpm install --frozen-lockfile'
-    # admin 用 fullstack 模式构建：base 为 './' 且注入 __DJ_ADMIN_BASE__ 占位符，
+    # admin 用 fullstack 模式构建：base 为 './' 且注入 __FAKA_58_ADMIN_BASE__ 占位符，
     # 后端启动时按 web.admin_path 替换，使产物可挂载到任意自定义前缀。
     - sh -c 'cd frontend/admin && pnpm run build:fullstack'
     - sh -c 'cd frontend/user  && pnpm run build'
@@ -25,15 +25,15 @@ before:
 
 builds:
   # 单一产物：内嵌 admin + user SPA，一个二进制跑完整服务。
-  - id: dujiao-next
+  - id: faka-58
     env:
       - CGO_ENABLED=0
     main: ./cmd/server
-    binary: dujiao-next
+    binary: faka-58
     # BuildType=release 是后台一键升级的开关：只有 CI 正式产物才允许自我替换，
     # 本地 go build 的二进制版本号是占位值，放开会把开发者自己编译的产物覆盖掉。
     ldflags:
-      - -s -w -X github.com/dujiao-next/internal/version.Version={{.Tag}} -X github.com/dujiao-next/internal/version.BuildType=release
+      - -s -w -X github.com/zxgad3wdasaq1e-ai/faka-58/internal/version.Version={{.Tag}} -X github.com/zxgad3wdasaq1e-ai/faka-58/internal/version.BuildType=release
     flags:
       - "-tags=release,fullstack"
     goos:
@@ -45,14 +45,14 @@ builds:
       - arm64
 
 archives:
-  - id: dujiao-next
+  - id: faka-58
     ids:
-      - dujiao-next
+      - faka-58
     formats: [tar.gz]
     files:
       - ./config.yml.example
       - ./README.md
-      - ./scripts/dujiao-next-manager.sh
+      - ./scripts/faka-58-manager.sh
     name_template: >-
       {{ .ProjectName }}_
       {{- .Tag }}_

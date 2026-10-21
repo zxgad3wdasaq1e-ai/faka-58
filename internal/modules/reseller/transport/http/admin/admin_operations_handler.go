@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 
-	reportingdomain "github.com/dujiao-next/internal/modules/reporting/domain"
-	reportinghttp "github.com/dujiao-next/internal/modules/reporting/transport/http"
-	resellermodule "github.com/dujiao-next/internal/modules/reseller/application"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	reportingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reporting/domain"
+	reportinghttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reporting/transport/http"
+	resellermodule "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

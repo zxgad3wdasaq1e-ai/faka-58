@@ -1,12 +1,12 @@
-name: ${COMPOSE_PROJECT_NAME:-getgpt}
+name: ${COMPOSE_PROJECT_NAME:-faka-58}
 
 services:
   app:
-    image: ${APP_IMAGE:-getgpt-store:local}
+    image: ${APP_IMAGE:-faka-58:local}
     build:
       context: .
       args:
-        APP_VERSION: ${APP_VERSION:-getgpt-local}
+        APP_VERSION: ${APP_VERSION:-faka-58-local}
     restart: unless-stopped
     init: true
     environment:
@@ -34,8 +34,9 @@ services:
     image: postgres:17-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB: getgpt
+      POSTGRES_DB: ${POSTGRES_DB:-${COMPOSE_PROJECT_NAME:-faka-58}}
       POSTGRES_USER: postgres
+      POSTGRES_APP_USER: ${POSTGRES_APP_USER:-${COMPOSE_PROJECT_NAME:-faka-58}}
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres_admin_password
       TZ: Asia/Shanghai
     secrets: [postgres_password, postgres_admin_password]
@@ -43,7 +44,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./deploy/postgres-init.sh:/docker-entrypoint-initdb.d/10-store-user.sh:ro
     healthcheck:
-      test: [CMD-SHELL, 'pg_isready -h 127.0.0.1 -U getgpt -d getgpt']
+      test: [CMD-SHELL, 'pg_isready -h 127.0.0.1 -U "$${POSTGRES_APP_USER}" -d "$${POSTGRES_DB}"']
       interval: 5s
       timeout: 5s
       retries: 30

@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/modules/upload/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/upload/contract"
 )
 
 // Options 仅从服务器启动配置装配，客户端不能指定目标端点或凭据。

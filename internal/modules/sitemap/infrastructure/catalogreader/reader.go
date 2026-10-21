@@ -1,9 +1,9 @@
 package catalogreader
 
 import (
-	categorycontract "github.com/dujiao-next/internal/modules/catalog/category/contract"
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	"github.com/dujiao-next/internal/modules/sitemap/contract"
+	categorycontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/contract"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/sitemap/contract"
 )
 
 // Reader 将 Catalog 的仓储契约收窄为 Sitemap 投影。

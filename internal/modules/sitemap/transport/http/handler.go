@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/dujiao-next/internal/logger"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
 
 	"github.com/gin-gonic/gin"
 )

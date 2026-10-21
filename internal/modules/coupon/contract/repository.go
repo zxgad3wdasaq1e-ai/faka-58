@@ -1,8 +1,8 @@
 package contract
 
 import (
-	coupondomain "github.com/dujiao-next/internal/modules/coupon/domain"
-	"github.com/dujiao-next/internal/shared/money"
+	coupondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 type ListFilter struct {

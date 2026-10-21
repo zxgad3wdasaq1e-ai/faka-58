@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 
-	fulfillmentapp "github.com/dujiao-next/internal/modules/fulfillment/application"
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
-	orderapp "github.com/dujiao-next/internal/modules/order/application"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	fulfillmentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/application"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
+	orderapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	fulfillmenttransport "github.com/dujiao-next/internal/modules/fulfillment/transport/http"
+	fulfillmenttransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/transport/http"
 )
 
 type fulfillmentManualCreatorAdapter struct {

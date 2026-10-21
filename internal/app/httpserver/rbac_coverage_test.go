@@ -14,7 +14,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dujiao-next/internal/authz"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/authz"
 
 	"github.com/casbin/casbin/v3/util"
 )

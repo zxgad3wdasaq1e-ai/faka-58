@@ -1,6 +1,6 @@
 package presenter
 
-import "github.com/dujiao-next/internal/shared/jsonmap"
+import "github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 
 // MemberLevel 是公开会员等级响应。
 type MemberLevel struct {

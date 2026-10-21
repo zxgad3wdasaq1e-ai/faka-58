@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
 
-	reportingdomain "github.com/dujiao-next/internal/modules/reporting/domain"
 	"github.com/shopspring/decimal"
+	reportingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reporting/domain"
 )
 
 type operationsStoreStub struct {

@@ -6,14 +6,14 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/dujiao-next/internal/authz"
-	"github.com/dujiao-next/internal/i18n"
-	"github.com/dujiao-next/internal/logger"
-	auditlogapp "github.com/dujiao-next/internal/modules/auditlog/application"
-	admindomain "github.com/dujiao-next/internal/modules/identity/admin/domain"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/authz"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/i18n"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	auditlogapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/application"
+	admindomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 
 	"github.com/gin-gonic/gin"
 )

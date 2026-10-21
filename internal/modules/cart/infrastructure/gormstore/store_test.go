@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/modules/cart/domain"
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cart/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"

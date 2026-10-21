@@ -3,8 +3,8 @@ package application
 import (
 	"errors"
 
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	orderapp "github.com/dujiao-next/internal/modules/order/application"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	orderapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application"
 )
 
 var (

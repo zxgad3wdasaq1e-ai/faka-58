@@ -3,7 +3,7 @@ package auditloghttp
 import (
 	"time"
 
-	"github.com/dujiao-next/internal/modules/auditlog/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/domain"
 )
 
 // UserLoginResponse 是个人安全中心可见的登录日志视图。

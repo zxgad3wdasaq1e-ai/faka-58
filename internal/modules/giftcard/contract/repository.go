@@ -3,12 +3,12 @@ package contract
 import (
 	"time"
 
-	walletdomain "github.com/dujiao-next/internal/modules/wallet/domain"
+	walletdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/domain"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	giftcarddomain "github.com/dujiao-next/internal/modules/giftcard/domain"
-	"github.com/dujiao-next/internal/shared/money"
+	giftcarddomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 // ListFilter 礼品卡仓储列表筛选。

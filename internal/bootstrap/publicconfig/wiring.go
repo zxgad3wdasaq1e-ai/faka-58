@@ -1,8 +1,8 @@
 package publicconfigwiring
 
 import (
-	"github.com/dujiao-next/internal/app/container"
-	publicconfigtransport "github.com/dujiao-next/internal/modules/settings/transport/http/public"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	publicconfigtransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/transport/http/public"
 )
 
 func NewHandler(c *container.Container) *publicconfigtransport.Handler {

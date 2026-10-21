@@ -6,12 +6,12 @@ import (
 	"mime/multipart"
 	"net/http"
 
-	"github.com/dujiao-next/internal/logger"
-	contentapp "github.com/dujiao-next/internal/modules/content/application"
-	contentdomain "github.com/dujiao-next/internal/modules/content/domain"
-	uploadcontract "github.com/dujiao-next/internal/modules/upload/contract"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	contentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/application"
+	contentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/domain"
+	uploadcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/upload/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

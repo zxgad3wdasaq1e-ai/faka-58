@@ -7,12 +7,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	googleauthapp "github.com/dujiao-next/internal/modules/identity/googleauth/application"
-	telegramauthapp "github.com/dujiao-next/internal/modules/identity/telegramauth/application"
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
-	"github.com/dujiao-next/internal/telegramidentity"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	googleauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/googleauth/application"
+	telegramauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/telegramauth/application"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/telegramidentity"
 
 	"github.com/golang-jwt/jwt/v5"
 )

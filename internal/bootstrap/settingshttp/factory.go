@@ -1,9 +1,9 @@
 package settingsbootstrap
 
 import (
-	"github.com/dujiao-next/internal/app/container"
-	"github.com/dujiao-next/internal/config"
-	settingstransport "github.com/dujiao-next/internal/modules/settings/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	settingstransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/transport/http"
 )
 
 func NewSMTPHandler(c *container.Container, cfg *config.Config) *settingstransport.SMTPHandler {

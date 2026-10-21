@@ -5,13 +5,13 @@ import (
 	"testing"
 	"time"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/shopspring/decimal"
 )
@@ -36,7 +36,7 @@ func TestGetTopProductsIncludesChildOrderItems(t *testing.T) {
 	}
 
 	parentOrder := &orderdomain.Order{
-		OrderNo:        "DJ-TEST-PARENT",
+		OrderNo:        "FAKA-58-TEST-PARENT",
 		UserID:         1,
 		Status:         constants.OrderStatusPaid,
 		Currency:       "CNY",
@@ -50,7 +50,7 @@ func TestGetTopProductsIncludesChildOrderItems(t *testing.T) {
 	}
 
 	childOrder := &orderdomain.Order{
-		OrderNo:        "DJ-TEST-PARENT-01",
+		OrderNo:        "FAKA-58-TEST-PARENT-01",
 		ParentID:       &parentOrder.ID,
 		UserID:         1,
 		Status:         constants.OrderStatusPaid,
@@ -139,7 +139,7 @@ func TestGetTopProductsGroupsBySKU(t *testing.T) {
 		{skuB, 3, 300},
 	} {
 		order := &orderdomain.Order{
-			OrderNo:        fmt.Sprintf("DJ-SKU-%d", i),
+			OrderNo:        fmt.Sprintf("FAKA-58-SKU-%d", i),
 			UserID:         1,
 			Status:         constants.OrderStatusPaid,
 			Currency:       "CNY",

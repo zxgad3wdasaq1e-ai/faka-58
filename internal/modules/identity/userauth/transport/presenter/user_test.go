@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/shopspring/decimal"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 func newMoney(s string) money.Amount {

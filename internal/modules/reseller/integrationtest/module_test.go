@@ -1,11 +1,11 @@
 package integrationtest
 
 import (
-	"github.com/dujiao-next/internal/config"
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	resellermodule "github.com/dujiao-next/internal/modules/reseller/application"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
-	resellergormstore "github.com/dujiao-next/internal/modules/reseller/infrastructure/gormstore"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	resellermodule "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/application"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	resellergormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/infrastructure/gormstore"
 )
 
 // These aliases keep the integration scenarios concise while ensuring every

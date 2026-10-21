@@ -3,7 +3,7 @@ package application
 import (
 	"testing"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 )
 
 func TestBuildPaymentReturnQueryForOrder(t *testing.T) {

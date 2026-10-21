@@ -3,7 +3,7 @@ package contract
 import (
 	"time"
 
-	"github.com/dujiao-next/internal/modules/auditlog/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/domain"
 )
 
 type UserLoginFilter struct {

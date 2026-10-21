@@ -1,6 +1,6 @@
 package contract
 
-import settingssecurity "github.com/dujiao-next/internal/modules/settings/schema/security"
+import settingssecurity "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/security"
 
 type SettingReader interface {
 	GetOrderRiskControlConfig() (settingssecurity.OrderRiskControlConfig, error)

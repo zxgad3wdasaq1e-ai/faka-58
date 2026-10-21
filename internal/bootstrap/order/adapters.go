@@ -4,37 +4,37 @@ import (
 	"errors"
 	"fmt"
 
-	paymentapp "github.com/dujiao-next/internal/modules/payment/application"
-	paymentcontract "github.com/dujiao-next/internal/modules/payment/contract"
+	paymentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/application"
+	paymentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/contract"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	orderapp "github.com/dujiao-next/internal/modules/order/application"
-	orderrefund "github.com/dujiao-next/internal/modules/order/application/refund"
-	ordercontract "github.com/dujiao-next/internal/modules/order/contract"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application"
+	orderrefund "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application/refund"
+	ordercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/contract"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	walletdomain "github.com/dujiao-next/internal/modules/wallet/domain"
+	walletdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/domain"
 
-	coupondomain "github.com/dujiao-next/internal/modules/coupon/domain"
+	coupondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/domain"
 
-	promotiondomain "github.com/dujiao-next/internal/modules/promotion/domain"
+	promotiondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/promotion/domain"
 
-	usercontract "github.com/dujiao-next/internal/modules/identity/user/contract"
+	usercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/contract"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	captchaapp "github.com/dujiao-next/internal/modules/captcha/application"
-	captchahttp "github.com/dujiao-next/internal/modules/captcha/transport/http"
-	couponcontract "github.com/dujiao-next/internal/modules/coupon/contract"
-	ordertransport "github.com/dujiao-next/internal/modules/order/transport/http"
-	orderriskcontract "github.com/dujiao-next/internal/modules/orderrisk/contract"
-	promotioncontract "github.com/dujiao-next/internal/modules/promotion/contract"
-	reseller "github.com/dujiao-next/internal/modules/reseller/contract"
-	walletcontract "github.com/dujiao-next/internal/modules/wallet/contract"
-	"github.com/dujiao-next/internal/queue"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	captchaapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/application"
+	captchahttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/transport/http"
+	couponcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/contract"
+	ordertransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/transport/http"
+	orderriskcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/orderrisk/contract"
+	promotioncontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/promotion/contract"
+	reseller "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	walletcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 type orderAdminQueryAdapter struct {

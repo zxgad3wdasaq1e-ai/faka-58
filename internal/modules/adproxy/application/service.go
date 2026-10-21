@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/dujiao-next/internal/modules/adproxy/contract"
-	"github.com/dujiao-next/internal/modules/adproxy/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/adproxy/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/adproxy/domain"
 )
 
 // Service 编排广告渲染与曝光上报用例。

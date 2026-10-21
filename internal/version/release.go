@@ -19,7 +19,7 @@ const (
 	repoName = "faka-58"
 
 	githubAPIBaseURL = "https://api.github.com"
-	releaseUserAgent = "xopen-ai-update-checker"
+	releaseUserAgent = "faka-58-update-checker"
 )
 
 // releasePayload GitHub Releases API 响应中本检测器关心的字段

@@ -6,7 +6,7 @@ services:
         condition: service_completed_successfully
 
   minio:
-    image: getgpt-minio:local
+    image: faka-58-minio:local
     build:
       context: .
       dockerfile: deploy/minio.Dockerfile
@@ -30,7 +30,7 @@ services:
     networks: [store]
 
   minio-init:
-    image: getgpt-mc:local
+    image: faka-58-mc:local
     build:
       context: .
       dockerfile: deploy/minio.Dockerfile

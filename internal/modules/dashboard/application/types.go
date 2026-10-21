@@ -1,6 +1,6 @@
 package application
 
-import "github.com/dujiao-next/internal/shared/jsonmap"
+import "github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 
 type OverviewResponse struct {
 	Range    string      `json:"range"`

@@ -3,7 +3,7 @@ package domain
 import (
 	"strings"
 
-	"github.com/dujiao-next/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
 )
 
 // IsStatusConsistent 判断本地采购状态与上游状态是否处于允许的同一业务窗口。

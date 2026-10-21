@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	downstreamapp "github.com/dujiao-next/internal/modules/downstreamcallback/application"
-	downstreamcontract "github.com/dujiao-next/internal/modules/downstreamcallback/contract"
-	downstreamdomain "github.com/dujiao-next/internal/modules/downstreamcallback/domain"
+	downstreamapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/downstreamcallback/application"
+	downstreamcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/downstreamcallback/contract"
+	downstreamdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/downstreamcallback/domain"
 )
 
 type refRepositoryStub struct {
@@ -156,7 +156,7 @@ func TestSendCallbackBuildsPayloadAndPersistsSentStatus(t *testing.T) {
 	references := &refRepositoryStub{byID: map[uint]*downstreamdomain.OrderRef{ref.ID: ref}}
 	orders := orderReaderStub{orders: map[uint]*downstreamcontract.OrderSnapshot{8: {
 		ID:      8,
-		OrderNo: "DJ-8",
+		OrderNo: "FAKA-58-8",
 		Status:  "completed",
 	}}}
 	credentials := credentialReaderStub{credentials: map[uint]*downstreamcontract.Credential{5: {

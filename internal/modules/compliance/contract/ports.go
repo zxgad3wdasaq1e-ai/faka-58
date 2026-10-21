@@ -1,6 +1,6 @@
 package contract
 
-import "github.com/dujiao-next/internal/shared/jsonmap"
+import "github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 
 // SettingsStore 是合规应用层读写保留设置键所需的最小端口。
 type SettingsStore interface {

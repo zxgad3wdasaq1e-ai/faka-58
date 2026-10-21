@@ -25,7 +25,7 @@ COPY frontend/admin ./admin
 COPY frontend/user  ./user
 COPY frontend/shared ./shared
 
-# admin 走 fullstack 模式：注入 __DJ_ADMIN_BASE__ 占位符，
+# admin 走 fullstack 模式：注入 __FAKA_58_ADMIN_BASE__ 占位符，
 # 后端启动时按 web.admin_path 替换，使同一份产物能挂到任意自定义前缀。
 RUN cd admin && pnpm run build:fullstack
 RUN cd user  && pnpm run build
@@ -57,7 +57,7 @@ RUN set -eux; \
     export GOOS="$TARGETOS" GOARCH="$TARGETARCH"; \
     if [ "$TARGETARCH" = "arm" ] && [ -n "$TARGETVARIANT" ]; then export GOARM="${TARGETVARIANT#v}"; fi; \
     if [ "$TARGETARCH" = "amd64" ] && [ -n "$TARGETVARIANT" ]; then export GOAMD64="${TARGETVARIANT#v}"; fi; \
-    go build -trimpath -tags release,fullstack -ldflags="-s -w -X github.com/dujiao-next/internal/version.Version=${APP_VERSION} -X github.com/dujiao-next/internal/version.BuildType=release" -o /out/xopen-ai ./cmd/server; \
+    go build -trimpath -tags release,fullstack -ldflags="-s -w -X github.com/zxgad3wdasaq1e-ai/faka-58/internal/version.Version=${APP_VERSION} -X github.com/zxgad3wdasaq1e-ai/faka-58/internal/version.BuildType=release" -o /out/faka-58 ./cmd/server; \
     go build -trimpath -ldflags="-s -w" -o /out/storectl ./cmd/storectl
 
 # ---- 阶段 3：运行时 ----
@@ -68,10 +68,10 @@ WORKDIR /app
 RUN apk --no-cache add ca-certificates tzdata \
     && mkdir -p /app/db /app/uploads /app/logs
 
-COPY --from=builder /out/xopen-ai /app/xopen-ai
+COPY --from=builder /out/faka-58 /app/faka-58
 COPY --from=builder /out/storectl /app/storectl
 COPY config.yml.example /app/config.yml.example
 
 EXPOSE 8080
 
-CMD ["./xopen-ai"]
+CMD ["./faka-58"]

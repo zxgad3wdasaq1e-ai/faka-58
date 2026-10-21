@@ -1,8 +1,8 @@
 package orderwiring
 
 import (
-	"github.com/dujiao-next/internal/app/container"
-	ordertransport "github.com/dujiao-next/internal/modules/order/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	ordertransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/transport/http"
 )
 
 // Handlers contains every order HTTP entrypoint required by the router.

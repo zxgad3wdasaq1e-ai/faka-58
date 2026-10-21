@@ -9,30 +9,30 @@ import (
 	"testing"
 	"time"
 
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	walletdomain "github.com/dujiao-next/internal/modules/wallet/domain"
+	walletdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/domain"
 
-	affiliateapp "github.com/dujiao-next/internal/modules/affiliate/application"
-	affiliatedomain "github.com/dujiao-next/internal/modules/affiliate/domain"
-	affiliategormstore "github.com/dujiao-next/internal/modules/affiliate/infrastructure/gormstore"
-	orderrefund "github.com/dujiao-next/internal/modules/order/application/refund"
-	ordergormstore "github.com/dujiao-next/internal/modules/order/infrastructure/gormstore"
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
-	paymentgormstore "github.com/dujiao-next/internal/modules/payment/infrastructure/gormstore"
+	affiliateapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/application"
+	affiliatedomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/domain"
+	affiliategormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/infrastructure/gormstore"
+	orderrefund "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application/refund"
+	ordergormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/infrastructure/gormstore"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
+	paymentgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gormstore"
 
-	userstore "github.com/dujiao-next/internal/modules/identity/user/infrastructure/gormstore"
+	userstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/infrastructure/gormstore"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/app/container"
-	orderwiring "github.com/dujiao-next/internal/bootstrap/order"
-	"github.com/dujiao-next/internal/constants"
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
-	ordertransport "github.com/dujiao-next/internal/modules/order/transport/http"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	orderwiring "github.com/zxgad3wdasaq1e-ai/faka-58/internal/bootstrap/order"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
+	ordertransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"
@@ -114,7 +114,7 @@ func seedAdminOrderRefundData(t *testing.T, db *gorm.DB) adminOrderRefundFixture
 	}
 
 	memberOrder := &orderdomain.Order{
-		OrderNo:          "DJ-ADMIN-REFUND-ORDER-1",
+		OrderNo:          "FAKA-58-ADMIN-REFUND-ORDER-1",
 		UserID:           member.ID,
 		Status:           constants.OrderStatusPartiallyRefunded,
 		Currency:         "CNY",
@@ -128,7 +128,7 @@ func seedAdminOrderRefundData(t *testing.T, db *gorm.DB) adminOrderRefundFixture
 		UpdatedAt:        now.Add(-2 * time.Hour),
 	}
 	guestOrder := &orderdomain.Order{
-		OrderNo:          "DJ-ADMIN-REFUND-ORDER-2",
+		OrderNo:          "FAKA-58-ADMIN-REFUND-ORDER-2",
 		UserID:           0,
 		GuestEmail:       "refund-guest@example.com",
 		GuestLocale:      constants.LocaleZhCN,
@@ -270,7 +270,7 @@ func TestGetAdminOrderRefundsFiltersByUserKeywordAndProduct(t *testing.T) {
 	if row["refund_type_label"] != "manual" {
 		t.Fatalf("unexpected refund_type_label: %+v", row["refund_type_label"])
 	}
-	if row["order_no"] != "DJ-ADMIN-REFUND-ORDER-1" {
+	if row["order_no"] != "FAKA-58-ADMIN-REFUND-ORDER-1" {
 		t.Fatalf("unexpected order_no: %+v", row["order_no"])
 	}
 	if row["user_email"] != "refund-member@example.com" {
@@ -424,7 +424,7 @@ func TestUpdateAdminOrderRefundPaymentFeeSupportsHistoricalManualRefund(t *testi
 	if resp.StatusCode != 0 {
 		t.Fatalf("status_code want 0 got %d", resp.StatusCode)
 	}
-	if resp.Data["order_no"] != "DJ-ADMIN-REFUND-ORDER-1" {
+	if resp.Data["order_no"] != "FAKA-58-ADMIN-REFUND-ORDER-1" {
 		t.Fatalf("unexpected order_no: %+v", resp.Data["order_no"])
 	}
 	if resp.Data["refund_type_label"] != "manual" {

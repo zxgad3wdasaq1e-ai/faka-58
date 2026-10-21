@@ -10,12 +10,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/cache"
-	"github.com/dujiao-next/internal/config"
-	orderriskcontract "github.com/dujiao-next/internal/modules/orderrisk/contract"
-	"github.com/dujiao-next/internal/modules/orderrisk/infrastructure/redislimiter"
-	settingssecurity "github.com/dujiao-next/internal/modules/settings/schema/security"
 	"github.com/redis/go-redis/v9"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/cache"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	orderriskcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/orderrisk/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/orderrisk/infrastructure/redislimiter"
+	settingssecurity "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/security"
 )
 
 func TestLocalLimiterSerializesRequestsAndExpiresBlock(t *testing.T) {

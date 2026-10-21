@@ -5,22 +5,22 @@ import (
 	"testing"
 	"time"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	cardsecretdomain "github.com/dujiao-next/internal/modules/cardsecret/domain"
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
-	. "github.com/dujiao-next/internal/modules/order/application"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
-	ordergormstore "github.com/dujiao-next/internal/modules/order/infrastructure/gormstore"
+	cardsecretdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/domain"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
+	. "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
+	ordergormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/infrastructure/gormstore"
 
-	coupondomain "github.com/dujiao-next/internal/modules/coupon/domain"
+	coupondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/domain"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	productgormstore "github.com/dujiao-next/internal/modules/catalog/product/store/gormstore"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	productgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/store/gormstore"
 
-	"github.com/dujiao-next/internal/constants"
-	coupongormstore "github.com/dujiao-next/internal/modules/coupon/infrastructure/gormstore"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	coupongormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/infrastructure/gormstore"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/glebarez/sqlite"
 	"github.com/shopspring/decimal"

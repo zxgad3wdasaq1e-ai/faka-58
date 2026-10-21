@@ -1,6 +1,7 @@
 import { ref, watch } from 'vue'
 
-const TEA_THEME_KEY = 'dujiao_theme'
+const THEME_KEY = 'faka-58_theme'
+const LEGACY_THEME_KEY = 'dujiao_theme'
 
 type Theme = 'light' | 'dark'
 
@@ -9,7 +10,12 @@ const getSystemTheme = (): Theme => {
 }
 
 const getSavedTheme = (): Theme | null => {
-    return localStorage.getItem(TEA_THEME_KEY) as Theme | null
+    try {
+        const saved = localStorage.getItem(THEME_KEY) ?? localStorage.getItem(LEGACY_THEME_KEY)
+        return saved === 'light' || saved === 'dark' ? saved : null
+    } catch {
+        return null
+    }
 }
 
 const theme = ref<Theme>(getSavedTheme() || getSystemTheme())
@@ -21,7 +27,12 @@ const applyTheme = (newTheme: Theme) => {
     } else {
         root.classList.remove('dark')
     }
-    localStorage.setItem(TEA_THEME_KEY, newTheme)
+    try {
+        localStorage.setItem(THEME_KEY, newTheme)
+        localStorage.removeItem(LEGACY_THEME_KEY)
+    } catch {
+        /* 存储不可写时仍允许切换当前页面的主题。 */
+    }
 }
 
 // Watch for changes and apply

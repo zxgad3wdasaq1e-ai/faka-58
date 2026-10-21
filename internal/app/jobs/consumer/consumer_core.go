@@ -1,10 +1,10 @@
 package consumer
 
 import (
-	"github.com/dujiao-next/internal/app/container"
-	"github.com/dujiao-next/internal/logger"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
-	"github.com/dujiao-next/internal/queue"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
 
 	"github.com/hibiken/asynq"
 )

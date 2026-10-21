@@ -1,7 +1,7 @@
 import { getImageUrl } from './image'
 
 const SITE_ICON_LINK_ID = 'site-favicon'
-const DEFAULT_SITE_ICON = '/xopen.svg'
+const DEFAULT_SITE_ICON = '/faka-58.svg'
 
 export function resolveSiteIconHref(value: unknown): string {
   const icon = String(value || '').trim()

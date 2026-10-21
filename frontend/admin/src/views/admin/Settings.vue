@@ -25,6 +25,7 @@ import SettingsHomeAnnouncementTab from './components/SettingsHomeAnnouncementTa
 import SettingsUpstreamSyncTab from './components/SettingsUpstreamSyncTab.vue'
 import SettingsHomepageTab from './components/SettingsHomepageTab.vue'
 import { normalizeHomepageSettings } from '../../../../shared/homepage'
+import { DEFAULT_TEMPLATE, normalizeStorefrontTemplate, type StorefrontTemplate } from '../../../../shared/storefrontTemplate'
 
 const { t } = useI18n()
 const loading = ref(false)
@@ -232,7 +233,7 @@ const form = reactive({
   },
   scripts: [] as SiteScriptItem[],
   footer_links: [] as FooterLinkItem[],
-  storefront_template: 'getgpt' as 'classic' | 'vault' | 'getgpt',
+  storefront_template: DEFAULT_TEMPLATE as StorefrontTemplate,
   template_mode: 'card' as 'card' | 'list',
   homepage: normalizeHomepageSettings(),
 })
@@ -471,8 +472,7 @@ const fetchSettings = async () => {
       const rawTemplateMode = String(data.template_mode || 'card').trim()
       form.template_mode = rawTemplateMode === 'list' ? 'list' : 'card'
 
-      const rawStorefrontTemplate = String(data.storefront_template || 'getgpt').trim()
-      form.storefront_template = rawStorefrontTemplate === 'vault' ? 'vault' : rawStorefrontTemplate === 'classic' ? 'classic' : 'getgpt'
+      form.storefront_template = normalizeStorefrontTemplate(data.storefront_template) ?? DEFAULT_TEMPLATE
       form.homepage = normalizeHomepageSettings(data.homepage)
     }
 
@@ -1176,10 +1176,10 @@ onMounted(() => {
         </div>
         <div class="px-6 py-6">
           <RadioGroup v-model="form.storefront_template" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Label class="relative flex cursor-pointer flex-col items-center gap-3 rounded-xl border-2 p-6 transition-all" :class="form.storefront_template === 'getgpt' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'border-border hover:border-muted-foreground/30'">
-              <RadioGroupItem value="getgpt" class="sr-only" />
+            <Label class="relative flex cursor-pointer flex-col items-center gap-3 rounded-xl border-2 p-6 transition-all" :class="form.storefront_template === 'faka-58' ? 'border-primary bg-primary/5 ring-1 ring-primary/20' : 'border-border hover:border-muted-foreground/30'">
+              <RadioGroupItem value="faka-58" class="sr-only" />
               <div class="flex h-16 w-16 items-center justify-center rounded-xl bg-violet-100 text-violet-600 text-3xl font-bold">✦</div>
-              <div class="text-center"><div class="font-semibold">{{ t('admin.settings.template.getgptMode') }}</div><div class="mt-1 text-xs text-muted-foreground">{{ t('admin.settings.template.getgptModeDesc') }}</div></div>
+              <div class="text-center"><div class="font-semibold">{{ t('admin.settings.template.faka58Mode') }}</div><div class="mt-1 text-xs text-muted-foreground">{{ t('admin.settings.template.faka58ModeDesc') }}</div></div>
             </Label>
             <!-- Classic -->
             <Label

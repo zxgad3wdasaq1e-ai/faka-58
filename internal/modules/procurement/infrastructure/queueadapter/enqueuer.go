@@ -3,8 +3,8 @@ package queueadapter
 import (
 	"time"
 
-	procurementcontract "github.com/dujiao-next/internal/modules/procurement/contract"
-	"github.com/dujiao-next/internal/queue"
+	procurementcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/procurement/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
 
 	"github.com/hibiken/asynq"
 )

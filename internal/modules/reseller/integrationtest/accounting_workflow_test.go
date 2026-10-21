@@ -6,30 +6,30 @@ import (
 	"testing"
 	"time"
 
-	paymentapp "github.com/dujiao-next/internal/modules/payment/application"
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
-	paymentgormstore "github.com/dujiao-next/internal/modules/payment/infrastructure/gormstore"
+	paymentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/application"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
+	paymentgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gormstore"
 
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
-	ordergormstore "github.com/dujiao-next/internal/modules/order/infrastructure/gormstore"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
+	ordergormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/infrastructure/gormstore"
 
-	resellerapplication "github.com/dujiao-next/internal/modules/reseller/application"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
-	resellergormstore "github.com/dujiao-next/internal/modules/reseller/infrastructure/gormstore"
+	resellerapplication "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/application"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	resellergormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/infrastructure/gormstore"
 
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
 
-	productgormstore "github.com/dujiao-next/internal/modules/catalog/product/store/gormstore"
+	productgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/store/gormstore"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/glebarez/sqlite"
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 	"gorm.io/gorm"
 )
 
@@ -229,7 +229,7 @@ func seedPaidResellerOrderSnapshot(t *testing.T, db *gorm.DB, eligible bool) (or
 	resellerID := profile.ID
 	now := time.Now()
 	order := orderdomain.Order{
-		OrderNo:              "DJ-RES-" + uuid.NewString(),
+		OrderNo:              "FAKA-58-RES-" + uuid.NewString(),
 		UserID:               user.ID,
 		Status:               constants.OrderStatusPaid,
 		TotalAmount:          money.FromDecimal(decimal.NewFromInt(130)),

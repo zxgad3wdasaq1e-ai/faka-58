@@ -52,7 +52,7 @@ parse_env() {
             APP_IMAGE) IMAGE=$value;;
             COMPOSE_FILE) [ "$value" = compose.yml ] || die '自定义 Compose / MinIO 请使用原备份工具。';;
             CADDY_PROXY_MODE) case "$value" in direct|cloudflare) ;; *) die 'CADDY_PROXY_MODE 仅支持 direct 或 cloudflare。';; esac;;
-            SITE_ADDRESS|HTTP_PORT|HTTPS_PORT|APP_SUBNET|CADDY_IP|APP_VERSION) ;;
+            SITE_ADDRESS|HTTP_PORT|HTTPS_PORT|APP_SUBNET|CADDY_IP|APP_VERSION|POSTGRES_DB|POSTGRES_APP_USER) ;;
             *) die '.env 含非快速安装配置项；请使用原备份工具。';;
         esac
         case "$value" in *[!A-Za-z0-9_./:@+-]*) die '.env 含变量、引号或不支持的字符。';; esac
@@ -67,6 +67,7 @@ compose() (
     # image, mount configuration, public ports, or proxy trust mode.
     unset COMPOSE_FILE COMPOSE_PROJECT_NAME COMPOSE_PROFILES COMPOSE_PATH_SEPARATOR
     unset APP_IMAGE APP_VERSION SITE_ADDRESS HTTP_PORT HTTPS_PORT APP_SUBNET CADDY_IP CADDY_PROXY_MODE
+    unset POSTGRES_DB POSTGRES_APP_USER
     cd "$ROOT"
     docker compose --project-name "$PROJECT" --env-file "$ROOT/.env" -f "$ROOT/compose.yml" "$@"
 )
@@ -181,7 +182,7 @@ backup() {
             compose stop "$service";;
         esac
     done
-    compose exec -T postgres pg_dump -U postgres -d getgpt -Fc > "$OUTPUT/database.dump"
+    compose exec -T postgres sh -ec 'exec pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc' > "$OUTPUT/database.dump"
     utility --mount "type=bind,source=$ROOT,target=/source,readonly" \
         --mount "type=bind,source=$OUTPUT,target=/backup" alpine:3.22 sh -ec "$ARCHIVE_CHECK"'
         source=$1 output=$2
@@ -296,7 +297,7 @@ EOF
         ' backup /backup /target "$logical"
     done
     compose up -d --no-build --wait --wait-timeout 300 postgres
-    compose exec -T postgres pg_restore -U postgres -d getgpt --clean --if-exists --exit-on-error --single-transaction < "$SOURCE/database.dump"
+    compose exec -T postgres sh -ec 'exec pg_restore -U "$POSTGRES_USER" -d "$POSTGRES_DB" --clean --if-exists --exit-on-error --single-transaction' < "$SOURCE/database.dump"
     compose pull
     compose up -d --no-build --wait --wait-timeout 300
     printf '恢复完成。请检查商品、历史订单、图片与支付回调。\n'

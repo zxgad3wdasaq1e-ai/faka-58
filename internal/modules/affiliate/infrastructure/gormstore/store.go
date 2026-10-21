@@ -5,10 +5,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	affiliatecontract "github.com/dujiao-next/internal/modules/affiliate/contract"
-	affiliatedomain "github.com/dujiao-next/internal/modules/affiliate/domain"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	affiliatecontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/contract"
+	affiliatedomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/domain"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )

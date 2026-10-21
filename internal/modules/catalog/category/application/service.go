@@ -4,9 +4,9 @@ import (
 	"errors"
 	"strconv"
 
-	categorycontract "github.com/dujiao-next/internal/modules/catalog/category/contract"
-	categorydomain "github.com/dujiao-next/internal/modules/catalog/category/domain"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	categorycontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/contract"
+	categorydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 var (

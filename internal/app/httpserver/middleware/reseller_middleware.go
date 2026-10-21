@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/dujiao-next/internal/i18n"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
-	"github.com/dujiao-next/internal/platform/http/response"
 	"github.com/gin-gonic/gin"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/i18n"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 )
 
 type ResellerTenantResolver interface {

@@ -5,31 +5,31 @@ import (
 	"strconv"
 	"testing"
 
-	paymentgormstore "github.com/dujiao-next/internal/modules/payment/infrastructure/gormstore"
+	paymentgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gormstore"
 
-	cardsecretgormstore "github.com/dujiao-next/internal/modules/cardsecret/infrastructure/gormstore"
-	memberleveldomain "github.com/dujiao-next/internal/modules/memberlevel/domain"
+	cardsecretgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/infrastructure/gormstore"
+	memberleveldomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/domain"
 
-	mappingdomain "github.com/dujiao-next/internal/modules/catalog/mapping/domain"
+	mappingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/domain"
 
-	catalogproductbootstrap "github.com/dujiao-next/internal/bootstrap/catalogproduct"
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	ordergormstore "github.com/dujiao-next/internal/modules/order/infrastructure/gormstore"
+	catalogproductbootstrap "github.com/zxgad3wdasaq1e-ai/faka-58/internal/bootstrap/catalogproduct"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	ordergormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/infrastructure/gormstore"
 
-	categorydomain "github.com/dujiao-next/internal/modules/catalog/category/domain"
+	categorydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/domain"
 
-	productgormstore "github.com/dujiao-next/internal/modules/catalog/product/store/gormstore"
+	productgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/store/gormstore"
 
-	"github.com/dujiao-next/internal/constants"
-	cartdomain "github.com/dujiao-next/internal/modules/cart/domain"
-	cartgormstore "github.com/dujiao-next/internal/modules/cart/infrastructure/gormstore"
-	categorygormstore "github.com/dujiao-next/internal/modules/catalog/category/infrastructure/gormstore"
-	mappinggormstore "github.com/dujiao-next/internal/modules/catalog/mapping/infrastructure/gormstore"
-	memberlevelgormstore "github.com/dujiao-next/internal/modules/memberlevel/infrastructure/gormstore"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	cartdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cart/domain"
+	cartgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cart/infrastructure/gormstore"
+	categorygormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/infrastructure/gormstore"
+	mappinggormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/infrastructure/gormstore"
+	memberlevelgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/infrastructure/gormstore"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 	"gorm.io/gorm"
 )
 

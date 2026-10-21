@@ -3,8 +3,8 @@ package broadcastdomain
 import (
 	"time"
 
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/jsonslice"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonslice"
 )
 
 // Broadcast is a persisted Telegram broadcast job.

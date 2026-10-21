@@ -3,8 +3,8 @@ package domain
 import (
 	"time"
 
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 // OrderRefundRecord 退款记录

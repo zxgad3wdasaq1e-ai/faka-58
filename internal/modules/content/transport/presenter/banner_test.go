@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	contentdomain "github.com/dujiao-next/internal/modules/content/domain"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	contentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 func TestBannerRespOmitsSensitiveFields(t *testing.T) {

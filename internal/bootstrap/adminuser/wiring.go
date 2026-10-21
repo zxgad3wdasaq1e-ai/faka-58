@@ -1,8 +1,8 @@
 package adminuserwiring
 
 import (
-	"github.com/dujiao-next/internal/app/container"
-	adminusertransport "github.com/dujiao-next/internal/modules/identity/user/transport/http/admin"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	adminusertransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/transport/http/admin"
 )
 
 func NewHandler(c *container.Container) *adminusertransport.AdminHandler {

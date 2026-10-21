@@ -5,15 +5,15 @@ import (
 	"testing"
 	"time"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	memberlevelapp "github.com/dujiao-next/internal/modules/memberlevel/application"
-	memberlevelcontract "github.com/dujiao-next/internal/modules/memberlevel/contract"
-	memberleveldomain "github.com/dujiao-next/internal/modules/memberlevel/domain"
-	"github.com/dujiao-next/internal/modules/memberlevel/infrastructure/gormstore"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/glebarez/sqlite"
 	"github.com/shopspring/decimal"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	memberlevelapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/application"
+	memberlevelcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/contract"
+	memberleveldomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/infrastructure/gormstore"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 	"gorm.io/gorm"
 )
 

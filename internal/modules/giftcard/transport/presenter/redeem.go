@@ -3,11 +3,11 @@ package presenter
 import (
 	"time"
 
-	walletdomain "github.com/dujiao-next/internal/modules/wallet/domain"
+	walletdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/domain"
 
-	giftcarddomain "github.com/dujiao-next/internal/modules/giftcard/domain"
-	walletpresenter "github.com/dujiao-next/internal/modules/wallet/transport/presenter"
-	"github.com/dujiao-next/internal/shared/money"
+	giftcarddomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/domain"
+	walletpresenter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/transport/presenter"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 // GiftCardRedeemResp 礼品卡兑换结果响应

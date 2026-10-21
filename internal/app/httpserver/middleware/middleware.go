@@ -1,27 +1,27 @@
 package middleware
 
 import (
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/modules/identity/jwttoken"
-	usercontract "github.com/dujiao-next/internal/modules/identity/user/contract"
-	userauthapp "github.com/dujiao-next/internal/modules/identity/userauth/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/jwttoken"
+	usercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/contract"
+	userauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/application"
 
 	"go.uber.org/zap"
 
-	"github.com/dujiao-next/internal/authz"
-	"github.com/dujiao-next/internal/cache"
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/i18n"
-	"github.com/dujiao-next/internal/logger"
-	admincontract "github.com/dujiao-next/internal/modules/identity/admin/contract"
-	adminauthapp "github.com/dujiao-next/internal/modules/identity/adminauth/application"
-	"github.com/dujiao-next/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/authz"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/cache"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/i18n"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	admincontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/contract"
+	adminauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/adminauth/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"

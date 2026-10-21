@@ -3,11 +3,11 @@ package application
 import (
 	"strings"
 
-	ordercontract "github.com/dujiao-next/internal/modules/order/contract"
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
+	ordercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/contract"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/telegramidentity"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/telegramidentity"
 )
 
 type receiverEmailResolver interface {

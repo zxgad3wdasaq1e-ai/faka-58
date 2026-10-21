@@ -4,10 +4,10 @@ import (
 	"strings"
 	"time"
 
-	ordercontract "github.com/dujiao-next/internal/modules/order/contract"
-	orderqueue "github.com/dujiao-next/internal/modules/order/infrastructure/queueadapter"
-	paymentcontract "github.com/dujiao-next/internal/modules/payment/contract"
-	"github.com/dujiao-next/internal/queue"
+	ordercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/contract"
+	orderqueue "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/infrastructure/queueadapter"
+	paymentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
 
 	"github.com/hibiken/asynq"
 )

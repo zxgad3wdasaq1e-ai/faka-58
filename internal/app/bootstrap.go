@@ -3,11 +3,11 @@ package app
 import (
 	"errors"
 
-	"github.com/dujiao-next/internal/app/container"
-	"github.com/dujiao-next/internal/app/httpserver"
-	"github.com/dujiao-next/internal/app/jobs"
-	jobconsumer "github.com/dujiao-next/internal/app/jobs/consumer"
-	"github.com/dujiao-next/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/httpserver"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/jobs"
+	jobconsumer "github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/jobs/consumer"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
 )
 
 // BuildRunner 构建服务运行器

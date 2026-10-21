@@ -18,9 +18,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	settingssecurity "github.com/dujiao-next/internal/modules/settings/schema/security"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	settingssecurity "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/security"
 )
 
 const (

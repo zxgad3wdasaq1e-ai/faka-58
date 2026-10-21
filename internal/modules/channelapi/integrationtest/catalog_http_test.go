@@ -8,25 +8,25 @@ import (
 	"testing"
 	"time"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	categoryapp "github.com/dujiao-next/internal/modules/catalog/category/application"
-	categorydomain "github.com/dujiao-next/internal/modules/catalog/category/domain"
+	categoryapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/application"
+	categorydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/domain"
 
-	productgormstore "github.com/dujiao-next/internal/modules/catalog/product/store/gormstore"
+	productgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/store/gormstore"
 
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
-	settingsstore "github.com/dujiao-next/internal/modules/settings/infrastructure/gormstore"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
+	settingsstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/infrastructure/gormstore"
 
-	"github.com/dujiao-next/internal/constants"
-	categorygormstore "github.com/dujiao-next/internal/modules/catalog/category/infrastructure/gormstore"
-	productapplication "github.com/dujiao-next/internal/modules/catalog/product/application"
-	channeltransport "github.com/dujiao-next/internal/modules/channelapi/transport/http"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	categorygormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/infrastructure/gormstore"
+	productapplication "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/application"
+	channeltransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/channelapi/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 	"gorm.io/gorm"
 )
 

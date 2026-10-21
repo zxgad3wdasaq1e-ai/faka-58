@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/modules/notification/contract"
-	"github.com/dujiao-next/internal/modules/notification/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/domain"
 
 	"github.com/gin-gonic/gin"
 )
@@ -57,7 +57,7 @@ func TestListNotificationLogsFiltersStatusAndChannel(t *testing.T) {
 			Channel:      "email",
 			Recipient:    "failed@example.com",
 			Locale:       "en-US",
-			Title:        "Order DJ-11",
+			Title:        "Order FAKA-58-11",
 			Body:         "failed body",
 			Status:       "failed",
 			ErrorMessage: "smtp disabled",

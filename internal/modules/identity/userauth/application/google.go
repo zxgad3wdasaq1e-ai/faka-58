@@ -9,12 +9,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/cache"
-	"github.com/dujiao-next/internal/constants"
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
-	googleauthapp "github.com/dujiao-next/internal/modules/identity/googleauth/application"
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/cache"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
+	googleauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/googleauth/application"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
 
 	"golang.org/x/crypto/bcrypt"
 )

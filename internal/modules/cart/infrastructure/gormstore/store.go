@@ -3,9 +3,9 @@ package gormstore
 import (
 	"errors"
 
-	"github.com/dujiao-next/internal/modules/cart/contract"
-	"github.com/dujiao-next/internal/modules/cart/domain"
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cart/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cart/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
 	"gorm.io/gorm"
 )

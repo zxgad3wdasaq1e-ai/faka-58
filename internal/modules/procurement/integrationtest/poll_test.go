@@ -9,15 +9,15 @@ import (
 	"testing"
 	"time"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	ordergormstore "github.com/dujiao-next/internal/modules/order/infrastructure/gormstore"
-	procurementapp "github.com/dujiao-next/internal/modules/procurement/application"
-	procurementgormstore "github.com/dujiao-next/internal/modules/procurement/infrastructure/gormstore"
-	procurementorder "github.com/dujiao-next/internal/modules/procurement/infrastructure/orderreader"
-	procurementupstream "github.com/dujiao-next/internal/modules/procurement/infrastructure/upstreamgateway"
-	siteconnectionapp "github.com/dujiao-next/internal/modules/siteconnection/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	ordergormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/infrastructure/gormstore"
+	procurementapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/procurement/application"
+	procurementgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/procurement/infrastructure/gormstore"
+	procurementorder "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/procurement/infrastructure/orderreader"
+	procurementupstream "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/procurement/infrastructure/upstreamgateway"
+	siteconnectionapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/application"
 )
 
 // ── PollUpstreamStatus test ──

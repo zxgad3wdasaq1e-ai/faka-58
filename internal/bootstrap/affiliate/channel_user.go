@@ -1,8 +1,8 @@
 package affiliatebootstrap
 
 import (
-	affiliatetransport "github.com/dujiao-next/internal/modules/affiliate/transport/http"
-	userauthapp "github.com/dujiao-next/internal/modules/identity/userauth/application"
+	affiliatetransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/transport/http"
+	userauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/application"
 )
 
 // affiliateChannelUserAdapter 连接身份模块与 Affiliate 渠道 transport。

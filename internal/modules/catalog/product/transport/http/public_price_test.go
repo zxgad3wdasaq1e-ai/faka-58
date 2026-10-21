@@ -4,14 +4,14 @@ import (
 	"errors"
 	"testing"
 
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	memberleveldomain "github.com/dujiao-next/internal/modules/memberlevel/domain"
-	promotiondomain "github.com/dujiao-next/internal/modules/promotion/domain"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	memberleveldomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/domain"
+	promotiondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/promotion/domain"
 
-	reseller "github.com/dujiao-next/internal/modules/reseller/contract"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/shopspring/decimal"
+	reseller "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 type stubResellerDisplayPricer struct {

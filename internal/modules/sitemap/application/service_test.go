@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/modules/sitemap/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/sitemap/contract"
 )
 
 type catalogStub struct {

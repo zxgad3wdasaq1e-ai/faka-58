@@ -3,8 +3,8 @@ package channelhttp
 import (
 	"strings"
 
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,9 +1,9 @@
 package contract
 
 import (
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	memberleveldomain "github.com/dujiao-next/internal/modules/memberlevel/domain"
 	"github.com/shopspring/decimal"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	memberleveldomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/domain"
 )
 
 type ListFilter struct {

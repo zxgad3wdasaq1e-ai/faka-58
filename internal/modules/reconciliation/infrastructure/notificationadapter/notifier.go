@@ -3,10 +3,10 @@ package notificationadapter
 import (
 	"fmt"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/modules/notification/contract"
-	reconciliationcontract "github.com/dujiao-next/internal/modules/reconciliation/contract"
-	reconciliationdomain "github.com/dujiao-next/internal/modules/reconciliation/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/contract"
+	reconciliationcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reconciliation/contract"
+	reconciliationdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reconciliation/domain"
 )
 
 type Notifier struct {

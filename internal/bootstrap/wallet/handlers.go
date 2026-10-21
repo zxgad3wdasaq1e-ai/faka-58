@@ -1,9 +1,9 @@
 package walletbootstrap
 
 import (
-	"github.com/dujiao-next/internal/app/container"
-	channeluserwiring "github.com/dujiao-next/internal/bootstrap/channeluser"
-	wallettransport "github.com/dujiao-next/internal/modules/wallet/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	channeluserwiring "github.com/zxgad3wdasaq1e-ai/faka-58/internal/bootstrap/channeluser"
+	wallettransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/transport/http"
 )
 
 type Handlers struct {

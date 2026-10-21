@@ -6,10 +6,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	contentapp "github.com/dujiao-next/internal/modules/content/application"
-	contentcontract "github.com/dujiao-next/internal/modules/content/contract"
-	contentdomain "github.com/dujiao-next/internal/modules/content/domain"
 	"github.com/gin-gonic/gin"
+	contentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/application"
+	contentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/contract"
+	contentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/domain"
 )
 
 type requestContextKey struct{}

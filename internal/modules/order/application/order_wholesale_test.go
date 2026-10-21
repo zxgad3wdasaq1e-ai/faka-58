@@ -8,32 +8,32 @@ import (
 	"testing"
 	"time"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	coupondomain "github.com/dujiao-next/internal/modules/coupon/domain"
+	coupondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/domain"
 
-	promotiondomain "github.com/dujiao-next/internal/modules/promotion/domain"
+	promotiondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/promotion/domain"
 
-	memberleveldomain "github.com/dujiao-next/internal/modules/memberlevel/domain"
+	memberleveldomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/domain"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	categorydomain "github.com/dujiao-next/internal/modules/catalog/category/domain"
+	categorydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/domain"
 
-	productgormstore "github.com/dujiao-next/internal/modules/catalog/product/store/gormstore"
+	productgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/store/gormstore"
 
-	userstore "github.com/dujiao-next/internal/modules/identity/user/infrastructure/gormstore"
+	userstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/infrastructure/gormstore"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	couponcontract "github.com/dujiao-next/internal/modules/coupon/contract"
-	coupongormstore "github.com/dujiao-next/internal/modules/coupon/infrastructure/gormstore"
-	memberlevelapp "github.com/dujiao-next/internal/modules/memberlevel/application"
-	memberlevelgormstore "github.com/dujiao-next/internal/modules/memberlevel/infrastructure/gormstore"
-	promotiongormstore "github.com/dujiao-next/internal/modules/promotion/infrastructure/gormstore"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	couponcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/contract"
+	coupongormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/infrastructure/gormstore"
+	memberlevelapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/application"
+	memberlevelgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/infrastructure/gormstore"
+	promotiongormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/promotion/infrastructure/gormstore"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/glebarez/sqlite"
 	"github.com/shopspring/decimal"

@@ -107,10 +107,10 @@ EOF
 [ -n "$pinned_image" ] || die 'RepoDigests 中没有与所选镜像仓库及摘要一致的不可变引用。'
 
 temp_base=$(CDPATH='' cd "${TMPDIR:-/tmp}" && pwd -P) || die '临时目录不可用。'
-staging=$(mktemp -d "$temp_base/xopen-deploy.XXXXXXXX") || die '无法创建临时下载目录。'
+staging=$(mktemp -d "$temp_base/faka-58-deploy.XXXXXXXX") || die '无法创建临时下载目录。'
 cleanup() {
     # This path is returned by mktemp under our checked, absolute temp base.
-    case "$staging" in "$temp_base"/xopen-deploy.*) rm -rf -- "$staging" ;; esac
+    case "$staging" in "$temp_base"/faka-58-deploy.*) rm -rf -- "$staging" ;; esac
 }
 trap cleanup 0
 trap 'exit 129' HUP

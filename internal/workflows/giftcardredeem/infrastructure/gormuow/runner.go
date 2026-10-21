@@ -1,13 +1,13 @@
 package gormuow
 
 import (
-	giftcardcontract "github.com/dujiao-next/internal/modules/giftcard/contract"
-	giftcarddomain "github.com/dujiao-next/internal/modules/giftcard/domain"
-	"github.com/dujiao-next/internal/modules/giftcard/infrastructure/gormstore"
-	walletapp "github.com/dujiao-next/internal/modules/wallet/application"
-	walletcontract "github.com/dujiao-next/internal/modules/wallet/contract"
-	walletdomain "github.com/dujiao-next/internal/modules/wallet/domain"
-	walletgormstore "github.com/dujiao-next/internal/modules/wallet/infrastructure/gormstore"
+	giftcardcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/contract"
+	giftcarddomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/infrastructure/gormstore"
+	walletapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/application"
+	walletcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/contract"
+	walletdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/domain"
+	walletgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/infrastructure/gormstore"
 
 	"gorm.io/gorm"
 )

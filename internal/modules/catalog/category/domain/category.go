@@ -3,7 +3,7 @@ package categorydomain
 import (
 	"time"
 
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 // Category 分类表

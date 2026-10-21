@@ -5,12 +5,12 @@ import (
 	"strings"
 	"time"
 
-	invitecodeapp "github.com/dujiao-next/internal/modules/identity/invitecode/application"
-	invitecodedomain "github.com/dujiao-next/internal/modules/identity/invitecode/domain"
-	usercontract "github.com/dujiao-next/internal/modules/identity/user/contract"
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	invitecodeapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/invitecode/application"
+	invitecodedomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/invitecode/domain"
+	usercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/contract"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

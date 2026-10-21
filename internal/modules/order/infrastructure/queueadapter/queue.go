@@ -4,9 +4,9 @@ import (
 	"strings"
 	"time"
 
-	ordercontract "github.com/dujiao-next/internal/modules/order/contract"
+	ordercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/contract"
 
-	"github.com/dujiao-next/internal/queue"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
 )
 
 // Queue 把平台异步队列适配为订单应用端口。

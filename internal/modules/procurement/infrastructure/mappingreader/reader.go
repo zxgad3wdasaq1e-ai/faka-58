@@ -1,8 +1,8 @@
 package mappingreader
 
 import (
-	mappingdomain "github.com/dujiao-next/internal/modules/catalog/mapping/domain"
-	procurementcontract "github.com/dujiao-next/internal/modules/procurement/contract"
+	mappingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/domain"
+	procurementcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/procurement/contract"
 )
 
 type ProductSource interface {

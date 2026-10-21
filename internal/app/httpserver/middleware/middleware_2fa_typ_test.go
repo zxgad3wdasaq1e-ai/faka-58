@@ -8,14 +8,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/modules/identity/jwttoken"
-	usercontract "github.com/dujiao-next/internal/modules/identity/user/contract"
-	userstore "github.com/dujiao-next/internal/modules/identity/user/infrastructure/gormstore"
-	userauthapp "github.com/dujiao-next/internal/modules/identity/userauth/application"
-	"github.com/dujiao-next/internal/modules/identity/userauth/challenge"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/jwttoken"
+	usercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/contract"
+	userstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/infrastructure/gormstore"
+	userauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/challenge"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
 	"github.com/gin-gonic/gin"
 	"github.com/glebarez/sqlite"

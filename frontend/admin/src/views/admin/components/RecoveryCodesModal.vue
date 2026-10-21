@@ -28,7 +28,7 @@ const downloadTxt = () => {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = 'xopenai-2fa-recovery-codes.txt'
+  a.download = 'faka-58-2fa-recovery-codes.txt'
   a.click()
   URL.revokeObjectURL(url)
 }

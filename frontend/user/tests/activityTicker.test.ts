@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { createActivitySequence, formatActivityMessage, maskActivityName } from '../src/templates/getgpt/activityTicker.ts'
+import { createActivitySequence, formatActivityMessage, maskActivityName } from '../src/templates/faka-58/activityTicker.ts'
 
 test('broadcast nicknames are masked without splitting emoji or exposing short names', () => {
   assert.equal(maskActivityName(' wx_kai109 '), 'wx****109')

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	channelclientdomain "github.com/dujiao-next/internal/modules/channelclient/domain"
+	channelclientdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/channelclient/domain"
 
 	"gorm.io/gorm"
 )

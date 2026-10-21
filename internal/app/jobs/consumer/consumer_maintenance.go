@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/logger"
-	"github.com/dujiao-next/internal/queue"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
 
 	"github.com/hibiken/asynq"
 )

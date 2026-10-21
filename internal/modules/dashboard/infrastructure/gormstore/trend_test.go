@@ -5,12 +5,12 @@ import (
 	"testing"
 	"time"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/shopspring/decimal"
 )
@@ -26,7 +26,7 @@ func TestTrendQueriesBucketByRequestedTimezone(t *testing.T) {
 
 	for idx, createdAt := range []time.Time{baseUTC, nextUTC} {
 		order := &orderdomain.Order{
-			OrderNo:        fmt.Sprintf("DJ-TZ-%d", idx),
+			OrderNo:        fmt.Sprintf("FAKA-58-TZ-%d", idx),
 			UserID:         1,
 			Status:         constants.OrderStatusPaid,
 			Currency:       "CNY",

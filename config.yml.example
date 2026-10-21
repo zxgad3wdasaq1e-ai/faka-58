@@ -1,11 +1,11 @@
-# XOPEN AI 配置文件
+# faka-58 配置文件
 #
 # 首次启动前必须把下面三个占位密钥替换为彼此不同的强随机值，否则服务会拒绝启动。
 # 可分别执行三次：openssl rand -hex 32
 
 app:
   secret_key: your-secret-key-change-in-production-please # 务必修改，用于 AES-256 加密敏感数据
-  totp_issuer: XOPEN AI                             # 后台 2FA 验证器中显示的发行方名称（避免 & 等特殊字符）
+  totp_issuer: faka-58                             # 后台 2FA 验证器中显示的发行方名称（避免 & 等特殊字符）
 
 server:
   host: 0.0.0.0
@@ -27,7 +27,7 @@ log:
 
 database:
   driver: sqlite  # sqlite / postgres
-  dsn: ./db/dujiao.db
+  dsn: ./db/faka-58.db
   pool:
     max_open_conns: 1
     max_idle_conns: 1
@@ -229,5 +229,5 @@ reseller:
 web:
   # 后台访问路径前缀
   # 强烈建议改成不易猜测的字符串以降低自动化扫描风险
-  # 例如: "/dj-mgmt-7x9k2" 或 "/console-private"
+  # 例如: "/faka-58-mgmt-7x9k2" 或 "/console-private"
   admin_path: "/admin"

@@ -3,12 +3,12 @@ package presenter
 import (
 	"time"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
-	paymentpresenter "github.com/dujiao-next/internal/modules/payment/transport/presenter"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
+	paymentpresenter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/transport/presenter"
 
-	walletdomain "github.com/dujiao-next/internal/modules/wallet/domain"
+	walletdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/domain"
 
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 // WalletAccountResp 钱包账户响应

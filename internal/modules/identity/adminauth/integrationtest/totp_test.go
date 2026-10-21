@@ -5,13 +5,13 @@ import (
 	"testing"
 	"time"
 
-	totpapplication "github.com/dujiao-next/internal/modules/identity/totp/application"
+	totpapplication "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/totp/application"
 
-	"github.com/dujiao-next/internal/config"
-	admincontract "github.com/dujiao-next/internal/modules/identity/admin/contract"
-	admindomain "github.com/dujiao-next/internal/modules/identity/admin/domain"
-	adminstore "github.com/dujiao-next/internal/modules/identity/admin/infrastructure/gormstore"
-	admintotpapp "github.com/dujiao-next/internal/modules/identity/adminauth/totp/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	admincontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/contract"
+	admindomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/domain"
+	adminstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/infrastructure/gormstore"
+	admintotpapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/adminauth/totp/application"
 
 	"github.com/glebarez/sqlite"
 	"github.com/pquerna/otp/totp"

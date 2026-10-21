@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
-	"github.com/dujiao-next/internal/persistence/gormutil"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/persistence/gormutil"
 
 	"gorm.io/gorm"
 )

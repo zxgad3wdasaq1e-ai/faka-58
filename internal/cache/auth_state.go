@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	admindomain "github.com/dujiao-next/internal/modules/identity/admin/domain"
+	admindomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/domain"
 )
 
 const authStateCacheTTL = 10 * time.Minute

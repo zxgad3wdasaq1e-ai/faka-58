@@ -4,11 +4,11 @@ import (
 	"errors"
 	"time"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	memberlevelcontract "github.com/dujiao-next/internal/modules/memberlevel/contract"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/shopspring/decimal"
+	memberlevelcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 	"gorm.io/gorm"
 )
 

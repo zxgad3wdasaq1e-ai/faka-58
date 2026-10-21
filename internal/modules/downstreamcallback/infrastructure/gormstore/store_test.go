@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	downstreamcontract "github.com/dujiao-next/internal/modules/downstreamcallback/contract"
-	downstreamdomain "github.com/dujiao-next/internal/modules/downstreamcallback/domain"
+	downstreamcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/downstreamcallback/contract"
+	downstreamdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/downstreamcallback/domain"
 
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"

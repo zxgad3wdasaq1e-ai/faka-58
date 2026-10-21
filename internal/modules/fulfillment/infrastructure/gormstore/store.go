@@ -3,8 +3,8 @@ package gormstore
 import (
 	"errors"
 
-	fulfillmentcontract "github.com/dujiao-next/internal/modules/fulfillment/contract"
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
+	fulfillmentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/contract"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"

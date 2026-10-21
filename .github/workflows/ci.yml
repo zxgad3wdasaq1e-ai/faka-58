@@ -31,12 +31,12 @@ jobs:
 
       - name: Check Bash syntax and ShellCheck
         run: |
-          bash -n scripts/dujiao-next-manager.sh
-          bash -n scripts/tests/dujiao-next-manager_test.sh
-          shellcheck -x -S warning scripts/dujiao-next-manager.sh scripts/tests/dujiao-next-manager_test.sh
+          bash -n scripts/faka-58-manager.sh
+          bash -n scripts/tests/faka-58-manager_test.sh
+          shellcheck -x -S warning scripts/faka-58-manager.sh scripts/tests/faka-58-manager_test.sh
 
       - name: Run installer tests
-        run: sudo bash scripts/tests/dujiao-next-manager_test.sh
+        run: sudo bash scripts/tests/faka-58-manager_test.sh
 
       - name: Verify image deployment bootstrap and configuration
         run: |
@@ -54,7 +54,7 @@ jobs:
           with open('.goreleaser.yaml', encoding='utf-8') as handle:
               config = yaml.safe_load(handle)
           files = config['archives'][0]['files']
-          assert './scripts/dujiao-next-manager.sh' in files, files
+          assert './scripts/faka-58-manager.sh' in files, files
           PY
 
   python38:

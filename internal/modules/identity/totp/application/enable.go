@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/dujiao-next/internal/crypto"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/crypto"
 )
 
 var (

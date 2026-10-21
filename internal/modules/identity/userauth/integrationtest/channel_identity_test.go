@@ -2,21 +2,21 @@ package integrationtest
 
 import (
 	"fmt"
-	userauthgormstore "github.com/dujiao-next/internal/modules/identity/userauth/infrastructure/gormstore"
+	userauthgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/infrastructure/gormstore"
 	"testing"
 	"time"
 
-	userstore "github.com/dujiao-next/internal/modules/identity/user/infrastructure/gormstore"
+	userstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/infrastructure/gormstore"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/constants"
-	emailverificationdomain "github.com/dujiao-next/internal/modules/identity/emailverification/domain"
-	emailverificationstore "github.com/dujiao-next/internal/modules/identity/emailverification/infrastructure/gormstore"
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
-	externalidentitystore "github.com/dujiao-next/internal/modules/identity/externalidentity/infrastructure/gormstore"
-	userauthapp "github.com/dujiao-next/internal/modules/identity/userauth/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	emailverificationdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/emailverification/domain"
+	emailverificationstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/emailverification/infrastructure/gormstore"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
+	externalidentitystore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/infrastructure/gormstore"
+	userauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/application"
 
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"

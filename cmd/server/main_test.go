@@ -1,16 +1,49 @@
 package main
 
 import (
+	"os"
 	"reflect"
 	"regexp"
 	"slices"
 	"strings"
 	"testing"
 
-	"github.com/dujiao-next/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
 )
 
 var bannerANSIPattern = regexp.MustCompile(`\x1b\[[0-9;]*m`)
+
+func TestDefaultAdminCredentialsPreferCurrentEnvironmentAndPreserveLegacy(t *testing.T) {
+	cfg := &config.Config{Bootstrap: config.BootstrapConfig{
+		DefaultAdminUsername: "configured-admin",
+		DefaultAdminPassword: "configured-password",
+	}}
+	for _, suffix := range []string{"USERNAME", "PASSWORD"} {
+		key := "FAKA_58_DEFAULT_ADMIN_" + suffix
+		t.Setenv(key, "")
+		if err := os.Unsetenv(key); err != nil {
+			t.Fatal(err)
+		}
+	}
+	t.Setenv("DJ_DEFAULT_ADMIN_USERNAME", " legacy-admin ")
+	t.Setenv("DJ_DEFAULT_ADMIN_PASSWORD", " legacy-password ")
+	if user, pass := resolveDefaultAdminCredentials(cfg); user != "legacy-admin" || pass != "legacy-password" {
+		t.Fatalf("legacy bootstrap credentials = %q / %q", user, pass)
+	}
+	t.Setenv("FAKA_58_DEFAULT_ADMIN_USERNAME", " current-admin ")
+	t.Setenv("FAKA_58_DEFAULT_ADMIN_PASSWORD", " current-password ")
+	if user, pass := resolveDefaultAdminCredentials(cfg); user != "current-admin" || pass != "current-password" {
+		t.Fatalf("current bootstrap keys did not take precedence: %q / %q", user, pass)
+	}
+	t.Setenv("FAKA_58_DEFAULT_ADMIN_USERNAME", "")
+	t.Setenv("FAKA_58_DEFAULT_ADMIN_PASSWORD", "")
+	if user, pass := resolveDefaultAdminCredentials(cfg); user != "configured-admin" || pass != "configured-password" {
+		t.Fatalf("explicitly cleared current keys must fall back to config: %q / %q", user, pass)
+	}
+	if user, pass := resolveDefaultAdminCredentials(nil); user != "" || pass != "" {
+		t.Fatal("cleared current keys must not restore legacy bootstrap credentials")
+	}
+}
 
 // bannerLinks 提取横幅里的链接，剥掉 ANSI 颜色码并按空白切分。
 // 断言链接本身而非"标签 + 对齐空白"的整行字面量，横幅排版微调就不会连带弄红 CI。
@@ -29,8 +62,12 @@ func TestWriteStartupBannerUsesStoreBrandAndLinks(t *testing.T) {
 	writeStartupBanner(&output)
 
 	banner := output.String()
+	if !strings.Contains(banner, "faka-58") {
+		t.Fatal("startup banner is missing the current project name")
+	}
 	for _, removed := range []string{
 		"Dujiao-Next",
+		"XOPEN AI",
 		"XIOEN AI",
 		"https://github.com/dujiao-next",
 		"https://dujiao-next.com",

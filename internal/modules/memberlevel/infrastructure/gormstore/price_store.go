@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	memberlevelcontract "github.com/dujiao-next/internal/modules/memberlevel/contract"
-	memberleveldomain "github.com/dujiao-next/internal/modules/memberlevel/domain"
+	memberlevelcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/contract"
+	memberleveldomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/domain"
 
 	"gorm.io/gorm"
 )

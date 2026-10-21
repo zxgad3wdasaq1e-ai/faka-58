@@ -3,8 +3,8 @@ package publicconfighttp
 import (
 	"context"
 	"encoding/json"
-	"github.com/dujiao-next/internal/shared/jsonmap"
 	"github.com/gin-gonic/gin"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 	"net/http"
 	"net/http/httptest"
 	"reflect"

@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/config"
-	googleauthapp "github.com/dujiao-next/internal/modules/identity/googleauth/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	googleauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/googleauth/application"
 )
 
 type fakeGoogleRedirectStore struct {

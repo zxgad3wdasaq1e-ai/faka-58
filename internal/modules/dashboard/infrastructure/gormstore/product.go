@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	dashboard "github.com/dujiao-next/internal/modules/dashboard/contract"
+	dashboard "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/dashboard/contract"
 )
 
 // GetTopProducts 获取商品排行榜

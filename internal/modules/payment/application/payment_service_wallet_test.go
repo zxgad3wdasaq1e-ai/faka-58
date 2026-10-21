@@ -13,45 +13,45 @@ import (
 	"testing"
 	"time"
 
-	alipayadapter "github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/adapters/alipay"
-	bepusdtadapter "github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/adapters/bepusdt"
-	dujiaopayadapter "github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/adapters/dujiaopay"
-	epayadapter "github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/adapters/epay"
-	epusdtadapter "github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/adapters/epusdt"
-	okpayadapter "github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/adapters/okpay"
-	paypaladapter "github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/adapters/paypal"
-	stripeadapter "github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/adapters/stripe"
-	tokenpayadapter "github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/adapters/tokenpay"
-	wechatpayadapter "github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/adapters/wechatpay"
+	alipayadapter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/adapters/alipay"
+	bepusdtadapter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/adapters/bepusdt"
+	dujiaopayadapter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/adapters/dujiaopay"
+	epayadapter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/adapters/epay"
+	epusdtadapter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/adapters/epusdt"
+	okpayadapter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/adapters/okpay"
+	paypaladapter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/adapters/paypal"
+	stripeadapter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/adapters/stripe"
+	tokenpayadapter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/adapters/tokenpay"
+	wechatpayadapter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/adapters/wechatpay"
 
-	paymentgormstore "github.com/dujiao-next/internal/modules/payment/infrastructure/gormstore"
+	paymentgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gormstore"
 
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
-	ordergormstore "github.com/dujiao-next/internal/modules/order/infrastructure/gormstore"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
+	ordergormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/infrastructure/gormstore"
 
-	walletdomain "github.com/dujiao-next/internal/modules/wallet/domain"
+	walletdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/domain"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	productgormstore "github.com/dujiao-next/internal/modules/catalog/product/store/gormstore"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	productgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/store/gormstore"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	userstore "github.com/dujiao-next/internal/modules/identity/user/infrastructure/gormstore"
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
-	settingsstore "github.com/dujiao-next/internal/modules/settings/infrastructure/gormstore"
-	walletapp "github.com/dujiao-next/internal/modules/wallet/application"
-	walletcontract "github.com/dujiao-next/internal/modules/wallet/contract"
-	walletgormstore "github.com/dujiao-next/internal/modules/wallet/infrastructure/gormstore"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	userstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/infrastructure/gormstore"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
+	settingsstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/infrastructure/gormstore"
+	walletapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/application"
+	walletcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/contract"
+	walletgormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/infrastructure/gormstore"
 
-	"github.com/dujiao-next/internal/constants"
-	paymentcontract "github.com/dujiao-next/internal/modules/payment/contract"
-	"github.com/dujiao-next/internal/modules/payment/infrastructure/gateway/provider"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
-	"github.com/dujiao-next/internal/platform/database/gormdb"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	paymentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/infrastructure/gateway/provider"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/database/gormdb"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/glebarez/sqlite"
 	"github.com/shopspring/decimal"
@@ -657,7 +657,7 @@ func TestHandleDujiaoPayWebhookMarksOrderPaid(t *testing.T) {
 	channel := createDujiaoPayChannelFixture(t, db)
 	now := time.Now()
 	order := &orderdomain.Order{
-		OrderNo:          fmt.Sprintf("DJ-DUJIAOPAY-%d", now.UnixNano()),
+		OrderNo:          fmt.Sprintf("FAKA-58-DUJIAOPAY-%d", now.UnixNano()),
 		UserID:           1,
 		Status:           constants.OrderStatusPendingPayment,
 		Currency:         "CNY",

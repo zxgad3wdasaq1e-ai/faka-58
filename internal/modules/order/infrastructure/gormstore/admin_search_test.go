@@ -5,18 +5,18 @@ import (
 	"testing"
 	"time"
 
-	ordercontract "github.com/dujiao-next/internal/modules/order/contract"
+	ordercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/contract"
 
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	usercontract "github.com/dujiao-next/internal/modules/identity/user/contract"
-	userstore "github.com/dujiao-next/internal/modules/identity/user/infrastructure/gormstore"
+	usercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/contract"
+	userstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/infrastructure/gormstore"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
 	"github.com/glebarez/sqlite"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
 	"gorm.io/gorm"
 )
 
@@ -95,7 +95,7 @@ func TestOrderRepositoryListAdminSupportsUserKeyword(t *testing.T) {
 	}
 
 	order := orderdomain.Order{
-		OrderNo:   "DJ-ORDER-TG-001",
+		OrderNo:   "FAKA-58-ORDER-TG-001",
 		UserID:    user.ID,
 		Status:    "paid",
 		Currency:  "USD",

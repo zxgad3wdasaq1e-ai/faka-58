@@ -3,12 +3,12 @@ package producthttp
 import (
 	"strings"
 
-	mappingdomain "github.com/dujiao-next/internal/modules/catalog/mapping/domain"
+	mappingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/domain"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	domaincatalog "github.com/dujiao-next/internal/modules/catalog"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	domaincatalog "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog"
 )
 
 func (h *PublicHandler) decorateProductStock(product *productdomain.Product, item *publicProductView) {

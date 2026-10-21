@@ -5,22 +5,22 @@ import (
 	"testing"
 	"time"
 
-	affiliateapp "github.com/dujiao-next/internal/modules/affiliate/application"
-	affiliatecontract "github.com/dujiao-next/internal/modules/affiliate/contract"
-	affiliatedomain "github.com/dujiao-next/internal/modules/affiliate/domain"
-	affiliategormstore "github.com/dujiao-next/internal/modules/affiliate/infrastructure/gormstore"
+	affiliateapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/application"
+	affiliatecontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/contract"
+	affiliatedomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/domain"
+	affiliategormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/infrastructure/gormstore"
 
-	userstore "github.com/dujiao-next/internal/modules/identity/user/infrastructure/gormstore"
+	userstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/infrastructure/gormstore"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
 
-	"github.com/dujiao-next/internal/testkit/memorysettings"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/testkit/memorysettings"
 
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
-	settingsintegration "github.com/dujiao-next/internal/modules/settings/schema/integration"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
+	settingsintegration "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/integration"
 
-	"github.com/dujiao-next/internal/constants"
 	"github.com/glebarez/sqlite"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
 	"gorm.io/gorm"
 )
 

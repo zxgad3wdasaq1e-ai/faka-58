@@ -65,9 +65,9 @@ def credentials(args: argparse.Namespace) -> dict[str, str]:
             raise SeedError("stdin must contain a JSON object with username/password or token.") from error
     else:
         source = {
-            "username": os.environ.get("XIOEN_ADMIN_USERNAME", ""),
-            "password": os.environ.get("XIOEN_ADMIN_PASSWORD", ""),
-            "token": os.environ.get("XIOEN_ADMIN_TOKEN", ""),
+            "username": os.environ.get("FAKA_58_ADMIN_USERNAME", ""),
+            "password": os.environ.get("FAKA_58_ADMIN_PASSWORD", ""),
+            "token": os.environ.get("FAKA_58_ADMIN_TOKEN", ""),
         }
         if not source["token"] and not (source["username"] and source["password"]):
             try:
@@ -141,7 +141,7 @@ class AdminAPI:
         if not isinstance(data, dict):
             raise SeedError("The administrator login response is invalid.")
         if data.get("requires_totp"):
-            raise SeedError("This administrator requires 2FA. Complete login normally and provide its token via XIOEN_ADMIN_TOKEN or stdin.")
+            raise SeedError("This administrator requires 2FA. Complete login normally and provide its token via FAKA_58_ADMIN_TOKEN or stdin.")
         if not isinstance(data.get("token"), str) or not data["token"]:
             raise SeedError("Administrator login did not return a token.")
         self.token = data["token"]
@@ -180,15 +180,15 @@ def localized(zh_cn: str, zh_tw: str, en_us: str) -> dict[str, str]:
 def site_settings(origin: str) -> dict:
     return {
         "brand": {
-            "site_name": "XOPEN AI", "site_url": origin,
+            "site_name": "faka-58", "site_url": origin,
             "site_description": localized("AI 订阅与数字商品服务", "AI 訂閱與數位商品服務", "AI subscriptions and digital services"),
         },
         "currency": "CNY",
-        "storefront_template": "getgpt",
+        "storefront_template": "faka-58",
         "template_mode": "card",
         "languages": ["zh-CN", "zh-TW", "en-US"],
         "seo": {
-            "title": localized("XOPEN AI · AI 订阅与数字商品", "XOPEN AI · AI 訂閱與數位商品", "XOPEN AI · AI subscriptions and digital services"),
+            "title": localized("faka-58 · AI 订阅与数字商品", "faka-58 · AI 訂閱與數位商品", "faka-58 · AI subscriptions and digital services"),
             "description": localized("选购 AI 服务与数字商品，查询订单和交付进度。", "選購 AI 服務與數位商品，查詢訂單和交付進度。", "Explore AI services and digital goods. Track your order and delivery."),
         },
     }
@@ -255,7 +255,7 @@ def seed(api: AdminAPI) -> None:
         print("Kept existing site settings.")
     else:
         api.request("PUT", "/admin/settings", {"key": "site_config", "value": site_settings(api.origin)})
-        print("Initialized XOPEN AI site settings.")
+        print("Initialized faka-58 site settings.")
 
     category_id = ensure_category(api)
     path = "/admin/products"
@@ -278,7 +278,7 @@ def seed(api: AdminAPI) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Idempotently create the XOPEN AI catalog via the real admin API. Existing settings/products are preserved; no card secrets or payments are created.")
+    parser = argparse.ArgumentParser(description="Idempotently create the faka-58 catalog via the real admin API. Existing settings/products are preserved; no card secrets or payments are created.")
     parser.add_argument("--base-url", default="https://xopenai.vip", help="Application origin (default: https://xopenai.vip; local: http://localhost:8080)")
     parser.add_argument("--config", type=Path, default=ROOT / "config.yml", help="Private JSON-format YAML written by setup.py (default: repository config.yml)")
     parser.add_argument("--credentials-stdin", action="store_true", help="Read a JSON object with username/password or token from stdin instead of config/environment")

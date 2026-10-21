@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"strings"
 
-	paymentpresenter "github.com/dujiao-next/internal/modules/payment/transport/presenter"
+	paymentpresenter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/transport/presenter"
 
-	"github.com/dujiao-next/internal/platform/http/channelresponse"
-	ginutil "github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/channelresponse"
+	ginutil "github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
-	"github.com/dujiao-next/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
 
 	"github.com/gin-gonic/gin"
 	"github.com/shopspring/decimal"

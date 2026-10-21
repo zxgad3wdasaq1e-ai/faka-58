@@ -3,10 +3,10 @@ package integrationtest
 import (
 	"testing"
 
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	userauthapp "github.com/dujiao-next/internal/modules/identity/userauth/application"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	userauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/application"
 
-	"github.com/dujiao-next/internal/telegramidentity"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/telegramidentity"
 )
 
 func TestBuildTelegramPlaceholderEmail(t *testing.T) {

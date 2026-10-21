@@ -67,14 +67,14 @@ func TestCardSecretUsesCompleteVerticalLayout(t *testing.T) {
 	}
 
 	for _, forbiddenImport := range []string{
-		"github.com/dujiao-next/internal/models",
-		"github.com/dujiao-next/internal/repository",
+		"github.com/zxgad3wdasaq1e-ai/faka-58/internal/models",
+		"github.com/zxgad3wdasaq1e-ai/faka-58/internal/repository",
 		"gorm.io/gorm",
 		"github.com/gin-gonic/gin",
 	} {
 		assertProductionImportsAbsent(t, applicationRoot, forbiddenImport)
 	}
-	assertProductionImportsAbsent(t, contractRoot, "github.com/dujiao-next/internal/models")
+	assertProductionImportsAbsent(t, contractRoot, "github.com/zxgad3wdasaq1e-ai/faka-58/internal/models")
 	assertProductionImportsAbsent(t, contractRoot, "gorm.io/gorm")
 	assertProductionImportsAbsent(t, domainRoot, "gorm.io/gorm")
 

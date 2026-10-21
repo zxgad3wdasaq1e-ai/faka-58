@@ -3,9 +3,9 @@ package shared
 import (
 	"strings"
 
-	resellerapplication "github.com/dujiao-next/internal/modules/reseller/application"
-	dto "github.com/dujiao-next/internal/modules/reseller/transport/http/presenter"
 	"github.com/shopspring/decimal"
+	resellerapplication "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/application"
+	dto "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/transport/http/presenter"
 )
 
 type ProductSettingRequest struct {

@@ -3,9 +3,9 @@ package adminapplication
 import (
 	"strings"
 
-	"github.com/dujiao-next/internal/logger"
-	admincontract "github.com/dujiao-next/internal/modules/identity/admin/contract"
-	admindomain "github.com/dujiao-next/internal/modules/identity/admin/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	admincontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/contract"
+	admindomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/domain"
 
 	"golang.org/x/crypto/bcrypt"
 )

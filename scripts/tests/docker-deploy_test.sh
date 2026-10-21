@@ -6,8 +6,8 @@ repository=$(CDPATH='' cd "$(dirname "$0")/../.." && pwd -P)
 bootstrap=$repository/deploy/docker-deploy.sh
 shell=$(command -v sh)
 temp_base=$(CDPATH='' cd "${TMPDIR:-/tmp}" && pwd -P)
-test_root=$(mktemp -d "$temp_base/xopen-shell-test.XXXXXXXX")
-cleanup() { case "$test_root" in "$temp_base"/xopen-shell-test.*) rm -rf -- "$test_root" ;; esac; }
+test_root=$(mktemp -d "$temp_base/faka-58-shell-test.XXXXXXXX")
+cleanup() { case "$test_root" in "$temp_base"/faka-58-shell-test.*) rm -rf -- "$test_root" ;; esac; }
 trap cleanup 0
 trap 'exit 129' HUP
 trap 'exit 130' INT

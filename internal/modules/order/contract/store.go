@@ -3,16 +3,16 @@ package contract
 import (
 	"time"
 
-	affiliatecontract "github.com/dujiao-next/internal/modules/affiliate/contract"
-	cardsecretcontract "github.com/dujiao-next/internal/modules/cardsecret/contract"
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	couponcontract "github.com/dujiao-next/internal/modules/coupon/contract"
-	fulfillmentcontract "github.com/dujiao-next/internal/modules/fulfillment/contract"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
-	walletcontract "github.com/dujiao-next/internal/modules/wallet/contract"
-	"github.com/dujiao-next/internal/shared/money"
+	affiliatecontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/contract"
+	cardsecretcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/contract"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	couponcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/contract"
+	fulfillmentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/contract"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
+	walletcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 // Store 是订单应用层所需的完整持久化端口。

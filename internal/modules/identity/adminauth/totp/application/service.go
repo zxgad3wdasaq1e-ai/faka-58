@@ -7,19 +7,19 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/cache"
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/crypto"
-	admincontract "github.com/dujiao-next/internal/modules/identity/admin/contract"
-	admindomain "github.com/dujiao-next/internal/modules/identity/admin/domain"
-	totpapplication "github.com/dujiao-next/internal/modules/identity/totp/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/cache"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/crypto"
+	admincontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/contract"
+	admindomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/domain"
+	totpapplication "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/totp/application"
 
 	"github.com/pquerna/otp/totp"
 	"github.com/redis/go-redis/v9"
 )
 
 const (
-	totpIssuerDefault     = "Dujiao-Next"
+	totpIssuerDefault     = "faka-58"
 	totpPendingTTL        = 10 * time.Minute
 	totpEnableMaxFailures = 5
 	RecoveryCodeCount     = 10

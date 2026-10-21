@@ -10,12 +10,12 @@ import (
 	"strings"
 	"testing"
 
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
 
-	resellermodule "github.com/dujiao-next/internal/modules/reseller/application"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
-	uploadcontract "github.com/dujiao-next/internal/modules/upload/contract"
-	"github.com/dujiao-next/internal/platform/http/response"
+	resellermodule "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/application"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	uploadcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/upload/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

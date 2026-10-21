@@ -5,13 +5,13 @@ import (
 	"strings"
 	"time"
 
-	ginutil "github.com/dujiao-next/internal/platform/http/ginutil"
+	ginutil "github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
 
-	"github.com/dujiao-next/internal/constants"
-	reseller "github.com/dujiao-next/internal/modules/reseller/contract"
-	"github.com/dujiao-next/internal/platform/http/response"
-	"github.com/dujiao-next/internal/shared/jsonmap"
-	"github.com/dujiao-next/internal/version"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	reseller "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/version"
 
 	"github.com/gin-gonic/gin"
 )
@@ -140,8 +140,8 @@ func (h *Handler) GetConfig(c *gin.Context) {
 		constants.SettingFieldSiteCurrency:       constants.SiteCurrencyDefault,
 		constants.SettingFieldStorefrontTemplate: constants.StorefrontTemplateDefault,
 		"contact": map[string]interface{}{
-			"telegram": "https://telegram.me/dujiaoka",
-			"whatsapp": "https://wa.me/1234567890",
+			"telegram": "",
+			"whatsapp": "",
 		},
 		"scripts": make([]interface{}, 0),
 	}

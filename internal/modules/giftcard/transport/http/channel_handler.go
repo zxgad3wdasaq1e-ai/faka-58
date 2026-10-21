@@ -5,14 +5,14 @@ import (
 	"net/http"
 	"strings"
 
-	giftcardapp "github.com/dujiao-next/internal/modules/giftcard/application"
-	giftcardcontract "github.com/dujiao-next/internal/modules/giftcard/contract"
-	giftcardpresenter "github.com/dujiao-next/internal/modules/giftcard/transport/presenter"
-	telegramauthapp "github.com/dujiao-next/internal/modules/identity/telegramauth/application"
-	userauthapp "github.com/dujiao-next/internal/modules/identity/userauth/application"
-	"github.com/dujiao-next/internal/platform/http/channelresponse"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	giftcardapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/application"
+	giftcardcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/contract"
+	giftcardpresenter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/transport/presenter"
+	telegramauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/telegramauth/application"
+	userauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/channelresponse"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

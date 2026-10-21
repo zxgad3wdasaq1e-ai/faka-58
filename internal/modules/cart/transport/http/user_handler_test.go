@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	cartcontract "github.com/dujiao-next/internal/modules/cart/contract"
-	"github.com/dujiao-next/internal/platform/http/response"
+	cartcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cart/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

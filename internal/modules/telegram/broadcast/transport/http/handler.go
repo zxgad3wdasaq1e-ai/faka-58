@@ -5,11 +5,11 @@ import (
 	"errors"
 	"strings"
 
-	broadcastapp "github.com/dujiao-next/internal/modules/telegram/broadcast/application"
-	broadcastdomain "github.com/dujiao-next/internal/modules/telegram/broadcast/domain"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	broadcastapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/telegram/broadcast/application"
+	broadcastdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/telegram/broadcast/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 
 	"github.com/gin-gonic/gin"
 )

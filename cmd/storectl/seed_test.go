@@ -15,7 +15,7 @@ import (
 
 func seedConfigFixture(t *testing.T) string {
 	t.Helper()
-	for _, key := range []string{"XIOEN_ADMIN_USERNAME", "XIOEN_ADMIN_PASSWORD", "XIOEN_ADMIN_TOKEN"} {
+	for _, key := range []string{"FAKA_58_ADMIN_USERNAME", "FAKA_58_ADMIN_PASSWORD", "FAKA_58_ADMIN_TOKEN", "XIOEN_ADMIN_USERNAME", "XIOEN_ADMIN_PASSWORD", "XIOEN_ADMIN_TOKEN"} {
 		t.Setenv(key, "")
 	}
 	root := t.TempDir()
@@ -25,6 +25,28 @@ func seedConfigFixture(t *testing.T) string {
 		t.Fatal(err)
 	}
 	return root
+}
+
+func TestAdminEnvironmentPrefersCurrentKeysAndSupportsExistingDeployments(t *testing.T) {
+	for _, suffix := range []string{"USERNAME", "PASSWORD", "TOKEN"} {
+		current := "FAKA_58_ADMIN_" + suffix
+		t.Setenv(current, "")
+		if err := os.Unsetenv(current); err != nil {
+			t.Fatal(err)
+		}
+		t.Setenv("XIOEN_ADMIN_"+suffix, "legacy-value")
+		if got := adminEnvironment(suffix); got != "legacy-value" {
+			t.Fatalf("existing %s environment was ignored", suffix)
+		}
+		t.Setenv(current, "current-value")
+		if got := adminEnvironment(suffix); got != "current-value" {
+			t.Fatalf("new %s environment did not take priority", suffix)
+		}
+		t.Setenv(current, "")
+		if got := adminEnvironment(suffix); got != "" {
+			t.Fatalf("explicit empty %s unexpectedly fell back", suffix)
+		}
+	}
 }
 
 func respondAPI(w http.ResponseWriter, data any) {
@@ -108,7 +130,7 @@ func TestSeedRealAPIContractIsIdempotentAndPreservesCustomization(t *testing.T) 
 	if err := seedFromConfig(root, server.URL, &output); err != nil {
 		t.Fatal(err)
 	}
-	if settings["brand"].(map[string]any)["site_url"] != "https://public.example" || settings["storefront_template"] != "getgpt" {
+	if settings["brand"].(map[string]any)["site_url"] != "https://public.example" || settings["storefront_template"] != "faka-58" {
 		t.Fatal("public brand origin must not become the internal API loopback address")
 	}
 	if len(products) != 3 || products[0]["price_amount"] != float64(179) || products[1]["price_amount"] != float64(879) || products[2]["price_amount"] != float64(1589) {

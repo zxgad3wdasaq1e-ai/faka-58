@@ -3,12 +3,12 @@ package couponhttp
 import (
 	"errors"
 
-	couponapp "github.com/dujiao-next/internal/modules/coupon/application"
-	couponcontract "github.com/dujiao-next/internal/modules/coupon/contract"
-	coupondomain "github.com/dujiao-next/internal/modules/coupon/domain"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
-	"github.com/dujiao-next/internal/shared/money"
+	couponapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/application"
+	couponcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/contract"
+	coupondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/gin-gonic/gin"
 	"github.com/shopspring/decimal"

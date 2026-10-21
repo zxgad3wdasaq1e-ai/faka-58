@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	settingsintegration "github.com/dujiao-next/internal/modules/settings/schema/integration"
+	settingsintegration "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/integration"
 )
 
 // fakeSettingsProvider 以固定同步间隔实现 SettingsProvider。

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/dujiao-next/internal/modules/adproxy/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/adproxy/domain"
 )
 
 type gatewayStub struct {

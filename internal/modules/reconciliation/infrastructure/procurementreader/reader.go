@@ -3,8 +3,8 @@ package procurementreader
 import (
 	"time"
 
-	procurementdomain "github.com/dujiao-next/internal/modules/procurement/domain"
-	reconciliationcontract "github.com/dujiao-next/internal/modules/reconciliation/contract"
+	procurementdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/procurement/domain"
+	reconciliationcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reconciliation/contract"
 )
 
 type Source interface {

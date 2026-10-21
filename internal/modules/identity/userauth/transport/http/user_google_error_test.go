@@ -13,13 +13,29 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
-	"github.com/dujiao-next/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )
+
+func TestGoogleRedirectCookieUsesCurrentNameAndAcceptsLegacyFlow(t *testing.T) {
+	request := httptest.NewRequest(http.MethodGet, "/", nil)
+	request.AddCookie(&http.Cookie{Name: legacyGoogleRedirectIntentCookieName, Value: "legacy-state"})
+	if value, ok := googleRedirectCookie(request, googleRedirectIntentCookieName, legacyGoogleRedirectIntentCookieName); !ok || value != "legacy-state" {
+		t.Fatal("redirect started before upgrade cannot complete")
+	}
+	request.AddCookie(&http.Cookie{Name: googleRedirectIntentCookieName, Value: "current-state"})
+	if value, ok := googleRedirectCookie(request, googleRedirectIntentCookieName, legacyGoogleRedirectIntentCookieName); !ok || value != "current-state" {
+		t.Fatal("current redirect cookie must take precedence")
+	}
+	request.AddCookie(&http.Cookie{Name: googleRedirectIntentCookieName, Value: "duplicate-state"})
+	if _, ok := googleRedirectCookie(request, googleRedirectIntentCookieName, legacyGoogleRedirectIntentCookieName); ok {
+		t.Fatal("ambiguous current cookie must not fall back to a legacy cookie")
+	}
+}
 
 type googleBodyLimitService struct {
 	loginCalls int

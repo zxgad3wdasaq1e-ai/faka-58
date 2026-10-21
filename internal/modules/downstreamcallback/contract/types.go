@@ -3,7 +3,7 @@ package contract
 import (
 	"time"
 
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 // RefListFilter 描述凭证维度的回调引用分页筛选。

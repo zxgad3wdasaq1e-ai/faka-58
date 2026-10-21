@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	dashboardcontract "github.com/dujiao-next/internal/modules/dashboard/contract"
-	reportingdomain "github.com/dujiao-next/internal/modules/reporting/domain"
-	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
+	dashboardcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/dashboard/contract"
+	reportingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reporting/domain"
+	settingsstorefront "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/storefront"
 )
 
 type dashboardServiceRepoStub struct {

@@ -3,8 +3,8 @@ package queueadapter
 import (
 	"time"
 
-	downstreamcontract "github.com/dujiao-next/internal/modules/downstreamcallback/contract"
-	"github.com/dujiao-next/internal/queue"
+	downstreamcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/downstreamcallback/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
 
 	"github.com/hibiken/asynq"
 )

@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/modules/upload/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/upload/contract"
 
 	_ "image/gif"
 	_ "image/jpeg"

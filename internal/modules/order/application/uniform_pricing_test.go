@@ -4,11 +4,11 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/dujiao-next/internal/constants"
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	couponcontract "github.com/dujiao-next/internal/modules/coupon/contract"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/shopspring/decimal"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	couponcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/coupon/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 )
 
 func TestUniformPricingIgnoresMarketingForGuestsAndMembers(t *testing.T) {

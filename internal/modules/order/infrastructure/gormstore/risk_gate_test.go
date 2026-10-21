@@ -9,10 +9,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
-	orderriskdomain "github.com/dujiao-next/internal/modules/orderrisk/domain"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
+	orderriskdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/orderrisk/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"

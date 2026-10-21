@@ -3,7 +3,7 @@ package contract
 import (
 	"testing"
 
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
 
 	"github.com/shopspring/decimal"
 )

@@ -4,7 +4,7 @@ import (
 	"net"
 	"strings"
 
-	settingssecurity "github.com/dujiao-next/internal/modules/settings/schema/security"
+	settingssecurity "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/security"
 )
 
 // OrderItem 是风控所需的最小订单项快照。

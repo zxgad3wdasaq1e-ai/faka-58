@@ -10,8 +10,8 @@ import (
 	"strconv"
 	"testing"
 
-	downstreamcontract "github.com/dujiao-next/internal/modules/downstreamcallback/contract"
-	"github.com/dujiao-next/internal/upstream"
+	downstreamcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/downstreamcallback/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/upstream"
 )
 
 func TestClientSendsSignedCallback(t *testing.T) {

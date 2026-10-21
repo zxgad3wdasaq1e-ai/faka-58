@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	channelclientdomain "github.com/dujiao-next/internal/modules/channelclient/domain"
 	"github.com/glebarez/sqlite"
+	channelclientdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/channelclient/domain"
 	"gorm.io/gorm"
 )
 

@@ -9,19 +9,19 @@ import (
 	"strings"
 	"testing"
 
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
 
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	auditlogapp "github.com/dujiao-next/internal/modules/auditlog/application"
-	resellermodule "github.com/dujiao-next/internal/modules/reseller/application"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
-	adminhttp "github.com/dujiao-next/internal/modules/reseller/transport/http/admin"
-	userhttp "github.com/dujiao-next/internal/modules/reseller/transport/http/user"
-	"github.com/dujiao-next/internal/platform/http/response"
-	"github.com/dujiao-next/internal/shared/money"
 	"github.com/shopspring/decimal"
+	auditlogapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/application"
+	resellermodule "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/application"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	adminhttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/transport/http/admin"
+	userhttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/transport/http/user"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/gin-gonic/gin"
 )

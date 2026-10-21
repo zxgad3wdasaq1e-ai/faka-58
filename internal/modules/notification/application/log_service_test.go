@@ -6,12 +6,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/modules/notification/contract"
-	"github.com/dujiao-next/internal/modules/notification/domain"
-	settingsmessaging "github.com/dujiao-next/internal/modules/settings/schema/messaging"
-	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
-	"github.com/dujiao-next/internal/queue"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/domain"
+	settingsmessaging "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/messaging"
+	settingsstorefront "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/storefront"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
 )
 
 type notificationSettingsStub struct {
@@ -165,7 +165,7 @@ func TestServiceDispatchSingleEventRecordsPerRecipientResult(t *testing.T) {
 		Locale:    constants.LocaleEnUS,
 		Force:     true,
 		Data: map[string]interface{}{
-			"order_no":       "DJ-LOG-88",
+			"order_no":       "FAKA-58-LOG-88",
 			"customer_email": "member@example.com",
 		},
 	})
@@ -213,7 +213,7 @@ func TestServiceDispatchSingleEventSendsFeishuAndRecordsEachRecipient(t *testing
 		Locale:    constants.LocaleZhCN,
 		Force:     true,
 		Data: map[string]interface{}{
-			"order_no":       "DJ-FEISHU-99",
+			"order_no":       "FAKA-58-FEISHU-99",
 			"customer_email": "member@example.com",
 		},
 	})
@@ -227,7 +227,7 @@ func TestServiceDispatchSingleEventSendsFeishuAndRecordsEachRecipient(t *testing
 	if firstCall.appID != "cli_demo" || firstCall.appSecret != "secret" || firstCall.receiveIDType != settingsmessaging.FeishuReceiveIDTypeChatID {
 		t.Fatalf("unexpected feishu credentials or id type: %#v", firstCall)
 	}
-	if !strings.Contains(firstCall.message, "DJ-FEISHU-99") {
+	if !strings.Contains(firstCall.message, "FAKA-58-FEISHU-99") {
 		t.Fatalf("rendered feishu message missing order number: %q", firstCall.message)
 	}
 

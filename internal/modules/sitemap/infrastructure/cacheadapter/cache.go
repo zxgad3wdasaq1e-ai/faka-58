@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/dujiao-next/internal/cache"
-	"github.com/dujiao-next/internal/modules/sitemap/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/cache"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/sitemap/contract"
 )
 
 // Cache 将共享缓存能力适配为 Sitemap 应用端口。

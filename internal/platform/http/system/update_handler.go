@@ -3,9 +3,9 @@ package systemhttp
 import (
 	"errors"
 
-	ginutil "github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
-	"github.com/dujiao-next/internal/selfupdate"
+	ginutil "github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/selfupdate"
 
 	"github.com/gin-gonic/gin"
 )
@@ -59,7 +59,7 @@ type rollbackRequest struct {
 // 这种情况下默认拒绝，返回 error.update_rollback_unsafe，让前端确认后带 force 重试。
 //
 // 注意：如果新版本压根起不来，这个 HTTP 接口本身也是不可用的。那种场景请在终端执行
-// `dujiao-next rollback`，它不依赖 HTTP 服务与数据库。
+// `faka-58 rollback`，它不依赖 HTTP 服务与数据库。
 // POST /api/v1/admin/system/update/rollback
 func (h *AdminHandler) RollbackUpdate(c *gin.Context) {
 	var req rollbackRequest

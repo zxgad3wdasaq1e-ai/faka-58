@@ -5,15 +5,15 @@ import (
 	"reflect"
 	"testing"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	categorydomain "github.com/dujiao-next/internal/modules/catalog/category/domain"
+	categorydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	cardsecretcontract "github.com/dujiao-next/internal/modules/cardsecret/contract"
-	cardsecretdomain "github.com/dujiao-next/internal/modules/cardsecret/domain"
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	cardsecretcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/contract"
+	cardsecretdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/domain"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
 )
 
 type productRepositoryStub struct {

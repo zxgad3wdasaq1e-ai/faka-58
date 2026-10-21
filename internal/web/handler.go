@@ -81,8 +81,8 @@ func ValidateAdminPath(p string) error {
 	return nil
 }
 
-// 占位符：admin/index.html 中的 __DJ_ADMIN_BASE__ 启动时被替换为实际 admin path
-const adminBasePlaceholder = "__DJ_ADMIN_BASE__"
+// 占位符：admin/index.html 中的 __FAKA_58_ADMIN_BASE__ 启动时被替换为实际 admin path
+const adminBasePlaceholder = "__FAKA_58_ADMIN_BASE__"
 
 const (
 	// SPA 入口必须每次回源校验。带内容 hash 的 chunk 文件名只记录在 index.html 里，
@@ -114,7 +114,7 @@ func serveAsset(c *gin.Context, fileServer http.Handler, fp string) {
 
 // RegisterAdmin 在 prefix 前缀下挂载 admin SPA。
 //
-// 启动时从 fsys 读取 index.html，把 __DJ_ADMIN_BASE__ 一次性替换为 strings.Trim(prefix, "/")，
+// 启动时从 fsys 读取 index.html，把 __FAKA_58_ADMIN_BASE__ 一次性替换为 strings.Trim(prefix, "/")，
 // 然后缓存。后续请求走该缓存，不做实时替换。
 //
 // 路由匹配规则：

@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/dujiao-next/internal/modules/upload/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/upload/contract"
 )
 
 // Store 将上传文件写入本地 uploads 目录。

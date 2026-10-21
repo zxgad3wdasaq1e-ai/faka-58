@@ -3,14 +3,14 @@ package carthttp
 import (
 	"errors"
 
-	"github.com/dujiao-next/internal/constants"
-	cartapp "github.com/dujiao-next/internal/modules/cart/application"
-	cartcontract "github.com/dujiao-next/internal/modules/cart/contract"
-	cartpresenter "github.com/dujiao-next/internal/modules/cart/transport/presenter"
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	promotioncontract "github.com/dujiao-next/internal/modules/promotion/contract"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	cartapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cart/application"
+	cartcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cart/contract"
+	cartpresenter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cart/transport/presenter"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	promotioncontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/promotion/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

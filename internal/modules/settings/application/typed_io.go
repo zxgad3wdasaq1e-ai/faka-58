@@ -3,12 +3,12 @@ package settingsapp
 import (
 	"time"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/constants"
-	settingsintegration "github.com/dujiao-next/internal/modules/settings/schema/integration"
-	settingsmessaging "github.com/dujiao-next/internal/modules/settings/schema/messaging"
-	settingssecurity "github.com/dujiao-next/internal/modules/settings/schema/security"
-	settingsstorefront "github.com/dujiao-next/internal/modules/settings/schema/storefront"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	settingsintegration "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/integration"
+	settingsmessaging "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/messaging"
+	settingssecurity "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/security"
+	settingsstorefront "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/storefront"
 )
 
 // GetDashboardSetting 获取仪表盘设置（优先 settings，空时回退默认）。

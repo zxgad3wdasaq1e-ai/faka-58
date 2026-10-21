@@ -4,17 +4,17 @@ import (
 	"errors"
 	"strings"
 
-	giftcarddomain "github.com/dujiao-next/internal/modules/giftcard/domain"
-	walletdomain "github.com/dujiao-next/internal/modules/wallet/domain"
+	giftcarddomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/domain"
+	walletdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	captcha "github.com/dujiao-next/internal/modules/captcha/contract"
-	captchahttp "github.com/dujiao-next/internal/modules/captcha/transport/http"
-	giftcardapp "github.com/dujiao-next/internal/modules/giftcard/application"
-	giftcardcontract "github.com/dujiao-next/internal/modules/giftcard/contract"
-	giftcardpresenter "github.com/dujiao-next/internal/modules/giftcard/transport/presenter"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	captcha "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/contract"
+	captchahttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/captcha/transport/http"
+	giftcardapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/application"
+	giftcardcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/contract"
+	giftcardpresenter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/transport/presenter"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

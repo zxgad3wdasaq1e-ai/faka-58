@@ -13,14 +13,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/i18n"
-	"github.com/dujiao-next/internal/logger"
-	notificationcontract "github.com/dujiao-next/internal/modules/notification/contract"
-	settingsmessaging "github.com/dujiao-next/internal/modules/settings/schema/messaging"
-	"github.com/dujiao-next/internal/shared/mailbrand"
-	"github.com/dujiao-next/internal/telegramidentity"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/i18n"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	notificationcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/contract"
+	settingsmessaging "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/messaging"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/mailbrand"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/telegramidentity"
 )
 
 // writeStandardHeaders 写入 RFC 5322 要求的通用邮件头（Date、Message-ID、From、To、Subject、MIME-Version）。
@@ -243,7 +243,7 @@ func (s *Service) sendSMTPMessage(addr, toEmail string, msg []byte) error {
 }
 
 func buildEmailMessageWithAttachment(from, to, subject, body, attachName, attachContent, replyTo string) string {
-	boundary := "----=_DujiaoNextBoundary_" + fmt.Sprintf("%d", len(body)+len(attachContent))
+	boundary := "----=_Faka58Boundary_" + fmt.Sprintf("%d", len(body)+len(attachContent))
 
 	var buf bytes.Buffer
 	writeStandardHeaders(&buf, from, to, subject, replyTo)

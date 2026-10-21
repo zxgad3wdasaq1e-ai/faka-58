@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	apicredentialcontract "github.com/dujiao-next/internal/modules/apicredential/contract"
-	apicredentialdomain "github.com/dujiao-next/internal/modules/apicredential/domain"
-	"github.com/dujiao-next/internal/modules/apicredential/infrastructure/gormstore"
 	"github.com/glebarez/sqlite"
+	apicredentialcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/apicredential/contract"
+	apicredentialdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/apicredential/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/apicredential/infrastructure/gormstore"
 	"gorm.io/gorm"
 )
 

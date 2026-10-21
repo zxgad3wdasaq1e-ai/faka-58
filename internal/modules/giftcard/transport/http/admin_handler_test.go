@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	giftcardapp "github.com/dujiao-next/internal/modules/giftcard/application"
+	giftcardapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/application"
 )
 
 func TestGenerateRequestMapsToGenerateInput(t *testing.T) {

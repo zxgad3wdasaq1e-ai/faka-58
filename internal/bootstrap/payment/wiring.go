@@ -1,9 +1,9 @@
 package paymentbootstrap
 
 import (
-	"github.com/dujiao-next/internal/app/container"
-	paymenttransport "github.com/dujiao-next/internal/modules/payment/transport/http"
-	paymentcallbacktransport "github.com/dujiao-next/internal/modules/payment/transport/http/callback"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	paymenttransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/transport/http"
+	paymentcallbacktransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/transport/http/callback"
 )
 
 // Handlers is the complete payment HTTP entrypoint set assembled at the

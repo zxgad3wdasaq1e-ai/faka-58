@@ -10,13 +10,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/i18n"
-	externalidentitydomain "github.com/dujiao-next/internal/modules/identity/externalidentity/domain"
-	userpresenter "github.com/dujiao-next/internal/modules/identity/userauth/transport/presenter"
-	resellercontract "github.com/dujiao-next/internal/modules/reseller/contract"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/i18n"
+	externalidentitydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/domain"
+	userpresenter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/transport/presenter"
+	resellercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,8 +24,10 @@ import (
 const (
 	maxGoogleCredentialRequestBodyBytes = 64 << 10
 
-	googleRedirectIntentCookieName  = "__Host-dujiao_google_state"
-	googleRedirectHandoffCookieName = "__Host-dujiao_google_handoff"
+	googleRedirectIntentCookieName        = "__Host-faka-58_google_state"
+	googleRedirectHandoffCookieName       = "__Host-faka-58_google_handoff"
+	legacyGoogleRedirectIntentCookieName  = "__Host-dujiao_google_state"
+	legacyGoogleRedirectHandoffCookieName = "__Host-dujiao_google_handoff"
 
 	googleRedirectFlowLogin = "login"
 	googleRedirectFlowBind  = "bind"
@@ -304,7 +306,7 @@ func (h *UserGoogleHandler) CompleteGoogleRedirect(c *gin.Context) {
 		return
 	}
 
-	intentState, ok := singleRequestCookie(c.Request, googleRedirectIntentCookieName)
+	intentState, ok := googleRedirectCookie(c.Request, googleRedirectIntentCookieName, legacyGoogleRedirectIntentCookieName)
 	clearGoogleRedirectIntentCookies(c)
 	if !ok {
 		redirectGoogleCallback(c, flow, "session_expired")
@@ -474,6 +476,15 @@ func singleRequestCookie(request *http.Request, name string) (string, bool) {
 	return cookies[0].Value, true
 }
 
+// Read an in-flight redirect created before an upgrade, while writing only the
+// new cookie name. A malformed current cookie must never fall back to legacy.
+func googleRedirectCookie(request *http.Request, current, legacy string) (string, bool) {
+	if request != nil && len(request.CookiesNamed(current)) > 0 {
+		return singleRequestCookie(request, current)
+	}
+	return singleRequestCookie(request, legacy)
+}
+
 func constantTimeStringEqual(left, right string) bool {
 	return subtle.ConstantTimeCompare([]byte(left), []byte(right)) == 1
 }
@@ -558,12 +569,14 @@ func clearGoogleRedirectCookie(c *gin.Context, name string, sameSite http.SameSi
 
 func clearGoogleRedirectIntentCookies(c *gin.Context) {
 	clearGoogleRedirectCookie(c, googleRedirectIntentCookieName, http.SameSiteNoneMode)
+	clearGoogleRedirectCookie(c, legacyGoogleRedirectIntentCookieName, http.SameSiteNoneMode)
 }
 
 func takeGoogleRedirectHandoffCookie(c *gin.Context) (string, bool) {
-	handle, ok := singleRequestCookie(c.Request, googleRedirectHandoffCookieName)
+	handle, ok := googleRedirectCookie(c.Request, googleRedirectHandoffCookieName, legacyGoogleRedirectHandoffCookieName)
 	// Clear before tenant/user validation or the application's atomic GETDEL.
 	clearGoogleRedirectCookie(c, googleRedirectHandoffCookieName, http.SameSiteLaxMode)
+	clearGoogleRedirectCookie(c, legacyGoogleRedirectHandoffCookieName, http.SameSiteLaxMode)
 	return handle, ok && validGoogleRedirectHandle(handle)
 }
 

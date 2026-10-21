@@ -176,7 +176,7 @@ const moreEl = ref<HTMLElement | null>(null)
 
 const year = new Date().getFullYear()
 
-const brandName = computed(() => String(appStore.config?.brand?.site_name || '').trim() || 'XOPEN AI')
+const brandName = computed(() => String(appStore.config?.brand?.site_name || '').trim() || 'faka-58')
 const brandLogo = computed(() => {
   const raw = String(appStore.config?.brand?.site_logo || '').trim()
   return raw ? getImageUrl(raw) : ''

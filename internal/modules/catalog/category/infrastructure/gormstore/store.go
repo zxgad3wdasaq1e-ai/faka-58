@@ -5,10 +5,10 @@ import (
 	"strconv"
 	"time"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	categorycontract "github.com/dujiao-next/internal/modules/catalog/category/contract"
-	categorydomain "github.com/dujiao-next/internal/modules/catalog/category/domain"
+	categorycontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/contract"
+	categorydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/domain"
 
 	"gorm.io/gorm"
 )

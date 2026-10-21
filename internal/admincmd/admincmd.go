@@ -3,7 +3,7 @@
 // gormdb.DB，无需重复 config.Load / InitDB。
 //
 // 入口由 cmd/server/main.go 在检测到 "admin" 子命令时调用 Run(args)，
-// 容器只需要 xopen-ai 一个二进制即可执行所有运维操作。
+// 容器只需要 faka-58 一个二进制即可执行所有运维操作。
 package admincmd
 
 import (
@@ -11,17 +11,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/dujiao-next/internal/cache"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/cache"
 	"os"
 	"strings"
 	"text/tabwriter"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	auditlogapp "github.com/dujiao-next/internal/modules/auditlog/application"
-	auditloggormstore "github.com/dujiao-next/internal/modules/auditlog/infrastructure/gormstore"
-	adminstore "github.com/dujiao-next/internal/modules/identity/admin/infrastructure/gormstore"
-	"github.com/dujiao-next/internal/platform/database/gormdb"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	auditlogapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/application"
+	auditloggormstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/infrastructure/gormstore"
+	adminstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/infrastructure/gormstore"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/database/gormdb"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -35,9 +35,9 @@ func Usage() {
 	fmt.Fprintln(os.Stderr, `admin 子命令: 后台管理员运维工具
 
 用法:
-  xopen-ai admin list-admins                              列出所有管理员
-  xopen-ai admin reset-2fa --username <name>              重置指定管理员的 2FA
-  xopen-ai admin reset-password --username <name> [--password <new>]
+  faka-58 admin list-admins                              列出所有管理员
+  faka-58 admin reset-2fa --username <name>              重置指定管理员的 2FA
+  faka-58 admin reset-password --username <name> [--password <new>]
                                                           重置管理员密码（超管忘记密码恢复用）
                                                           不传 --password 时从 stdin 隐藏读入两次确认`)
 }

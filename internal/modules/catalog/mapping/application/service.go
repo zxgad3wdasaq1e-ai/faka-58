@@ -3,9 +3,9 @@ package application
 import (
 	"strconv"
 
-	"github.com/dujiao-next/internal/constants"
-	mappingcontract "github.com/dujiao-next/internal/modules/catalog/mapping/contract"
-	mappingdomain "github.com/dujiao-next/internal/modules/catalog/mapping/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	mappingcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/contract"
+	mappingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/domain"
 )
 
 // 文件组织约定:

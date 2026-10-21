@@ -3,11 +3,13 @@ package config
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/logger"
-	"github.com/dujiao-next/internal/shared/passwordpolicy"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/mailbrand"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/passwordpolicy"
 
 	"github.com/spf13/viper"
 )
@@ -329,7 +331,7 @@ func (p PasswordPolicyConfig) ValidationPolicy() passwordpolicy.Policy {
 // WebConfig 仅在 fullstack 二进制模式下生效。
 // 默认构建模式（无 -tags fullstack）下这些字段不被任何代码读取。
 type WebConfig struct {
-	// AdminPath 后台访问路径前缀，例如 "/admin" 或 "/dj-mgmt-7x9k2"。
+	// AdminPath 后台访问路径前缀，例如 "/admin" 或 "/faka-58-mgmt-7x9k2"。
 	// 校验规则见 internal/web.ValidateAdminPath。
 	AdminPath string `mapstructure:"admin_path"`
 }
@@ -356,7 +358,7 @@ func Load() *Config {
 
 	// 设置默认值（可选）
 	viper.SetDefault("app.secret_key", "change-me-32-byte-secret-key!!")
-	viper.SetDefault("app.totp_issuer", "XOPEN AI")
+	viper.SetDefault("app.totp_issuer", "faka-58")
 	viper.SetDefault("server.host", "0.0.0.0")
 	viper.SetDefault("server.port", "8080")
 	viper.SetDefault("server.mode", "debug")
@@ -368,7 +370,7 @@ func Load() *Config {
 	viper.SetDefault("log.max_age_days", 30)
 	viper.SetDefault("log.compress", true)
 	viper.SetDefault("database.driver", "sqlite")
-	viper.SetDefault("database.dsn", "./db/dujiao.db")
+	viper.SetDefault("database.dsn", defaultSQLiteDSN())
 	viper.SetDefault("database.pool.max_open_conns", 1)
 	viper.SetDefault("database.pool.max_idle_conns", 1)
 	viper.SetDefault("database.pool.conn_max_lifetime_seconds", 0)
@@ -515,5 +517,21 @@ func Load() *Config {
 		panic(fmt.Errorf("配置解析失败: %w", err))
 	}
 
+	cfg.App.TOTPIssuer = mailbrand.NormalizeName(cfg.App.TOTPIssuer)
+	cfg.Email.FromName = mailbrand.NormalizeName(cfg.Email.FromName)
 	return &cfg
+}
+
+// Keep existing SQLite installations on their original file; new installs use
+// the current project name. An explicit database.dsn always takes precedence.
+func defaultSQLiteDSN() string {
+	const current = "./db/faka-58.db"
+	if _, err := os.Stat(current); err == nil {
+		return current
+	}
+	const legacy = "./db/dujiao.db"
+	if _, err := os.Stat(legacy); err == nil {
+		return legacy
+	}
+	return current
 }

@@ -6,9 +6,10 @@ import (
 	"net/mail"
 	"strings"
 
-	"github.com/dujiao-next/internal/config"
-	settingsvalue "github.com/dujiao-next/internal/modules/settings/schema/value"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	settingsvalue "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/value"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/mailbrand"
 )
 
 var ErrSMTPConfigInvalid = errors.New("smtp config invalid")
@@ -88,7 +89,7 @@ func NormalizeSMTPSetting(setting SMTPSetting) SMTPSetting {
 	setting.Username = strings.TrimSpace(setting.Username)
 	setting.Password = strings.TrimSpace(setting.Password)
 	setting.From = strings.TrimSpace(setting.From)
-	setting.FromName = strings.TrimSpace(setting.FromName)
+	setting.FromName = mailbrand.NormalizeName(setting.FromName)
 
 	if setting.Port <= 0 || setting.Port > 65535 {
 		setting.Port = 587

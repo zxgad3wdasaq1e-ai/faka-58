@@ -15,9 +15,9 @@ import (
 	"strings"
 	"time"
 
-	siteconnectiondomain "github.com/dujiao-next/internal/modules/siteconnection/domain"
+	siteconnectiondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/domain"
 
-	"github.com/dujiao-next/internal/logger"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
 
 	"github.com/google/uuid"
 )

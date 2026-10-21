@@ -4,15 +4,15 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/dujiao-next/internal/testkit/memorysettings"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/testkit/memorysettings"
 
-	orderqueueadapter "github.com/dujiao-next/internal/modules/order/infrastructure/queueadapter"
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
+	orderqueueadapter "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/infrastructure/queueadapter"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/queue"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/queue"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 type orderStatusEmailOrderRepoStub struct {

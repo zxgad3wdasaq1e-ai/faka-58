@@ -11,12 +11,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/i18n"
-	notificationcontract "github.com/dujiao-next/internal/modules/notification/contract"
-	settingsmessaging "github.com/dujiao-next/internal/modules/settings/schema/messaging"
-	"github.com/dujiao-next/internal/shared/mailbrand"
-	"github.com/dujiao-next/internal/shared/money"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/i18n"
+	notificationcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/notification/contract"
+	settingsmessaging "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/messaging"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/mailbrand"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/money"
 
 	"github.com/shopspring/decimal"
 )
@@ -40,7 +40,7 @@ func TestBuildOrderStatusContent(t *testing.T) {
 			},
 			wantBodyContains: []string{
 				"已收到您的付款",
-				"订单号：DJ-PAID",
+				"订单号：FAKA-58-PAID",
 			},
 		},
 		{
@@ -68,7 +68,7 @@ func TestBuildOrderStatusContent(t *testing.T) {
 			},
 			wantBodyContains: []string{
 				"Delivery completed",
-				"Order No: DJ-DELIVER",
+				"Order No: FAKA-58-DELIVER",
 			},
 		},
 		{
@@ -152,13 +152,13 @@ func TestBuildOrderStatusContent(t *testing.T) {
 func pickOrderNo(status string) string {
 	switch status {
 	case "paid":
-		return "DJ-PAID"
+		return "FAKA-58-PAID"
 	case "refunded":
-		return "DJ-REFUND"
+		return "FAKA-58-REFUND"
 	case "partially_refunded":
-		return "DJ-PART-REFUND"
+		return "FAKA-58-PART-REFUND"
 	default:
-		return "DJ-DELIVER"
+		return "FAKA-58-DELIVER"
 	}
 }
 
@@ -233,7 +233,7 @@ func TestBuildOrderStatusContentFromTemplateIncludesSiteBrand(t *testing.T) {
 	tmpl.Templates.Paid.ZHCN.Body = "订单号：{{order_no}}\n站点：{{site_name}} {{site_url}}"
 
 	input := notificationcontract.OrderStatusEmailInput{
-		OrderNo:         "DJ-SITE-001",
+		OrderNo:         "FAKA-58-SITE-001",
 		Status:          "paid",
 		Amount:          money.FromDecimal(decimal.NewFromInt(10)),
 		Currency:        "CNY",
@@ -463,7 +463,7 @@ func TestEmailServiceSendOffice365Integration(t *testing.T) {
 		Username: username,
 		Password: password,
 		From:     from,
-		FromName: "Dujiao Next",
+		FromName: "faka-58",
 		UseTLS:   true,
 		UseSSL:   false,
 	})

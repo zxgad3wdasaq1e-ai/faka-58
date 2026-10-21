@@ -5,20 +5,20 @@ import (
 	"fmt"
 	"time"
 
-	paymentapp "github.com/dujiao-next/internal/modules/payment/application"
+	paymentapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/application"
 
-	orderapp "github.com/dujiao-next/internal/modules/order/application"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	orderapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
 
-	"github.com/dujiao-next/internal/app/container"
-	productapplication "github.com/dujiao-next/internal/modules/catalog/product/application"
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
-	"github.com/dujiao-next/internal/modules/catalog/product/manualform"
-	upstreamtransport "github.com/dujiao-next/internal/modules/upstreamapi/transport/http"
-	walletcontract "github.com/dujiao-next/internal/modules/wallet/contract"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	productapplication "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/application"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/manualform"
+	upstreamtransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/upstreamapi/transport/http"
+	walletcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 // NewHandler connects application services to the upstream HTTP

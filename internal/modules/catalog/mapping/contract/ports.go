@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	categoryapp "github.com/dujiao-next/internal/modules/catalog/category/application"
-	categorydomain "github.com/dujiao-next/internal/modules/catalog/category/domain"
-	settingsintegration "github.com/dujiao-next/internal/modules/settings/schema/integration"
-	siteconnectiondomain "github.com/dujiao-next/internal/modules/siteconnection/domain"
-	"github.com/dujiao-next/internal/upstream"
+	categoryapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/application"
+	categorydomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/domain"
+	settingsintegration "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/integration"
+	siteconnectiondomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/upstream"
 )
 
 // ConnectionProvider 隔离连接读取与上游协议适配器构造。

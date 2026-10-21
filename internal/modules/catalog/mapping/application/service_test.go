@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	mappingcontract "github.com/dujiao-next/internal/modules/catalog/mapping/contract"
+	mappingcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/contract"
 )
 
 type recordingMediaRecorder struct {

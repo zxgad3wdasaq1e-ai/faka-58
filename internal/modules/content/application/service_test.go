@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/modules/content/contract"
-	"github.com/dujiao-next/internal/modules/content/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/content/domain"
 )
 
 type fixedClock struct {

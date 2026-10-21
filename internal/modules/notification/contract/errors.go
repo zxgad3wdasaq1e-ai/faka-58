@@ -3,7 +3,7 @@ package contract
 import (
 	"errors"
 
-	settingsmessaging "github.com/dujiao-next/internal/modules/settings/schema/messaging"
+	settingsmessaging "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/messaging"
 )
 
 var (

@@ -22,7 +22,7 @@ export function useRegister() {
 
   const brandSiteName = computed(() => {
     const siteName = String(appStore.config?.brand?.site_name || '').trim()
-    return siteName !== '' ? siteName : 'XOPEN AI'
+    return siteName !== '' ? siteName : 'faka-58'
   })
 
   const email = ref('')

@@ -1,14 +1,14 @@
 package httpserver
 
 import (
-	"github.com/dujiao-next/internal/app/container"
-	"github.com/dujiao-next/internal/app/httpserver/middleware"
-	affiliatetransport "github.com/dujiao-next/internal/modules/affiliate/transport/http"
-	channeltransport "github.com/dujiao-next/internal/modules/channelapi/transport/http"
-	giftcardtransport "github.com/dujiao-next/internal/modules/giftcard/transport/http"
-	memberleveltransport "github.com/dujiao-next/internal/modules/memberlevel/transport/http"
-	telegramtransport "github.com/dujiao-next/internal/modules/telegram/channelbot/transport/http"
-	wallettransport "github.com/dujiao-next/internal/modules/wallet/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/container"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/app/httpserver/middleware"
+	affiliatetransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/transport/http"
+	channeltransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/channelapi/transport/http"
+	giftcardtransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/giftcard/transport/http"
+	memberleveltransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/transport/http"
+	telegramtransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/telegram/channelbot/transport/http"
+	wallettransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/wallet/transport/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"

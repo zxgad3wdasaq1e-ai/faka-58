@@ -1,6 +1,6 @@
 package contract
 
-import "github.com/dujiao-next/internal/shared/jsonmap"
+import "github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 
 // Store is the persistence contract shared by settings use cases and the few
 // modules that own reserved settings keys. It exposes values rather than GORM

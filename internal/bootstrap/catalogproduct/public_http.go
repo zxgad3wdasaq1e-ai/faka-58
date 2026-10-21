@@ -1,12 +1,12 @@
 package catalogproductbootstrap
 
 import (
-	productapplication "github.com/dujiao-next/internal/modules/catalog/product/application"
-	productdomain "github.com/dujiao-next/internal/modules/catalog/product/domain"
-	producthttp "github.com/dujiao-next/internal/modules/catalog/product/transport/http"
-	promotionapp "github.com/dujiao-next/internal/modules/promotion/application"
-	promotioncontract "github.com/dujiao-next/internal/modules/promotion/contract"
-	reseller "github.com/dujiao-next/internal/modules/reseller/contract"
+	productapplication "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/application"
+	productdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/domain"
+	producthttp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/transport/http"
+	promotionapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/promotion/application"
+	promotioncontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/promotion/contract"
+	reseller "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/contract"
 )
 
 // PublicHTTPDependencies 是公开 Product HTTP 入口的显式装配依赖。

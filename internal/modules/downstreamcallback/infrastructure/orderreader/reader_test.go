@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
 
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 type sourceStub struct {
@@ -23,7 +23,7 @@ func TestReaderProjectsParentAndChildFulfillment(t *testing.T) {
 	deliveredAt := time.Unix(1_700_000_000, 0).UTC()
 	source := sourceStub{order: &orderdomain.Order{
 		ID:      parentID,
-		OrderNo: "DJ-8",
+		OrderNo: "FAKA-58-8",
 		Status:  "completed",
 		Children: []orderdomain.Order{{
 			ID:       9,
@@ -43,7 +43,7 @@ func TestReaderProjectsParentAndChildFulfillment(t *testing.T) {
 	if err != nil {
 		t.Fatalf("GetByID() error = %v", err)
 	}
-	if projection.ID != parentID || projection.OrderNo != "DJ-8" || len(projection.Children) != 1 {
+	if projection.ID != parentID || projection.OrderNo != "FAKA-58-8" || len(projection.Children) != 1 {
 		t.Fatalf("order projection mismatch: %#v", projection)
 	}
 	fulfillment := projection.Children[0].Fulfillment

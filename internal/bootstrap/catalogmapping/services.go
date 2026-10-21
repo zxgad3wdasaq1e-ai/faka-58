@@ -3,13 +3,13 @@ package catalogmappingbootstrap
 import (
 	"errors"
 
-	productcontract "github.com/dujiao-next/internal/modules/catalog/product/contract"
+	productcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/product/contract"
 
-	categorycontract "github.com/dujiao-next/internal/modules/catalog/category/contract"
+	categorycontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/category/contract"
 
-	mappingapp "github.com/dujiao-next/internal/modules/catalog/mapping/application"
-	mappingcontract "github.com/dujiao-next/internal/modules/catalog/mapping/contract"
-	siteconnectionapp "github.com/dujiao-next/internal/modules/siteconnection/application"
+	mappingapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/application"
+	mappingcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/catalog/mapping/contract"
+	siteconnectionapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/siteconnection/application"
 
 	"gorm.io/gorm"
 )

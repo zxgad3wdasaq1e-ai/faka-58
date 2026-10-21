@@ -1,8 +1,8 @@
 package contract
 
 import (
-	"github.com/dujiao-next/internal/config"
-	settingssecurity "github.com/dujiao-next/internal/modules/settings/schema/security"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	settingssecurity "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/security"
 )
 
 // SettingReader 是验证码运行时读取动态配置所需的最小端口。

@@ -3,15 +3,15 @@ package adminhttp
 import (
 	"strings"
 
-	resellerdomain "github.com/dujiao-next/internal/modules/reseller/domain"
+	resellerdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/domain"
 
-	auditlogapp "github.com/dujiao-next/internal/modules/auditlog/application"
-	resellermodule "github.com/dujiao-next/internal/modules/reseller/application"
-	dto "github.com/dujiao-next/internal/modules/reseller/transport/http/presenter"
-	transportshared "github.com/dujiao-next/internal/modules/reseller/transport/http/shared"
-	"github.com/dujiao-next/internal/platform/http/ginutil"
-	"github.com/dujiao-next/internal/platform/http/response"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	auditlogapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/application"
+	resellermodule "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/application"
+	dto "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/transport/http/presenter"
+	transportshared "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/transport/http/shared"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/ginutil"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 
 	"github.com/gin-gonic/gin"
 )

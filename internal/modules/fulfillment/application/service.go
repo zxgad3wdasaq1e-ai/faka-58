@@ -7,19 +7,19 @@ import (
 	"strings"
 	"time"
 
-	fulfillmentcontract "github.com/dujiao-next/internal/modules/fulfillment/contract"
-	fulfillmentdomain "github.com/dujiao-next/internal/modules/fulfillment/domain"
-	externalidentitycontract "github.com/dujiao-next/internal/modules/identity/externalidentity/contract"
-	orderapp "github.com/dujiao-next/internal/modules/order/application"
-	ordercontract "github.com/dujiao-next/internal/modules/order/contract"
-	orderdomain "github.com/dujiao-next/internal/modules/order/domain"
-	settingsapp "github.com/dujiao-next/internal/modules/settings/application"
+	fulfillmentcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/contract"
+	fulfillmentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/fulfillment/domain"
+	externalidentitycontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/externalidentity/contract"
+	orderapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/application"
+	ordercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/contract"
+	orderdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/domain"
+	settingsapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/application"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/logger"
-	cardsecretdomain "github.com/dujiao-next/internal/modules/cardsecret/domain"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	cardsecretdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/cardsecret/domain"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 // Service 编排人工交付与自动交付。

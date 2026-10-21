@@ -5,14 +5,14 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/dujiao-next/internal/authz"
-	"github.com/dujiao-next/internal/cache"
-	auditlogapp "github.com/dujiao-next/internal/modules/auditlog/application"
-	admincontract "github.com/dujiao-next/internal/modules/identity/admin/contract"
-	admindomain "github.com/dujiao-next/internal/modules/identity/admin/domain"
-	adminauthapp "github.com/dujiao-next/internal/modules/identity/adminauth/application"
-	adminauthztransport "github.com/dujiao-next/internal/modules/identity/adminauthorization/transport/http"
-	"github.com/dujiao-next/internal/shared/passwordpolicy"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/authz"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/cache"
+	auditlogapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/auditlog/application"
+	admincontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/contract"
+	admindomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/admin/domain"
+	adminauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/adminauth/application"
+	adminauthztransport "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/adminauthorization/transport/http"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/passwordpolicy"
 )
 
 type adminAuthzRolePolicyAdapter struct {

@@ -3,8 +3,8 @@ package contract
 import (
 	"time"
 
-	ordercontract "github.com/dujiao-next/internal/modules/order/contract"
-	paymentdomain "github.com/dujiao-next/internal/modules/payment/domain"
+	ordercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/order/contract"
+	paymentdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/payment/domain"
 )
 
 // Store 是支付记录持久化与事务边界。

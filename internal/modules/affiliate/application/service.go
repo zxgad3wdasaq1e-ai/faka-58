@@ -3,8 +3,8 @@ package application
 import (
 	"time"
 
-	affiliatecontract "github.com/dujiao-next/internal/modules/affiliate/contract"
-	usercontract "github.com/dujiao-next/internal/modules/identity/user/contract"
+	affiliatecontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/affiliate/contract"
+	usercontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/contract"
 )
 
 const (

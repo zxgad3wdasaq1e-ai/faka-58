@@ -1,9 +1,10 @@
 package settingsapp
 
 import (
-	"github.com/dujiao-next/internal/config"
-	settingscontract "github.com/dujiao-next/internal/modules/settings/contract"
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	settingscontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 // Service 是站点设置的核心用例入口：读写、Registry 归一化与声明式副作用。
@@ -54,6 +55,9 @@ func (s *Service) GetByKey(key string) (jsonmap.JSON, error) {
 	}
 	if !found {
 		return nil, nil
+	}
+	if key == constants.SettingKeySiteConfig {
+		return normalizeLegacySiteIdentity(value), nil
 	}
 	return value, nil
 }

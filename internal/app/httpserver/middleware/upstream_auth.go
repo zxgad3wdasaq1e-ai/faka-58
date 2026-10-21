@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"time"
 
-	apicredentialdomain "github.com/dujiao-next/internal/modules/apicredential/domain"
+	apicredentialdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/apicredential/domain"
 
-	"github.com/dujiao-next/internal/constants"
-	"github.com/dujiao-next/internal/logger"
-	"github.com/dujiao-next/internal/upstream"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/upstream"
 
 	"github.com/gin-gonic/gin"
 )

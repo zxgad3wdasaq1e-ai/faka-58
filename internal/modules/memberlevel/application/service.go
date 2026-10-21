@@ -1,9 +1,9 @@
 package application
 
 import (
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	memberlevelcontract "github.com/dujiao-next/internal/modules/memberlevel/contract"
-	memberleveldomain "github.com/dujiao-next/internal/modules/memberlevel/domain"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	memberlevelcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/contract"
+	memberleveldomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/memberlevel/domain"
 
 	"github.com/shopspring/decimal"
 )

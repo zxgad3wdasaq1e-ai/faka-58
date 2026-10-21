@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/constants"
-	invitecodeapp "github.com/dujiao-next/internal/modules/identity/invitecode/application"
-	invitecodedomain "github.com/dujiao-next/internal/modules/identity/invitecode/domain"
-	invitecodestore "github.com/dujiao-next/internal/modules/identity/invitecode/infrastructure/gormstore"
-	telegramauthapp "github.com/dujiao-next/internal/modules/identity/telegramauth/application"
-	userdomain "github.com/dujiao-next/internal/modules/identity/user/domain"
-	userauthapp "github.com/dujiao-next/internal/modules/identity/userauth/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	invitecodeapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/invitecode/application"
+	invitecodedomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/invitecode/domain"
+	invitecodestore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/invitecode/infrastructure/gormstore"
+	telegramauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/telegramauth/application"
+	userdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/user/domain"
+	userauthapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/identity/userauth/application"
 
 	"gorm.io/gorm"
 )

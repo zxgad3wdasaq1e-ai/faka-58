@@ -3,9 +3,9 @@ package settingsapp
 import (
 	"testing"
 
-	"github.com/dujiao-next/internal/config"
-	"github.com/dujiao-next/internal/constants"
-	settingssecurity "github.com/dujiao-next/internal/modules/settings/schema/security"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/constants"
+	settingssecurity "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/security"
 )
 
 func TestNormalizeTelegramAuthSetting(t *testing.T) {

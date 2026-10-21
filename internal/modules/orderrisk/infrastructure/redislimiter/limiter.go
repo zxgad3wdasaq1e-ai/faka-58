@@ -8,10 +8,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dujiao-next/internal/cache"
-	"github.com/dujiao-next/internal/logger"
-	orderriskcontract "github.com/dujiao-next/internal/modules/orderrisk/contract"
-	settingssecurity "github.com/dujiao-next/internal/modules/settings/schema/security"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/cache"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/logger"
+	orderriskcontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/orderrisk/contract"
+	settingssecurity "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/schema/security"
 
 	"github.com/redis/go-redis/v9"
 )

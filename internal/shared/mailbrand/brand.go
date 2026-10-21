@@ -5,6 +5,17 @@ import (
 	"strings"
 )
 
+// NormalizeName replaces retired built-in names while preserving custom brands.
+func NormalizeName(name string) string {
+	name = strings.TrimSpace(name)
+	switch name {
+	case "XOPEN AI", "XIOEN AI", "Dujiao-Next", "Dujiao Next":
+		return "faka-58"
+	default:
+		return name
+	}
+}
+
 // Brand describes the customer-visible identity used by one email.
 type Brand struct {
 	SiteName string

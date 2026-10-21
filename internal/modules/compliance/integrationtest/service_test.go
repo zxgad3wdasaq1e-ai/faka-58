@@ -3,14 +3,14 @@ package compliance_test
 import (
 	"testing"
 
-	settingsstore "github.com/dujiao-next/internal/modules/settings/infrastructure/gormstore"
+	settingsstore "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/settings/infrastructure/gormstore"
 
-	complianceapp "github.com/dujiao-next/internal/modules/compliance/application"
-	compliancecontract "github.com/dujiao-next/internal/modules/compliance/contract"
-	"github.com/dujiao-next/internal/shared/jsonmap"
 	"github.com/glebarez/sqlite"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	complianceapp "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/compliance/application"
+	compliancecontract "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/compliance/contract"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 	"gorm.io/gorm"
 )
 

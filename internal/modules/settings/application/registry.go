@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/dujiao-next/internal/shared/jsonmap"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/shared/jsonmap"
 )
 
 // Normalizer 把任意设置 JSON 归一化为可持久化形状。

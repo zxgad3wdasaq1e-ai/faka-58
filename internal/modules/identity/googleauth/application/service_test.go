@@ -16,7 +16,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dujiao-next/internal/config"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/config"
 
 	"github.com/golang-jwt/jwt/v5"
 )

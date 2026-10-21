@@ -7,9 +7,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	reportingdomain "github.com/dujiao-next/internal/modules/reporting/domain"
-	resellermodule "github.com/dujiao-next/internal/modules/reseller/application"
-	"github.com/dujiao-next/internal/platform/http/response"
+	reportingdomain "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reporting/domain"
+	resellermodule "github.com/zxgad3wdasaq1e-ai/faka-58/internal/modules/reseller/application"
+	"github.com/zxgad3wdasaq1e-ai/faka-58/internal/platform/http/response"
 
 	"github.com/gin-gonic/gin"
 )

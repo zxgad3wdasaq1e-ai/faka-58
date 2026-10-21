@@ -228,7 +228,7 @@ const currentLocaleLabel = computed(() => {
 
 const brandSiteName = computed(() => {
   const text = String(appStore.config?.brand?.site_name || '').trim()
-  return text !== '' ? text : 'XOPEN AI'
+  return text !== '' ? text : 'faka-58'
 })
 
 const brandLogo = computed(() => {
