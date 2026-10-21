@@ -4,9 +4,13 @@
 
 展示品牌为 XOPEN AI，镜像内主程序为 `xopen-ai`。已有站点的名称、站点 URL 和 SEO 配置保存在数据库中，升级后请在后台「系统设置」同步为 XOPEN AI 和实际访问域名，并在支付平台同步 `https://xopenai.vip/api/v1/payments/callback`。后台版本检查使用本仓库的 GitHub Releases；镜像部署通过 Docker Compose 更新。
 
-包含分类和 SKU、卡密批量导入与自动交付、人工交付、游客查单、会员、购物车、优惠券、库存预占、订单管理、支付配置、后台 RBAC 和 2FA。初始化目录不含真实卡密、虚构销量或用户评价，展示商品需要先导入库存或配置人工交付。
+包含分类和 SKU、卡密批量导入与自动交付、游客及注册用户购买、购物车、库存预占、订单退款、钱包、推广返利、上游供货对接、Telegram 商城、支付配置、后台 RBAC 和 2FA。初始化目录不含真实卡密、虚构销量或用户评价，展示商品需要先导入库存或配置供货方式。
 
-技术栈：Go 1.26.5 / Gin / GORM，Vue 3 / TypeScript / Tailwind CSS，PostgreSQL 17、Redis 7。Docker 多阶段构建将前台和后台嵌入同一二进制。默认图床为持久化 `uploads`，可选 MinIO。
+后台侧栏按概览、商品、卡密、订单与售后、收款与钱包、客户、货源、推广返利、Telegram 商城和店铺设置组织，相关子功能在页面顶部切换。首页默认显示今天的四项核心指标，详细统计可展开。新建商品默认自动发卡，允许游客和注册用户购买；已有商品沿用原配置。
+
+默认开启 `order.uniform_pricing`，新订单统一按所选 SKU 售价计算，不应用优惠券、活动价、会员价或批发价；网页、购物车、Telegram 和对外商品目录使用同一模式。历史订单及已保存的优惠规则保留，显式配置为 `false` 可恢复旧定价逻辑。分销子站默认关闭，基础购买、购物钱包与推广返利各自保留。订单中的「登记退款」只记录已在支付平台完成的退款，不会自动转账；「退款到余额」继续按原流程处理。
+
+技术栈：Go 1.26.10 / Gin / GORM，Vue 3 / TypeScript / Tailwind CSS，PostgreSQL 17、Redis 7。Docker 多阶段构建将前台和后台嵌入同一二进制。默认图床为持久化 `uploads`，可选 MinIO。
 
 首页还原了首屏短句轮播、双排反向连续滚动评价和吸顶导航。登录后台「系统设置 → 首页内容」可编辑三语短句、轮换间隔、评价内容及滚动速度；保存后刷新前台生效。评价墙默认使用标有演示说明的原创模拟内容，可替换或关闭。动画支持悬停暂停、手动暂停和系统减少动态效果偏好。
 
@@ -128,6 +132,35 @@ docker compose --profile tools stop adminer
 
 应用数据库账号 `getgpt` 是数据库所有者，不具有 PostgreSQL 超级用户、建库或建角色权限；应用密码位于 `deploy/secrets/postgres_password`，管理员密码另存为 `postgres_admin_password`。PostgreSQL、Redis 和 MinIO S3 端口均不向宿主机公开；管理工具仅监听回环地址。
 
+## 请求限制与退款佣金
+
+应用在读取 JSON 和访问业务数据库之前按访客 IP 限制公开 API、登录及对接接口。公开 API 默认每分钟 300 次，推广点击及验证码各每分钟 20 次；登录接口合计每 5 分钟 30 次，原有账号限制继续生效。默认及自定义回调共用每分钟 600 次的独立计数，保留签名所需的原始正文。相关 `security.*_rate_limit` 配置见 `config.yml.example`；被限请求返回 429 和 `Retry-After`，回调发送方需要保留重试能力。
+
+普通前台 API 正文上限 128 KiB，后台及对接 API 为 1 MiB，回调为 1 MiB，卡密批量接口为 12 MiB；文件上传仍按上传配置验证并限制 multipart 余量。Redis 故障时使用有容量上限的进程内计数，多实例部署仍需共享 Redis。
+
+未保存过订单风控设置时默认开启：游客同 IP 最多 2 个待付款订单、每单同商品 1 件、累计同商品预占 2 件、10 分钟超时；注册用户每账号最多 5 个待付款订单、同 IP 最多 10 个、每单同商品 5 件，并分别按账号及 IP 限频。已有显式关闭配置会保留，升级后需在后台「店铺设置 → 订单风控」核对并启用。共享网络和批量购买场景可调整阈值；Telegram 保留账号及商品配额。
+
+订单退款会按累计退款额冲减未提现佣金。受影响的待审核提现整单自动拒绝，保留原申请金额和原因，其他有效佣金解冻后可重新申请；已打款历史不改写，也不从购物钱包扣款。升级时无法从旧数据判断是否已冲减的历史退款佣金会单独标记「待核对」并暂停提现，保留原始金额及其他有效佣金；这些记录需要逐笔核实，当前不提供自动解冻入口。此版本升级前须备份数据库并停止旧版应用和队列写入，再启动新版执行迁移；多实例不能混跑新旧版本。
+
+两端编辑器固定使用 pnpm 补丁回移 [Tiptap 官方原型属性修复](https://github.com/ueberdosis/tiptap/security/advisories/GHSA-cp6q-959q-f8rh)，补丁覆盖 ESM、CommonJS、UMD 及源码；回归测试验证实际依赖导出。安装时必须保留 `patches/` 并使用锁文件。版本型 `pnpm audit --prod` 仍报告该中危版本告警，未将其静默忽略；迁移到已修复的编辑器主版本后才能移除回移补丁。
+
+限流和 CDN 不构成容量承诺。上线容量需在与生产相同的 CPU、内存、PostgreSQL、Redis 和代理配置上分别测商品浏览、下单及回调；日访问量、在线人数与每秒下单量不能互换。不要在真实库存和支付环境直接进行破坏性压测。
+
+## Cloudflare 橙云与真实访客 IP
+
+使用 Cloudflare 橙云时，先让源站域名以 HTTPS 正常工作，Cloudflare SSL/TLS 设为 **Full (strict)**。通常使用源站 80/443；快速安装的默认 1888 不在 [Cloudflare 支持的代理端口](https://developers.cloudflare.com/fundamentals/reference/network-ports/)内，不能直接作为橙云入口。首次安装可使用前述 `--domain` 模式。
+
+新版本 Caddy 模板提供 `direct` 和 `cloudflare` 两种模式，初始化默认写入 `CADDY_PROXY_MODE=direct`。开启橙云后，将服务器部署目录 `.env` 中这一项改为 `CADDY_PROXY_MODE=cloudflare`。Caddy 仅接受 [Cloudflare 官方出口网段](https://www.cloudflare.com/ips/)发来的 `CF-Connecting-IP`，再向应用发送单一、已校验的 `X-Forwarded-For`；直连请求伪造这些头不会改变访客 IP。应用的 `server.trusted_proxies` 继续只填写 `.env` 中 `CADDY_IP` 对应的 `/32`，不要改成全网信任或所有 Cloudflare 网段。实现依据见 [Caddy 可信代理文档](https://caddyserver.com/docs/caddyfile/options#trusted-proxies)。
+
+既有安装还需先同步所选版本的 `compose.yml`、`deploy/Caddyfile` 与运行时模板。默认本地图片存储可在备份后，将新版 `deploy/Caddyfile` 复制到 `deploy/runtime/Caddyfile`。MinIO 或自定义路由部署应保留现有路由，合并新版可信代理配置与 `storefront_proxy` 片段，并将应用上游入口改用 `import storefront_proxy`；不能直接覆盖掉 `/media/*` 路由。检查后只重建 Caddy：
+
+```bash
+docker compose run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+docker compose up -d --no-build --no-deps --force-recreate caddy
+```
+
+完成后用不同网络提交测试订单，核对订单客户端 IP 与实际访客地址一致；未匹配到 Cloudflare 网段时会使用连接来源 IP。模板网段清单核对于 2026-10-21，后续应按官方清单维护。源站防火墙仅允许 Cloudflare 网段进入业务端口，并保留自己的 SSH 管理入口；应用容器 8080 继续只在内部网络可达。如果 Caddy 前还有其他反向代理或 Tunnel，需要单独核实实际连接来源，不能直接套用此信任链。
+
 ## 运维、备份和恢复
 
 ```bash
@@ -161,7 +194,7 @@ Shell 工具仅处理新快速安装的持久化本地图床与预构建镜像�
 
 ## 本地开发和构建
 
-使用 Go 1.26.5、pnpm 10.34.3。复制 `config.yml.example` 到 `config.yml` 并填写三个不同强密钥。本地可使用 SQLite 与独立 Redis；setup 生成的是 Compose 内部数据库地址，宿主机运行需修改连接参数。
+使用 Go 1.26.10、pnpm 10.34.3。复制 `config.yml.example` 到 `config.yml` 并填写三个不同强密钥。本地可使用 SQLite 与独立 Redis；setup 生成的是 Compose 内部数据库地址，宿主机运行需修改连接参数。
 
 ```bash
 go run ./cmd/server
@@ -184,7 +217,7 @@ go test ./...
 
 生产 DNS/TLS 和真实支付须在目标服务器验收。当前开发环境缺少 Docker CLI，尚未在此环境执行镜像构建、Compose 启动、MinIO 容器和真实收款验证；上述命令为目标 Ubuntu 主机的构建与验收入口。
 
-本地已通过两前端共 104 项测试、类型检查及生产构建、`go vet ./...`、Windows 和 Linux amd64 完整程序构建，以及隔离测试库中的微信/支付宝易支付模拟回调、错误签名/金额/商户号拒绝、自动发卡、重复回调和图片上传删除验证。Windows 的完整 Go 测试仍有自更新测试因平台前提失败，依赖 Linux/macOS 的 `flock`、POSIX 权限或操作系统探测前提；业务模块测试通过，完整 Linux 测试由 Ubuntu CI 验证。模拟测试没有真实收款，不能代替商户平台联调。
+本地已通过两前端共 119 项测试、类型检查及生产构建、`go vet ./...`，以及隔离测试库中的微信/支付宝易支付模拟回调、错误签名/金额/商户号拒绝、自动发卡、重复回调和图片上传删除验证。Windows 的完整 Go 测试仍有自更新测试因平台前提失败，依赖 Linux/macOS 的 `flock`、POSIX 权限或操作系统探测前提；业务模块测试通过，完整 Linux 测试由 Ubuntu CI 验证。模拟测试没有真实收款，不能代替商户平台联调。
 
 ## 来源和许可证
 
