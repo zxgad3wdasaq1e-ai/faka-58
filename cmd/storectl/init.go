@@ -250,7 +250,7 @@ func initialize(options initOptions) (installationState, bool, error) {
 		return zero, false, errors.New("无法编码部署配置")
 	}
 	stateJSON, _ := json.MarshalIndent(state, "", "  ")
-	env := fmt.Sprintf("COMPOSE_PROJECT_NAME=getgpt\nSITE_ADDRESS=%s\nHTTP_PORT=%d\nHTTPS_PORT=%d\nAPP_SUBNET=%s\nCADDY_IP=%s\nAPP_IMAGE=%s\nAPP_VERSION=v1.0.0-xopen.1\nCOMPOSE_FILE=compose.yml\n", siteAddress, httpPort, httpsPort, network, proxyIP, options.Image)
+	env := fmt.Sprintf("COMPOSE_PROJECT_NAME=getgpt\nSITE_ADDRESS=%s\nHTTP_PORT=%d\nHTTPS_PORT=%d\nAPP_SUBNET=%s\nCADDY_IP=%s\nCADDY_PROXY_MODE=direct\nAPP_IMAGE=%s\nAPP_VERSION=v1.0.0-xopen.1\nCOMPOSE_FILE=compose.yml\n", siteAddress, httpPort, httpsPort, network, proxyIP, options.Image)
 	files := []struct {
 		name string
 		data []byte

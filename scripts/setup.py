@@ -132,7 +132,7 @@ def initialize(args: argparse.Namespace) -> dict:
             # initializes as uid 999; the parent directory stays host-private 0700.
             (secret_dir / name).chmod(0o444)
 
-    env = ["COMPOSE_PROJECT_NAME=getgpt", f"SITE_ADDRESS={address}", f"HTTP_PORT={8080 if args.local else 80}", f"HTTPS_PORT={8443 if args.local else 443}", f"APP_SUBNET={subnet}", f"CADDY_IP={proxy_ip}", f"APP_IMAGE={requested_image or 'getgpt-store:local'}", "APP_VERSION=v1.0.0-xopen.1"]
+    env = ["COMPOSE_PROJECT_NAME=getgpt", f"SITE_ADDRESS={address}", f"HTTP_PORT={8080 if args.local else 80}", f"HTTPS_PORT={8443 if args.local else 443}", f"APP_SUBNET={subnet}", f"CADDY_IP={proxy_ip}", "CADDY_PROXY_MODE=direct", f"APP_IMAGE={requested_image or 'getgpt-store:local'}", "APP_VERSION=v1.0.0-xopen.1"]
     if storage == "minio":
         env += ["COMPOSE_PATH_SEPARATOR=|", "COMPOSE_FILE=compose.yml|compose.minio.yml", "COMPOSE_PROFILES=storage"]
     else:
@@ -142,7 +142,7 @@ def initialize(args: argparse.Namespace) -> dict:
     private_write(config_path, json.dumps(config, ensure_ascii=False, indent=2) + "\n")
     caddy = (ROOT / "deploy/Caddyfile").read_text(encoding="utf-8")
     if storage == "minio":
-        caddy = caddy.replace("    reverse_proxy app:8080", "    handle_path /media/* {\n        @read method GET HEAD\n        handle @read {\n            rewrite * /storefront-media{uri}\n            reverse_proxy minio:9000\n        }\n        respond 405\n    }\n    handle {\n        reverse_proxy app:8080\n    }")
+        caddy = caddy.replace("    import storefront_proxy", "    handle_path /media/* {\n        @read method GET HEAD\n        handle @read {\n            rewrite * /storefront-media{uri}\n            reverse_proxy minio:9000\n        }\n        respond 405\n    }\n    handle {\n        import storefront_proxy\n    }")
     private_write(ROOT / "deploy/runtime/Caddyfile", caddy)
     state = {"origin": origin, "admin_path": admin_path, "admin_user": args.admin_user, "storage": storage, "local": args.local, "image": requested_image or ""}
     private_write(state_path, json.dumps(state, ensure_ascii=False, indent=2) + "\n")

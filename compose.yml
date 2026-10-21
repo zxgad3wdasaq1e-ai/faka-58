@@ -71,6 +71,7 @@ services:
     restart: unless-stopped
     environment:
       SITE_ADDRESS: ${SITE_ADDRESS:-http://localhost}
+      CADDY_PROXY_MODE: ${CADDY_PROXY_MODE:-direct}
     ports:
       - '${HTTP_PORT:-1888}:80'
       - '${HTTPS_PORT:-8443}:443'

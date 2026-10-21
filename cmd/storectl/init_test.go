@@ -18,7 +18,11 @@ func initFixture(t *testing.T) initOptions {
 	if err := os.Mkdir(filepath.Join(root, "deploy"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "deploy", "Caddyfile"), []byte("{$SITE_ADDRESS} {\n    reverse_proxy app:8080\n}\n"), 0o644); err != nil {
+	caddy, err := os.ReadFile(filepath.Join("..", "..", "deploy", "Caddyfile"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "deploy", "Caddyfile"), caddy, 0o644); err != nil {
 		t.Fatal(err)
 	}
 	return initOptions{Root: root, Domain: "xopenai.vip", Image: testImage, AdminUser: "admin", Subnet: "172.29.240.0/24"}
@@ -70,6 +74,10 @@ func TestInitCompatibleConfigurationAndPermissions(t *testing.T) {
 	if config["email"].(map[string]any)["enabled"] != false || config["upload"].(map[string]any)["storage"] != "local" {
 		t.Fatal("new installation must disable mail and use local image storage")
 	}
+	proxies := config["server"].(map[string]any)["trusted_proxies"].([]any)
+	if len(proxies) != 1 || proxies[0] != "172.29.240.10/32" {
+		t.Fatal("Gin must only trust the exact Caddy container address")
+	}
 	password := config["bootstrap"].(map[string]any)["default_admin_password"].(string)
 	if len(password) < 32 || !strings.HasPrefix(password, "Aa9_") {
 		t.Fatal("initial administrator password does not satisfy policy")
@@ -77,6 +85,14 @@ func TestInitCompatibleConfigurationAndPermissions(t *testing.T) {
 	env, err := os.ReadFile(filepath.Join(options.Root, ".env"))
 	if err != nil || !strings.Contains(string(env), "APP_IMAGE="+testImage+"\n") || !strings.Contains(string(env), "COMPOSE_PROJECT_NAME=getgpt\n") {
 		t.Fatal("environment image or project does not match installation state")
+	}
+	if !strings.Contains(string(env), "CADDY_PROXY_MODE=direct\n") {
+		t.Fatal("fresh installs must explicitly default to direct proxy mode")
+	}
+	template, _ := os.ReadFile(filepath.Join(options.Root, "deploy", "Caddyfile"))
+	generated, err := os.ReadFile(filepath.Join(options.Root, "deploy", "runtime", "Caddyfile"))
+	if err != nil || !bytes.Equal(generated, template) {
+		t.Fatal("initialization must preserve optional Cloudflare trust and normalized forwarding")
 	}
 	credentials, _ := os.ReadFile(filepath.Join(options.Root, "deploy", "secrets", "initial-admin.txt"))
 	if !strings.Contains(string(credentials), password) {

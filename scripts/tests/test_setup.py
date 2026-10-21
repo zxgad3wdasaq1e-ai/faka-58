@@ -41,7 +41,7 @@ class SetupTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
         (self.root / "deploy").mkdir()
-        (self.root / "deploy/Caddyfile").write_text("{$SITE_ADDRESS} {\n    reverse_proxy app:8080\n}\n", encoding="utf-8")
+        (self.root / "deploy/Caddyfile").write_text((REPOSITORY / "deploy/Caddyfile").read_text(encoding="utf-8"), encoding="utf-8")
         self.root_patch = patch.object(setup, "ROOT", self.root)
         self.root_patch.start()
         self.addCleanup(self.root_patch.stop)
@@ -60,9 +60,24 @@ class SetupTests(unittest.TestCase):
         config = json.loads((self.root / "config.yml").read_text(encoding="utf-8"))
         self.assertFalse(config["email"]["enabled"])
         self.assertEqual(config["upload"]["storage"], "local")
+        self.assertEqual(config["server"]["trusted_proxies"], ["172.29.240.10/32"])
+        self.assertIn("CADDY_PROXY_MODE=direct\n", (self.root / ".env").read_text(encoding="utf-8"))
+        self.assertEqual((self.root / "deploy/runtime/Caddyfile").read_text(encoding="utf-8"), (self.root / "deploy/Caddyfile").read_text(encoding="utf-8"))
         secrets = [config["app"]["secret_key"], config["jwt"]["secret"], config["user_jwt"]["secret"]]
         self.assertEqual(len(set(secrets)), 3)
         self.assertTrue(all(len(value) >= 32 for value in secrets))
+
+    def test_minio_preserves_proxy_trust_and_application_ip_normalization(self) -> None:
+        self.initialize(storage="minio")
+        caddy = (self.root / "deploy/runtime/Caddyfile").read_text(encoding="utf-8")
+        self.assertIn("handle_path /media/*", caddy)
+        self.assertIn("reverse_proxy minio:9000", caddy)
+        self.assertIn("    handle {\n        import storefront_proxy\n    }", caddy)
+        self.assertEqual(caddy.count("reverse_proxy app:8080"), 1)
+        self.assertEqual(caddy.count("import storefront_proxy"), 1)
+        self.assertIn("header_up X-Forwarded-For {client_ip}", caddy)
+        self.assertIn("header_up -CF-Connecting-IP", caddy)
+        self.assertIn("import {$CADDY_PROXY_MODE:direct}", caddy)
 
     def test_image_installation_is_consistent(self) -> None:
         state = self.initialize(image=IMAGE)
