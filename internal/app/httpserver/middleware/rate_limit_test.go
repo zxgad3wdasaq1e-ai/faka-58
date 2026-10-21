@@ -1,12 +1,15 @@
 package middleware
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -197,4 +200,113 @@ func TestToInt64(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestLongJSONFieldKeysAreBoundedAndDoNotCollideOnSharedPrefix(t *testing.T) {
+	keys := make([]string, 0, 2)
+	for _, suffix := range []string{"a", "b"} {
+		c, _ := gin.CreateTestContext(httptest.NewRecorder())
+		c.Request = httptest.NewRequest(http.MethodPost, "/auth", strings.NewReader(`{"email":"`+strings.Repeat("x", 64<<10)+suffix+`"}`))
+		c.Request.RemoteAddr = "203.0.113.30:1234"
+		key := KeyByIPAndJSONField("email")(c)
+		if len(key) > 128 || !strings.HasPrefix(key, "sha256:") {
+			t.Fatalf("unbounded field key: bytes=%d", len(key))
+		}
+		keys = append(keys, key)
+	}
+	if keys[0] == keys[1] {
+		t.Fatal("different long accounts collided")
+	}
+}
+
+func TestLocalRateLimiterFullCapacityCleanupIsThrottled(t *testing.T) {
+	now := time.Now()
+	limiter := &localRateLimiter{entries: make(map[string]localRateLimitEntry, localRateLimitMaxEntries)}
+	for index := 0; index < localRateLimitMaxEntries; index++ {
+		limiter.entries[fmt.Sprint(index)] = localRateLimitEntry{count: 1, expiresAt: now.Add(500 * time.Millisecond)}
+	}
+	rule := RateLimitRule{WindowSeconds: 60, MaxRequests: 1}
+	limiter.increment("new-a", rule, now)
+	limiter.increment("new-b", rule, now.Add(600*time.Millisecond))
+	if !limiter.lastCleanupAt.Equal(now) {
+		t.Fatal("new keys triggered repeated full-map scans within one second")
+	}
+	count, _, _ := limiter.increment("new-c", rule, now.Add(2*time.Second))
+	if count != 1 || len(limiter.entries) != 1 {
+		t.Fatalf("expired entries were not reclaimed: count=%d entries=%d", count, len(limiter.entries))
+	}
+}
+
+func TestLocalRateLimiterRedisCooldownAllowsOnlyOneRecoveryProbe(t *testing.T) {
+	now := time.Now()
+	limiter := &localRateLimiter{}
+	if !limiter.allowRedis(now) {
+		t.Fatal("healthy Redis request blocked")
+	}
+	limiter.finishRedisAttempt(false, now)
+	if limiter.allowRedis(now.Add(500 * time.Millisecond)) {
+		t.Fatal("failed Redis retried during cooldown")
+	}
+	if !limiter.allowRedis(now.Add(2 * time.Second)) {
+		t.Fatal("recovery probe blocked after cooldown")
+	}
+	if limiter.allowRedis(now.Add(2 * time.Second)) {
+		t.Fatal("multiple recovery probes allowed concurrently")
+	}
+	limiter.finishRedisAttempt(true, now.Add(2*time.Second))
+	if !limiter.allowRedis(now.Add(2 * time.Second)) {
+		t.Fatal("healthy Redis did not resume")
+	}
+}
+
+func TestRateLimitRedisFailureCooldownStillEnforcesLocalLimit(t *testing.T) {
+	client := redis.NewClient(&redis.Options{Addr: "127.0.0.1:1"})
+	t.Cleanup(func() { _ = client.Close() })
+	hook := &protectionRedisFailureHook{}
+	client.AddHook(hook)
+	router := gin.New()
+	router.Use(RateLimitMiddleware(client, RateLimitRule{WindowSeconds: 60, MaxRequests: 1}, KeyByIP))
+	router.GET("/ping", func(c *gin.Context) { c.Status(http.StatusNoContent) })
+	for index := 0; index < 3; index++ {
+		got := httptest.NewRecorder()
+		router.ServeHTTP(got, httptest.NewRequest(http.MethodGet, "/ping", nil))
+		want := http.StatusNoContent
+		if index > 0 {
+			want = http.StatusTooManyRequests
+		}
+		if got.Code != want {
+			t.Fatalf("fallback request %d status=%d want=%d", index, got.Code, want)
+		}
+	}
+	if hook.calls.Load() != 1 {
+		t.Fatalf("failed Redis retried %d times, want 1", hook.calls.Load())
+	}
+}
+
+type protectionRedisFailureHook struct{ calls atomic.Int64 }
+
+func (*protectionRedisFailureHook) DialHook(next redis.DialHook) redis.DialHook { return next }
+func (h *protectionRedisFailureHook) ProcessHook(redis.ProcessHook) redis.ProcessHook {
+	return func(context.Context, redis.Cmder) error { h.calls.Add(1); return errors.New("test Redis unavailable") }
+}
+func (*protectionRedisFailureHook) ProcessPipelineHook(next redis.ProcessPipelineHook) redis.ProcessPipelineHook {
+	return next
+}
+
+func BenchmarkLocalRateLimiterFullCapacityParallel(b *testing.B) {
+	now := time.Now()
+	limiter := &localRateLimiter{entries: make(map[string]localRateLimitEntry, localRateLimitMaxEntries)}
+	for index := 0; index < localRateLimitMaxEntries; index++ {
+		limiter.entries[fmt.Sprint(index)] = localRateLimitEntry{count: 1, expiresAt: now.Add(time.Minute)}
+	}
+	rule := RateLimitRule{WindowSeconds: 60, MaxRequests: 1}
+	var sequence atomic.Int64
+	b.ReportAllocs()
+	b.SetParallelism(8)
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			limiter.increment(fmt.Sprintf("new-%d", sequence.Add(1)), rule, now)
+		}
+	})
 }

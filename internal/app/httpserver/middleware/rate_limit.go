@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -51,10 +52,15 @@ type localRateLimiter struct {
 	entries                 map[string]localRateLimitEntry
 	lastCapacityWarningAt   time.Time
 	lastRedisFallbackWarnAt time.Time
+	lastCleanupAt           time.Time
+	redisRetryAfter         time.Time
+	redisProbeInFlight      bool
 }
 
 const localRateLimitMaxEntries = 10000
 const localRateLimitWarningInterval = time.Minute
+const localRateLimitCleanupInterval = time.Second
+const rateLimitRedisRetryInterval = time.Second
 
 func (l *localRateLimiter) increment(key string, rule RateLimitRule, now time.Time) (int64, int64, bool) {
 	l.mu.Lock()
@@ -69,7 +75,9 @@ func (l *localRateLimiter) increment(key string, rule RateLimitRule, now time.Ti
 		exists = false
 	}
 	if !exists {
-		if len(l.entries) >= localRateLimitMaxEntries {
+		if len(l.entries) >= localRateLimitMaxEntries &&
+			(l.lastCleanupAt.IsZero() || now.Sub(l.lastCleanupAt) >= localRateLimitCleanupInterval) {
+			l.lastCleanupAt = now
 			for existingKey, existing := range l.entries {
 				if existing.expiresAt.IsZero() || !now.Before(existing.expiresAt) {
 					delete(l.entries, existingKey)
@@ -104,6 +112,32 @@ func (l *localRateLimiter) increment(key string, rule RateLimitRule, now time.Ti
 	return entry.count, ttl, false
 }
 
+// During an outage, only one request probes Redis after each cooldown. Other
+// requests stay on the bounded local limiter instead of piling onto Redis.
+func (l *localRateLimiter) allowRedis(now time.Time) bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if l.redisRetryAfter.IsZero() {
+		return true
+	}
+	if now.Before(l.redisRetryAfter) || l.redisProbeInFlight {
+		return false
+	}
+	l.redisProbeInFlight = true
+	return true
+}
+
+func (l *localRateLimiter) finishRedisAttempt(succeeded bool, now time.Time) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.redisProbeInFlight = false
+	if succeeded {
+		l.redisRetryAfter = time.Time{}
+	} else {
+		l.redisRetryAfter = now.Add(rateLimitRedisRetryInterval)
+	}
+}
+
 func (l *localRateLimiter) shouldWarnRedisFallback(now time.Time) bool {
 	l.mu.Lock()
 	defer l.mu.Unlock()
@@ -120,10 +154,21 @@ func (l *localRateLimiter) shouldWarnRedisFallback(now time.Time) bool {
 // 多实例部署必须配置共享 Redis 才能获得全局一致的计数。Redis 故障降级和
 // 本地容量耗尽都会输出节流后的 warning，避免故障期间产生日志洪泛。
 func RateLimitMiddleware(client *redis.Client, rule RateLimitRule, keyFunc RateLimitKeyFunc) gin.HandlerFunc {
+	guard := RateLimitGuard(client, rule, keyFunc)
+	return func(c *gin.Context) {
+		guard(c)
+		if !c.IsAborted() {
+			c.Next()
+		}
+	}
+}
+
+// RateLimitGuard applies a shared counter without advancing the Gin handler chain.
+// A dynamic route dispatcher can therefore check it before calling its handler.
+func RateLimitGuard(client *redis.Client, rule RateLimitRule, keyFunc RateLimitKeyFunc) gin.HandlerFunc {
 	local := &localRateLimiter{}
 	return func(c *gin.Context) {
 		if rule.WindowSeconds <= 0 || rule.MaxRequests <= 0 {
-			c.Next()
 			return
 		}
 
@@ -152,9 +197,10 @@ func RateLimitMiddleware(client *redis.Client, rule RateLimitRule, keyFunc RateL
 				)
 			}
 		}
-		if client == nil {
+		if client == nil || !local.allowRedis(now) {
 			incrementLocal()
 		} else {
+			succeeded := false
 			result, err := rateLimitScript.Run(
 				c.Request.Context(),
 				client,
@@ -192,9 +238,11 @@ func RateLimitMiddleware(client *redis.Client, rule RateLimitRule, keyFunc RateL
 						incrementLocal()
 					} else {
 						ttlSeconds, _ = toInt64(values[1])
+						succeeded = true
 					}
 				}
 			}
+			local.finishRedisAttempt(succeeded, time.Now())
 		}
 		if count > int64(rule.MaxRequests) {
 			waitSeconds := int(ttlSeconds)
@@ -204,6 +252,7 @@ func RateLimitMiddleware(client *redis.Client, rule RateLimitRule, keyFunc RateL
 			if waitSeconds < 1 {
 				waitSeconds = 1
 			}
+			c.Header("Retry-After", fmt.Sprint(waitSeconds))
 			msgKey := strings.TrimSpace(rule.MessageKey)
 			if msgKey == "" {
 				msgKey = "error.rate_limited"
@@ -218,7 +267,6 @@ func RateLimitMiddleware(client *redis.Client, rule RateLimitRule, keyFunc RateL
 			return
 		}
 
-		c.Next()
 	}
 }
 
@@ -273,6 +321,12 @@ func KeyByIPAndJSONField(field string) RateLimitKeyFunc {
 		value := strings.ToLower(strings.TrimSpace(readJSONField(c, field)))
 		if value == "" {
 			return c.ClientIP()
+		}
+		// Invalid emails can otherwise retain an entire request body in both
+		// the local map and Redis key. Hashing bounds memory without collisions
+		// introduced by truncation or changing normal account-key behavior.
+		if len(value) > 256 {
+			value = fmt.Sprintf("sha256:%x", sha256.Sum256([]byte(value)))
 		}
 		return fmt.Sprintf("%s|%s", value, c.ClientIP())
 	}

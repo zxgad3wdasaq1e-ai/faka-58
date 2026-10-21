@@ -33,6 +33,7 @@ func CallbackRouteMiddleware(
 	callbackHandler *paymentcallbacktransport.Handler,
 	webhookHandler *paymenttransport.WebhookHandler,
 	upstreamHandler *upstreamtransport.Handler,
+	callbackRateLimit gin.HandlerFunc,
 ) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		path := strings.TrimRight(c.Request.URL.Path, "/")
@@ -51,6 +52,20 @@ func CallbackRouteMiddleware(
 		}
 
 		routes := settingService.GetCallbackRoutesCached()
+		isCallback := defaultCallbackPaths[path] || path == "/api/v1/payments/epay-redirect"
+		if routes != nil {
+			isCallback = isCallback || path == routes.PaymentCallback || path == routes.DujiaoPayWebhook ||
+				path == routes.PaypalWebhook || path == routes.StripeWebhook || path == routes.UpstreamCallback
+		}
+		if isCallback {
+			// Both route forms use the same guard/counter, including when Redis
+			// is unavailable. Route registrations must not count them again.
+			callbackRateLimit(c)
+			if c.IsAborted() || !limitRequestBody(c, 1<<20, false) {
+				return
+			}
+			c.Set(callbackBodyValidatedKey, true)
+		}
 		if routes == nil {
 			// 未配置自定义路由，放行使用默认路由
 			c.Next()

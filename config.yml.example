@@ -146,6 +146,37 @@ security:
     window_seconds: 300
     max_attempts: 5
     block_seconds: 900
+  # 以下规则按来源 IP 独立计数；非正值回落到安全默认值。
+  # 使用 CDN/反向代理时，server.trusted_proxies 只填写实际代理地址。
+  public_rate_limit: # 所有公开商品、分类、配置等接口合计
+    window_seconds: 60
+    max_requests: 300
+    block_seconds: 60
+  affiliate_click_rate_limit: # 推广点击写入另行限流
+    window_seconds: 60
+    max_requests: 20
+    block_seconds: 300
+  captcha_rate_limit:
+    window_seconds: 60
+    max_requests: 20
+    block_seconds: 60
+  login_ip_rate_limit: # 更换邮箱仍共享 IP 限额，账号+IP 限额继续生效
+    window_seconds: 300
+    max_requests: 30
+    block_seconds: 900
+  callback_rate_limit: # 默认与自定义回调共享；支付网关出口需按订单峰值调高
+    window_seconds: 60
+    max_requests: 600
+    block_seconds: 60
+  # 渠道/上游另有按 API Key 限额；纯 IP 总闸防止轮换伪造 Key 刷鉴权。
+  channel_ip_rate_limit:
+    window_seconds: 60
+    max_requests: 1200
+    block_seconds: 60
+  upstream_ip_rate_limit:
+    window_seconds: 60
+    max_requests: 120
+    block_seconds: 60
   password_policy:
     min_length: 8
     require_upper: true

@@ -51,11 +51,11 @@ type OrderRiskControlConfig struct {
 	Member  OrderRiskMemberPolicy `json:"member"`
 }
 
-// DefaultOrderRiskControlConfig 返回新安装推荐值；总开关默认关闭，避免静默改变订单行为。
+// DefaultOrderRiskControlConfig 返回未保存过风控配置时使用的库存保护策略。
 func DefaultOrderRiskControlConfig() OrderRiskControlConfig {
 	return OrderRiskControlConfig{
 		Version: orderRiskControlVersion,
-		Enabled: false,
+		Enabled: true,
 		Common:  OrderRiskCommonPolicy{IPBlacklist: []string{}},
 		Guest: OrderRiskGuestPolicy{
 			Enabled:                        true,
@@ -73,10 +73,10 @@ func DefaultOrderRiskControlConfig() OrderRiskControlConfig {
 		Member: OrderRiskMemberPolicy{
 			Enabled:                       true,
 			MaxPendingOrdersPerUser:       5,
-			MaxPendingOrdersPerIP:         0,
-			MaxQuantityPerProductPerOrder: 0,
+			MaxPendingOrdersPerIP:         10,
+			MaxQuantityPerProductPerOrder: 5,
 			RateLimit: OrderRateLimitConfig{
-				Enabled:       false,
+				Enabled:       true,
 				WindowSeconds: 60,
 				MaxRequests:   10,
 				BlockSeconds:  120,
@@ -147,7 +147,7 @@ func isValidIPOrCIDR(value string) bool {
 
 // DecodeOrderRiskControlConfig 解析新版嵌套配置，并把旧版扁平配置一次性映射到游客/会员策略。
 func DecodeOrderRiskControlConfig(raw jsonmap.JSON, fallback OrderRiskControlConfig) OrderRiskControlConfig {
-	if raw == nil {
+	if len(raw) == 0 {
 		return NormalizeOrderRiskControlConfig(fallback)
 	}
 	data, err := json.Marshal(raw)
@@ -181,6 +181,7 @@ func DecodeOrderRiskControlConfig(raw jsonmap.JSON, fallback OrderRiskControlCon
 	}
 	result := fallback
 	// 先恢复旧版缺省值，再叠加持久化字段。这样旧的稀疏 JSON 也不会误用 v2 推荐值。
+	result.Enabled = false
 	result.Guest.MaxPendingOrdersPerIP = 5
 	result.Member.MaxPendingOrdersPerUser = 3
 	result.Member.MaxPendingOrdersPerIP = 5

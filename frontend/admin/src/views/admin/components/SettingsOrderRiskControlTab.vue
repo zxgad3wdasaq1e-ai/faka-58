@@ -15,14 +15,14 @@ const loading = ref(false)
 const submitting = ref(false)
 
 const defaultRateLimit = (guest: boolean) => ({
-  enabled: guest,
+  enabled: true,
   window_seconds: 60,
   max_requests: guest ? 3 : 10,
   block_seconds: 120,
 })
 
 const form = reactive({
-  enabled: false,
+  enabled: true,
   common: {
     ip_blacklist_text: '',
   },
@@ -37,8 +37,8 @@ const form = reactive({
   member: {
     enabled: true,
     max_pending_orders_per_user: 5,
-    max_pending_orders_per_ip: 0,
-    max_quantity_per_product_per_order: 0,
+    max_pending_orders_per_ip: 10,
+    max_quantity_per_product_per_order: 5,
     rate_limit: defaultRateLimit(false),
   },
 })
@@ -78,7 +78,7 @@ const loadNestedConfig = (data: Record<string, unknown>) => {
   const common = data.common as Record<string, unknown> | undefined
   const guest = data.guest as Record<string, unknown> | undefined
   const member = data.member as Record<string, unknown> | undefined
-  form.enabled = !!data.enabled
+  form.enabled = data.enabled != null ? !!data.enabled : true
   form.common.ip_blacklist_text = ((common?.ip_blacklist as string[] | undefined) || []).join('\n')
 
   form.guest.enabled = guest?.enabled != null ? !!guest.enabled : true
@@ -90,8 +90,8 @@ const loadNestedConfig = (data: Record<string, unknown>) => {
 
   form.member.enabled = member?.enabled != null ? !!member.enabled : true
   form.member.max_pending_orders_per_user = numberValue(member?.max_pending_orders_per_user, 5)
-  form.member.max_pending_orders_per_ip = numberValue(member?.max_pending_orders_per_ip, 0)
-  form.member.max_quantity_per_product_per_order = numberValue(member?.max_quantity_per_product_per_order, 0)
+  form.member.max_pending_orders_per_ip = numberValue(member?.max_pending_orders_per_ip, 10)
+  form.member.max_quantity_per_product_per_order = numberValue(member?.max_quantity_per_product_per_order, 5)
   applyRateLimit(form.member.rate_limit, member?.rate_limit, false)
 }
 

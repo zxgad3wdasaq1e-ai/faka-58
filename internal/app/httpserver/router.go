@@ -228,10 +228,15 @@ func SetupRouter(cfg *config.Config, c *container.Container) *gin.Engine {
 	callbackRule := middleware.RateLimitRule{
 		Prefix:        fmt.Sprintf("%s:rate:callback", redisPrefix),
 		WindowSeconds: 60,
-		MaxRequests:   120,
+		MaxRequests:   600,
 		BlockSeconds:  60,
 		MessageKey:    "error.rate_limited",
 	}
+	callbackConfig := cfg.Security.CallbackRateLimit.WithDefaults(60, 600, 60)
+	callbackRule.WindowSeconds = callbackConfig.WindowSeconds
+	callbackRule.MaxRequests = callbackConfig.MaxRequests
+	callbackRule.BlockSeconds = callbackConfig.BlockSeconds
+	callbackRateLimit := middleware.RateLimitGuard(redisClient, callbackRule, middleware.KeyByIP)
 	// 礼品卡兑换：按用户+IP 计数
 	giftCardRedeemRule := middleware.RateLimitRule{
 		Prefix:        fmt.Sprintf("%s:rate:gift_card_redeem", redisPrefix),
@@ -246,7 +251,9 @@ func SetupRouter(cfg *config.Config, c *container.Container) *gin.Engine {
 	r.Use(middleware.RecoveryMiddleware())
 	r.Use(middleware.LoggerMiddleware(log))
 	r.Use(middleware.CORSMiddleware(cfg.CORS))
-	r.Use(middleware.CallbackRouteMiddleware(c.SettingService, paymentCallbackHandler, paymentWebhookHandler, upstreamHandler))
+	r.Use(middleware.CallbackRouteMiddleware(c.SettingService, paymentCallbackHandler, paymentWebhookHandler, upstreamHandler, callbackRateLimit))
+	r.Use(middleware.PublicRequestProtectionMiddleware(redisClient, redisPrefix+":rate", cfg.Security))
+	r.Use(middleware.RequestBodyLimitMiddleware(cfg.Upload.MaxSize))
 
 	// 静态文件服务（上传的图片）必须放在前面。
 	// 所有上传文件一律禁止脚本：即使上传校验被绕过（如 telegram 场景不限扩展名、上游图片），
@@ -265,9 +272,9 @@ func SetupRouter(cfg *config.Config, c *container.Container) *gin.Engine {
 
 	apiV1 := r.Group("/api/v1")
 	registerStorefrontRoutes(apiV1, cfg, c, publicContentHandler, publicCatalogHandler, publicCategoryHandler, userResellerHandler, userResellerProductSettingHandler, userResellerFinanceHandler, userResellerOrderHandler, userApiCredentialHandler, userAuditLogHandler, userGiftCardHandler, publicMemberLevelHandler, userProfileHandler, userEmailHandler, userPasswordHandler, userVerifyHandler, userTelegramOIDCHandler, userTelegramHandler, userGoogleHandler, userLoginHandler, user2FAHandler, userInviteHandler, publicConfigHandler, userCartHandler, userOrderHandler, guestOrderHandler, orderPreviewHandler, orderCreateHandler, paymentLatestHandler, paymentWriteHandler, userWalletHandler, redisClient, loginRule, guestReadRule, guestWriteRule, giftCardRedeemRule)
-	registerUpstreamRoutes(apiV1, c, upstreamHandler, redisClient, upstreamAPIRule, callbackRule)
+	registerUpstreamRoutes(apiV1, c, upstreamHandler, redisClient, upstreamAPIRule)
 	registerChannelRoutes(apiV1, c, channelHandler, channelMemberLevelHandler, channelGiftCardHandler, channelAffiliateHandler, channelTelegramBotHandler, channelWalletHandler, redisClient, channelAPIRule)
-	registerPaymentCallbackRoutes(apiV1, paymentCallbackHandler, paymentWebhookHandler, paymentEpayRedirectHandler, redisClient, callbackRule)
+	registerPaymentCallbackRoutes(apiV1, paymentCallbackHandler, paymentWebhookHandler, paymentEpayRedirectHandler)
 	registerAdminRoutes(r, apiV1, cfg, c, adminLoginHandler, admin2FAHandler, adminUser2FAHandler, adminUserHandler, adminAuthzHandler, adminFulfillmentHandler, adminOrderHandler, adminOrderRefundHandler, adminContentHandler, adminDashboardHandler, adminMemberLevelHandler, adminApiCredentialHandler, adminAuditLogHandler, adminCardSecretHandler, adminCatalogCategoryHandler, adminCatalogProductHandler, adminCatalogProductMappingHandler, adminCouponHandler, adminGiftCardHandler, adminPromotionHandler, adminNotificationHandler, adminProcurementHandler, adminResellerManagementHandler, adminResellerProfileDetailHandler, adminResellerSiteConfigHandler, adminResellerProductSettingHandler, adminResellerOperationsHandler, adminResellerFinanceHandler, adminSettingsHandler, adminWalletHandler, adminPaymentHandler, adminPaymentChannelHandler, redisClient, adminLoginRule)
 
 	// 健康检查

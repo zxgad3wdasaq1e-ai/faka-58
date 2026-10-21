@@ -267,8 +267,36 @@ func DefaultCORSAllowedHeaders() []string {
 
 // SecurityConfig 安全配置
 type SecurityConfig struct {
-	LoginRateLimit LoginRateLimitConfig `mapstructure:"login_rate_limit"`
-	PasswordPolicy PasswordPolicyConfig `mapstructure:"password_policy"`
+	LoginRateLimit          LoginRateLimitConfig   `mapstructure:"login_rate_limit"`
+	PublicRateLimit         RequestRateLimitConfig `mapstructure:"public_rate_limit"`
+	AffiliateClickRateLimit RequestRateLimitConfig `mapstructure:"affiliate_click_rate_limit"`
+	CaptchaRateLimit        RequestRateLimitConfig `mapstructure:"captcha_rate_limit"`
+	LoginIPRateLimit        RequestRateLimitConfig `mapstructure:"login_ip_rate_limit"`
+	CallbackRateLimit       RequestRateLimitConfig `mapstructure:"callback_rate_limit"`
+	ChannelIPRateLimit      RequestRateLimitConfig `mapstructure:"channel_ip_rate_limit"`
+	UpstreamIPRateLimit     RequestRateLimitConfig `mapstructure:"upstream_ip_rate_limit"`
+	PasswordPolicy          PasswordPolicyConfig   `mapstructure:"password_policy"`
+}
+
+// RequestRateLimitConfig 按来源 IP 的请求限流；非正值使用安全默认值。
+type RequestRateLimitConfig struct {
+	WindowSeconds int `mapstructure:"window_seconds"`
+	MaxRequests   int `mapstructure:"max_requests"`
+	BlockSeconds  int `mapstructure:"block_seconds"`
+}
+
+// WithDefaults also protects callers that construct Config without Viper.
+func (r RequestRateLimitConfig) WithDefaults(windowSeconds, maxRequests, blockSeconds int) RequestRateLimitConfig {
+	if r.WindowSeconds <= 0 {
+		r.WindowSeconds = windowSeconds
+	}
+	if r.MaxRequests <= 0 {
+		r.MaxRequests = maxRequests
+	}
+	if r.BlockSeconds <= 0 {
+		r.BlockSeconds = blockSeconds
+	}
+	return r
 }
 
 // LoginRateLimitConfig 登录限流配置
@@ -408,6 +436,19 @@ func Load() *Config {
 	viper.SetDefault("security.login_rate_limit.window_seconds", 300)
 	viper.SetDefault("security.login_rate_limit.max_attempts", 5)
 	viper.SetDefault("security.login_rate_limit.block_seconds", 900)
+	for name, rule := range map[string]RequestRateLimitConfig{
+		"public_rate_limit":          {WindowSeconds: 60, MaxRequests: 300, BlockSeconds: 60},
+		"affiliate_click_rate_limit": {WindowSeconds: 60, MaxRequests: 20, BlockSeconds: 300},
+		"captcha_rate_limit":         {WindowSeconds: 60, MaxRequests: 20, BlockSeconds: 60},
+		"login_ip_rate_limit":        {WindowSeconds: 300, MaxRequests: 30, BlockSeconds: 900},
+		"callback_rate_limit":        {WindowSeconds: 60, MaxRequests: 600, BlockSeconds: 60},
+		"channel_ip_rate_limit":      {WindowSeconds: 60, MaxRequests: 1200, BlockSeconds: 60},
+		"upstream_ip_rate_limit":     {WindowSeconds: 60, MaxRequests: 120, BlockSeconds: 60},
+	} {
+		viper.SetDefault("security."+name+".window_seconds", rule.WindowSeconds)
+		viper.SetDefault("security."+name+".max_requests", rule.MaxRequests)
+		viper.SetDefault("security."+name+".block_seconds", rule.BlockSeconds)
+	}
 	viper.SetDefault("security.password_policy.min_length", 8)
 	viper.SetDefault("security.password_policy.require_upper", true)
 	viper.SetDefault("security.password_policy.require_lower", true)

@@ -87,8 +87,10 @@ func testConfig() settingssecurity.OrderRiskControlConfig {
 	return cfg
 }
 
-func TestCheckOrderAllowed_DisabledByDefault(t *testing.T) {
-	svc := NewService(Options{Settings: settingReaderStub{config: settingssecurity.DefaultOrderRiskControlConfig()}})
+func TestCheckOrderAllowed_ExplicitlyDisabled(t *testing.T) {
+	cfg := settingssecurity.DefaultOrderRiskControlConfig()
+	cfg.Enabled = false
+	svc := NewService(Options{Settings: settingReaderStub{config: cfg}})
 	result, err := svc.CheckOrderAllowed(orderriskcontract.CheckInput{
 		IsGuest:  true,
 		ClientIP: "2001:db8:abcd:12::1234",
@@ -200,8 +202,8 @@ func TestCheckOrderAllowed_SettingsReadFailureFailsClosedOnlyForCreate(t *testin
 	if err != nil {
 		t.Fatalf("preview-style check should preserve fail-open behavior, got %v", err)
 	}
-	if preview.ConfigSnapshot.Enabled {
-		t.Fatal("preview fallback config must keep risk control disabled")
+	if !preview.ConfigSnapshot.Enabled {
+		t.Fatal("preview fallback config must retain the protected default")
 	}
 
 	_, err = svc.CheckOrderAllowed(orderriskcontract.CheckInput{
@@ -251,14 +253,16 @@ func TestCheckOrderAllowed_MemberUsesIndependentQuantityPolicy(t *testing.T) {
 	svc := NewService(Options{Settings: settingReaderStub{config: cfg}})
 
 	if _, err := svc.CheckOrderAllowed(orderriskcontract.CheckInput{
-		UserID: 3,
-		Items:  []orderriskcontract.OrderItem{{ProductID: 1, Quantity: 5}},
+		UserID:   3,
+		ClientIP: "1.2.3.4",
+		Items:    []orderriskcontract.OrderItem{{ProductID: 1, Quantity: 5}},
 	}); err != nil {
 		t.Fatalf("member quantity must not use guest limit: %v", err)
 	}
 	if _, err := svc.CheckOrderAllowed(orderriskcontract.CheckInput{
-		UserID: 3,
-		Items:  []orderriskcontract.OrderItem{{ProductID: 1, Quantity: 6}},
+		UserID:   3,
+		ClientIP: "1.2.3.4",
+		Items:    []orderriskcontract.OrderItem{{ProductID: 1, Quantity: 6}},
 	}); !errors.Is(err, orderriskcontract.ErrProductQuantityLimit) {
 		t.Fatalf("expected member quantity limit, got %v", err)
 	}

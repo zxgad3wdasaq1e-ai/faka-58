@@ -1,10 +1,52 @@
 package settingssecurity
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/dujiao-next/internal/shared/jsonmap"
 )
+
+func TestDecodeOrderRiskControlConfig_MissingPolicyEnablesInventoryProtection(t *testing.T) {
+	for _, raw := range []jsonmap.JSON{nil, {}} {
+		cfg := DecodeOrderRiskControlConfig(raw, DefaultOrderRiskControlConfig())
+		if !cfg.Enabled || !cfg.Guest.Enabled || !cfg.Member.Enabled {
+			t.Fatalf("missing policy must enable inventory protection: %+v", cfg)
+		}
+		if cfg.Guest.MaxPendingOrdersPerIP != 2 || cfg.Guest.MaxQuantityPerProductPerOrder != 1 || cfg.Guest.MaxPendingQuantityPerIPProduct != 2 || cfg.Guest.PaymentExpireMinutes != 10 {
+			t.Fatalf("unexpected default guest policy: %+v", cfg.Guest)
+		}
+		if cfg.Member.MaxPendingOrdersPerUser != 5 || cfg.Member.MaxPendingOrdersPerIP != 10 || cfg.Member.MaxQuantityPerProductPerOrder != 5 || !cfg.Member.RateLimit.Enabled {
+			t.Fatalf("members must have bounded inventory and frequency while allowing multiple cards: %+v", cfg.Member)
+		}
+	}
+}
+
+func TestDecodeOrderRiskControlConfig_PreservesExplicitDisabledAndUnlimitedPolicy(t *testing.T) {
+	want := DefaultOrderRiskControlConfig()
+	want.Enabled = false
+	want.Guest.Enabled = false
+	want.Member.MaxPendingOrdersPerIP = 0
+	want.Member.MaxQuantityPerProductPerOrder = 0
+	want.Member.RateLimit.Enabled = false
+	got := DecodeOrderRiskControlConfig(EncodeOrderRiskControlConfig(want), DefaultOrderRiskControlConfig())
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("saved settings must remain authoritative: got=%+v want=%+v", got, want)
+	}
+}
+
+func TestDecodeOrderRiskControlConfig_PreservesDisabledLegacyPolicy(t *testing.T) {
+	for _, raw := range []jsonmap.JSON{
+		{"enabled": false},
+		{"version": 1},
+		{"order_rate_limit": map[string]interface{}{"window_seconds": 60}},
+	} {
+		cfg := DecodeOrderRiskControlConfig(raw, DefaultOrderRiskControlConfig())
+		if cfg.Enabled {
+			t.Fatalf("a legacy policy without an enabled flag must retain the disabled v1 default: %+v", cfg)
+		}
+	}
+}
 
 func TestNormalizeOrderRiskControlConfig_Defaults(t *testing.T) {
 	cfg := NormalizeOrderRiskControlConfig(OrderRiskControlConfig{
